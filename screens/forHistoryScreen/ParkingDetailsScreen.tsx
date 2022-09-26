@@ -17,7 +17,6 @@ export default function ParkingDetailsScreen({route, navigation}:{route: any,nav
                     <Text style={[{color:'#886DEC',fontSize:18, fontWeight:'bold'}]}>Название: {route.params.element.name}</Text>
                     <Text style={[{color:'#886DEC',fontSize:18, fontWeight:'bold'}]}>Стоимость: {route.params.element.price}</Text>
                     <Text style={[{color:'#886DEC',fontSize:18, fontWeight:'bold'}]}>Дата: {route.params.element.date}</Text>
-
                 </View>
             </View>
             <StatusBar style="auto" />
