@@ -5,9 +5,9 @@ export default function NumberAndCardComponent(props:{func:any}) {
     return (
         <View style={styles.cardAndNumberView}>
             <TouchableOpacity style={[{width:'48%', height:'100%'}]} onPress={props.func}>
-            <LinearGradient style={[styles.cardAndNumber]} colors={['#EAB496','#EF81F8']}>
-                <Text style={styles.textStyle}>к510ат</Text>
-            </LinearGradient>
+                <LinearGradient style={[styles.cardAndNumber]} colors={['#EAB496','#EF81F8']}>
+                    <Text style={styles.textStyle}>к510ат</Text>
+                </LinearGradient>
             </TouchableOpacity>
             <TouchableOpacity style={[{width:'48%', height:'100%'}]} onPress={props.func}>
                 <LinearGradient style={[styles.cardAndNumber]} colors={['#886DEC','#56439E']}>
@@ -38,9 +38,5 @@ const styles = StyleSheet.create({
         justifyContent:'space-between',
         height:180,
         width:'90%',
-        shadowOpacity:0.15,
-        elevation: 10,
-        shadowOffset: {width: 7, height: 7},
-        shadowColor: '#000000',
     },
 });

@@ -11,7 +11,7 @@ export default function ThemeAndLanguageComponent(props:{func:any, secondFunc:an
                 </LinearGradient>
             </TouchableOpacity>
             <TouchableOpacity style={[{width:'48%', height:'100%'}]} onPress={props.secondFunc}>
-                <LinearGradient style={styles.ThemeAndLanguage} colors={['#000000','#1C1C1C']}>
+                <LinearGradient style={styles.ThemeAndLanguage} colors={['#100f12','#25144a']}>
                     <Text style={styles.textStyle}>Включить тёмную тему</Text>
                 </LinearGradient>
             </TouchableOpacity>
@@ -43,5 +43,6 @@ const styles = StyleSheet.create({
         shadowOpacity:0.15,
         elevation: 15,
         shadowOffset: {width: 7, height: 7},
+        shadowColor: '#000000',
     },
 });

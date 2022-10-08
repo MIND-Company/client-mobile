@@ -1,11 +1,12 @@
-import {Dimensions, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text} from 'react-native';
+import {TouchableWithoutFeedback} from "react-native-gesture-handler";
 
 export default function MainButton(props:{text:string, func: any}) {
     return (
         <>
-            <TouchableOpacity style={styles.buttonStyle} onPress={props.func}>
+            <TouchableWithoutFeedback style={styles.buttonStyle} onPress={props.func}>
                 <Text style={[{color:'white', fontSize: 16, fontWeight:'400',}]}>{props.text}</Text>
-            </TouchableOpacity>
+            </TouchableWithoutFeedback>
         </>
     );
 }

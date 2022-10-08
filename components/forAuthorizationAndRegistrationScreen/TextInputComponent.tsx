@@ -1,6 +1,6 @@
 import {Dimensions, StyleSheet, TextInput, View} from 'react-native';
 
-export default function TextInputComponent(props:{value:string,func:any, secure:boolean, placeholder:string}) {
+export default function TextInputComponent(props:{clearError: any, value:string,func:any, secure:boolean, placeholder:string}) {
     return (
         <View style={styles.inputView}>
             <TextInput style={styles.inputStyles}
@@ -8,7 +8,8 @@ export default function TextInputComponent(props:{value:string,func:any, secure:
                        onChangeText={props.func}
                        placeholder={props.placeholder}
                        placeholderTextColor="#9A9A9A"
-                       secureTextEntry={props.secure}/>
+                       secureTextEntry={props.secure}
+                       onFocus={props.clearError}/>
         </View>
     );
 }
@@ -16,7 +17,7 @@ export default function TextInputComponent(props:{value:string,func:any, secure:
 const styles = StyleSheet.create({
     inputView: {
         alignItems:'center',
-        height: '20%',
+        height: '14%',
     },
     inputStyles: {
         height: Math.round(Dimensions.get('window').height)/16,
