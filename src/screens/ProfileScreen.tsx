@@ -1,11 +1,15 @@
-import React from 'react';
-import {ScrollView, StatusBar} from 'react-native';
+import React, {useContext} from 'react';
+import {ScrollView} from 'react-native';
 import EmailAndPhoneComponent from '../components/forProfileScreen/EmailAndPhoneComponent';
 import NumberAndCardComponent from '../components/forProfileScreen/NumberAndCardComponent';
 import StatsComponent from '../components/forProfileScreen/StatsComponent';
 import ThemeAndLanguageComponent from '../components/forProfileScreen/ThemeAndLanguageComponent';
+import themeContext from '../../config/ThemeContext';
+import type {NavigationProp} from '@react-navigation/native';
 
-export default function ProfileScreen({navigation}: {navigation: any}) {
+export default function ProfileScreen({navigation}: {navigation: NavigationProp<any>}) {
+	const theme = useContext(themeContext);
+
 	const goChangeCard = () => {
 		navigation.navigate('ChangeCard');
 	};
@@ -18,18 +22,12 @@ export default function ProfileScreen({navigation}: {navigation: any}) {
 		navigation.navigate('ChangeLanguage');
 	};
 
-	const goChangeTheme = () => {
-		navigation.navigate('ChangeTheme');
-	};
-
 	return (
-		<ScrollView style={[{width: '100%', backgroundColor: '#EFF1FB'}]}>
-			<EmailAndPhoneComponent />
+		<ScrollView style={[{width: '100%', backgroundColor: theme.backgroundScreen}]}>
+			<EmailAndPhoneComponent bg = {theme.backgroundComponent} textColor = {theme.textColor}/>
 			<NumberAndCardComponent func={goChangeCard}/>
 			<StatsComponent func={goStats} />
-			<ThemeAndLanguageComponent func={goChangeLanguage} secondFunc={goChangeTheme} />
-			<StatusBar backgroundColor='#EFF1FB'
-				barStyle='dark-content' />
+			<ThemeAndLanguageComponent func={goChangeLanguage} />
 		</ScrollView>
 	);
 }

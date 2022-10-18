@@ -1,9 +1,9 @@
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
-export default function AddCardComponent(props: {func: any; card: any; cardFunc: any}) {
+export default function AddCardComponent(props: {bg: string; func: any; card: any; cardFunc: any}) {
 	return (
-		<View style={styles.View}>
+		<View style={[styles.View, {backgroundColor: props.bg}]}>
 			{props.card !== null
 				? <View style={[{alignItems: 'center', justifyContent: 'center'}]}>
 					<Text style={[{fontSize: 25, fontWeight: 'bold', color: '#886DEC'}]}>{props.card}</Text>
@@ -32,7 +32,6 @@ const styles = StyleSheet.create({
 		borderRadius: 20,
 		marginBottom: '3%',
 		height: 220,
-		backgroundColor: '#FFFFFF',
 		alignItems: 'center',
 		justifyContent: 'center',
 		shadowOpacity: 0.15,

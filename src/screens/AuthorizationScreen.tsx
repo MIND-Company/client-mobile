@@ -1,18 +1,19 @@
-import {StyleSheet, Text, TouchableOpacity, View, Dimensions, StatusBar} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View, Dimensions, StatusBar, ActivityIndicator} from 'react-native';
 import {useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useAuth} from '../components/forAuth/useAuth';
 import TextInputComponent from '../components/forAuthorizationAndRegistrationScreen/TextInputComponent';
 import MainButton from '../components/forAuthorizationAndRegistrationScreen/MainButton';
 import React from 'react';
+import type {NavigationProp} from '@react-navigation/native';
 
-export default function AuthorizationScreen({navigation}: {navigation: any}) {
+export default function AuthorizationScreen({navigation}: {navigation: NavigationProp<any>}) {
 	const {isAuth, setIsAuth} = useAuth();
 	const [email, setEmail] = useState<string>('');
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState<boolean>(false);
 	const [textError, setTextError] = useState<string>('');
-
+	const [load, setLoad] = useState<boolean>(false);
 	const authFunction = async () => {
 		if (email !== '' && password !== '') {
 			try {
@@ -54,7 +55,8 @@ export default function AuthorizationScreen({navigation}: {navigation: any}) {
 
 	const authRequest = () => {
 		if (email === '1' && password === '1') {
-			navigation.navigate('MainNavigation');
+			setLoad(true);
+			setTimeout(() => (navigation.navigate('MainNavigation'), setLoad(false)), 1000);
 		}
 	};
 
@@ -82,11 +84,28 @@ export default function AuthorizationScreen({navigation}: {navigation: any}) {
 			</View>
 			<StatusBar backgroundColor='#886DEC'
 				barStyle='dark-content' translucent={false}/>
+
+			{load
+				&& <View style={styles.loading}>
+					<ActivityIndicator size={50} color={'black'}/>
+				</View>
+			}
 		</View>
 	);
 }
 
 const styles = StyleSheet.create({
+	loading: {
+		position: 'absolute',
+		left: 0,
+		right: 0,
+		top: 0,
+		bottom: 100,
+		opacity: 0.1,
+		backgroundColor: 'gray',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
 	borderedView: {
 		marginTop: '-30%',
 		height: '50%',

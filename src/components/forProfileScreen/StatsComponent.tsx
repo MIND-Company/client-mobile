@@ -1,13 +1,16 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
 import React from 'react';
+import LinearGradient from 'react-native-linear-gradient';
 
 export default function StatsComponent(props: {func: any}) {
 	return (
-		<TouchableOpacity style={styles.StatsView} onPress={props.func}>
-			<View style={styles.GradientStyle}>
-				<Text style={styles.textStyle}>Ваша статистика</Text>
-			</View>
-		</TouchableOpacity>
+		<View style={styles.StatsView}>
+			<TouchableWithoutFeedback style={[{height: '100%'}]} onPress={props.func}>
+				<LinearGradient style={styles.GradientStyle} colors={['#9d50bb', '#6e48aa']}>
+					<Text style={styles.textStyle}>Ваша статистика</Text>
+				</LinearGradient>
+			</TouchableWithoutFeedback>
+		</View>
 	);
 }
 
@@ -19,6 +22,10 @@ const styles = StyleSheet.create({
 		width: '100%',
 		alignItems: 'center',
 		justifyContent: 'center',
+		shadowColor: '#000000',
+		shadowOpacity: 0.15,
+		elevation: 10,
+		shadowOffset: {width: 7, height: 7},
 	},
 	textStyle: {
 		fontSize: 21,
@@ -31,9 +38,5 @@ const styles = StyleSheet.create({
 		alignSelf: 'center',
 		height: 200,
 		width: '90%',
-		shadowColor: '#000000',
-		shadowOpacity: 0.15,
-		elevation: 10,
-		shadowOffset: {width: 7, height: 7},
 	},
 });

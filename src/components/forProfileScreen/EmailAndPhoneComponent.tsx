@@ -2,11 +2,11 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/Feather';
 
-export default function EmailAndPhoneComponent() {
+export default function EmailAndPhoneComponent(props: {bg: string; textColor: string}) {
 	return (
-		<View style={styles.emailAndPhoneView}>
-			<Text style={styles.textStyle}><Text style={[{color: '#000000'}]}>Номер телефона:</Text> +79223811755</Text>
-			<Text style={styles.textStyle}><Text style={[{color: '#000000'}]}>Электронная почта:</Text> agadfsdfdsfdsgda.gdagad@inbox.ru</Text>
+		<View style={[styles.emailAndPhoneView, {backgroundColor: props.bg}]}>
+			<Text style={styles.textStyle}><Text style={[{color: props.textColor}]}>Номер телефона:</Text> +79223811755</Text>
+			<Text style={styles.textStyle}><Text style={[{color: props.textColor}]}>Электронная почта:</Text> agadfsdfdsfdsgda.gdagad@inbox.ru</Text>
 			<TouchableOpacity style={[{width: '35%', alignSelf: 'center'}]}>
 				<View style={styles.changeView}>
 					<Text style={[{color: '#886DEC', fontWeight: '500', fontSize: 16}]}>Изменить</Text>
@@ -37,7 +37,6 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-evenly',
 		height: 200,
 		width: '90%',
-		backgroundColor: 'white',
 		borderRadius: 20,
 		shadowColor: '#000000',
 		shadowOpacity: 0.15,

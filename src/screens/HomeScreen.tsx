@@ -2,11 +2,14 @@ import {ActivityIndicator, BackHandler, ScrollView, StatusBar} from 'react-nativ
 import InfoComponent from '../components/forHomeScreen/InfoComponent';
 import AddCarComponent from '../components/forHomeScreen/AddCarComponent';
 import AddCardComponent from '../components/forHomeScreen/AddCardComponent';
-import {useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
+import themeContext from '../../config/ThemeContext';
+import type {NavigationProp} from '@react-navigation/native';
 
-export default function HomeScreen({navigation}: {navigation: any}) {
+export default function HomeScreen({navigation}: {navigation: NavigationProp<any>}) {
+	const theme = useContext(themeContext);
 	const [number, setNumber] = useState<string | undefined>(null);
 	const [loading, setLoading] = useState(true);
 	const [card, setCard] = useState<string | undefined>(null);
@@ -50,8 +53,8 @@ export default function HomeScreen({navigation}: {navigation: any}) {
 	};
 
 	return (
-		<ScrollView style={[{width: '100%', backgroundColor: '#EFF1FB'}]}>
-			<InfoComponent />
+		<ScrollView style={[{width: '100%', backgroundColor: theme.backgroundScreen}]}>
+			<InfoComponent bg = {theme.backgroundComponent} textColor = {theme.textColor}/>
 			{loading ? (
 				<>
 					<ActivityIndicator animating={true} size='large' color='#C5C5C5' />
@@ -59,13 +62,12 @@ export default function HomeScreen({navigation}: {navigation: any}) {
 				</>
 			) : (
 				<>
-					<AddCarComponent func={goAddCar} number={number} numberFunc={setNumber}
+					<AddCarComponent bg = {theme.backgroundComponent} func={goAddCar} number={number} numberFunc={setNumber}
 					/>
-					<AddCardComponent func={goAddCard} card={card} cardFunc={setCard} />
+					<AddCardComponent bg = {theme.backgroundComponent} func={goAddCard} card={card} cardFunc={setCard} />
 				</>
 			)}
-			<StatusBar backgroundColor='#EFF1FB'
-				barStyle='dark-content'/>
+			<StatusBar backgroundColor={theme.backgroundScreen} barStyle={theme.statusBarStyle}/>
 		</ScrollView>
 	);
 }

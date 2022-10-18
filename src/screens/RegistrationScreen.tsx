@@ -4,8 +4,9 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import TextInputComponent from '../components/forAuthorizationAndRegistrationScreen/TextInputComponent';
 import MainButton from '../components/forAuthorizationAndRegistrationScreen/MainButton';
 import React from 'react';
+import type {NavigationProp} from '@react-navigation/native';
 
-export default function RegistrationScreen({navigation}: {navigation: any}) {
+export default function RegistrationScreen({navigation}: {navigation: NavigationProp<any>}) {
 	const [login, setLogin] = useState<string>('');
 	const [email, setEmail] = useState<string>('');
 	const [firstPassword, setFirstPassword] = useState<string>('');
@@ -57,7 +58,9 @@ export default function RegistrationScreen({navigation}: {navigation: any}) {
 	return (
 		<View style={styles.container}>
 			<View style={styles.borderedView}>
-				<TouchableOpacity style={[{marginBottom: '13%', maxWidth: '35%'}]} onPress={() => navigation.goBack()}>
+				<TouchableOpacity style={[{marginBottom: '13%', maxWidth: '35%'}]} onPress={() => {
+					navigation.goBack();
+				}}>
 					<View style={[{flexDirection: 'row', alignItems: 'center'}]}>
 						<Icon name='chevron-back' size={22} color='#886DEC' style={[{marginLeft: '3%'}]}/>
 						<Text style={styles.backStyle}>Вернуться</Text>

@@ -1,15 +1,15 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
-export default function InfoComponent() {
+export default function InfoComponent(props: {bg: string; textColor: string}) {
 	return (
-		<View style={styles.View}>
-			<Text style={styles.ViewText}><Text style={styles.textNumberStyle}>1) </Text> Перед въездом проверьте, что задний регистрационный
+		<View style={[styles.View, {backgroundColor: props.bg}]}>
+			<Text style={[styles.ViewText, {color: props.textColor}]}><Text style={styles.textNumberStyle}>1) </Text> Перед въездом проверьте, что задний регистрационный
                 знак читаем</Text>
-			<Text style={styles.ViewText}><Text style={styles.textNumberStyle}>2) </Text> При въезде на парковку наша камера считает номер
+			<Text style={[styles.ViewText, {color: props.textColor}]}><Text style={styles.textNumberStyle}>2) </Text> При въезде на парковку наша камера считает номер
                 вашего транспортного средства, от вас никаких
                 действий не требуется</Text>
-			<Text style={styles.ViewText}><Text style={styles.textNumberStyle}>3) </Text> При выезде камера считает номер транспортного
+			<Text style={[styles.ViewText, {color: props.textColor}]}><Text style={styles.textNumberStyle}>3) </Text> При выезде камера считает номер транспортного
                 средства и автоматически спишет с вашей карты
                 нужную сумму, и откроет шлагбаум</Text>
 		</View>
@@ -29,10 +29,8 @@ const styles = StyleSheet.create({
 		marginLeft: '4%',
 		marginRight: '2%',
 		marginVertical: '1%',
-		color: 'black',
 	},
 	View: {
-		backgroundColor: '#FFFFFF',
 		alignSelf: 'center',
 		marginTop: '3%',
 		width: '95%',

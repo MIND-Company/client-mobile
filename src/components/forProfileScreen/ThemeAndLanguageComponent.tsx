@@ -1,19 +1,28 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import {StyleSheet, Text, TouchableWithoutFeedback, View} from 'react-native';
+import React, {useContext, useState} from 'react';
+import LinearGradient from 'react-native-linear-gradient';
+import {EventRegister} from 'react-native-event-listeners';
+import themeContext from '../../../config/ThemeContext';
 
-export default function ThemeAndLanguageComponent(props: {func: any; secondFunc: any}) {
+export default function ThemeAndLanguageComponent(props: {func: any}) {
+	const [mode, setMode] = useState(false);
+	const theme = useContext(themeContext);
+
 	return (
 		<View style={styles.ThemeAndLanguageView}>
-			<TouchableOpacity style={[{width: '48%', height: '100%'}]} onPress={props.func}>
-				<View style={[styles.ThemeAndLanguage, {backgroundColor: '#003AFF'}]}>
+			<TouchableWithoutFeedback style={[{height: '100%'}]} onPress={props.func}>
+				<LinearGradient style={[styles.ThemeAndLanguage, {backgroundColor: '#42275a'}]} colors={['#734b6d', '#00223E']}>
 					<Text style={styles.textStyle}>Русский язык</Text>
-				</View>
-			</TouchableOpacity>
-			<TouchableOpacity style={[{width: '48%', height: '100%'}]} onPress={props.secondFunc}>
-				<View style={[styles.ThemeAndLanguage, {backgroundColor: '#000000'}]}>
-					<Text style={styles.textStyle}>Включить тёмную тему</Text>
-				</View>
-			</TouchableOpacity>
+				</LinearGradient>
+			</TouchableWithoutFeedback>
+			<TouchableWithoutFeedback style={[{height: '100%'}]} onPress={() => {
+				setMode(mode => !mode);
+				EventRegister.emit('ChangeTheme', mode);
+			}}>
+				<LinearGradient style={[styles.ThemeAndLanguage, {backgroundColor: '#000000'}]} colors={theme.themeViewColor}>
+					<Text style={styles.textStyle}>Включить {theme.text} тему</Text>
+				</LinearGradient>
+			</TouchableWithoutFeedback>
 		</View>
 	);
 }
@@ -29,7 +38,11 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		borderRadius: 20,
 		height: '100%',
-		width: '100%',
+		width: '48%',
+		shadowColor: '#000000',
+		shadowOpacity: 0.15,
+		elevation: 10,
+		shadowOffset: {width: 7, height: 7},
 	},
 	ThemeAndLanguageView: {
 		flexDirection: 'row',
@@ -39,9 +52,5 @@ const styles = StyleSheet.create({
 		height: 180,
 		width: '90%',
 		marginBottom: '5%',
-		shadowOpacity: 0.15,
-		elevation: 15,
-		shadowOffset: {width: 7, height: 7},
-		shadowColor: '#000000',
 	},
 });
