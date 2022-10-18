@@ -11,7 +11,7 @@ import type {NavigationProp} from '@react-navigation/native';
 export default function HomeScreen({navigation}: {navigation: NavigationProp<any>}) {
 	const theme = useContext(themeContext);
 	const [number, setNumber] = useState<string | undefined>(null);
-	const [loading, setLoading] = useState(true);
+	const [loading, setLoading] = useState <boolean>(true);
 	const [card, setCard] = useState<string | undefined>(null);
 
 	useEffect(() => {
