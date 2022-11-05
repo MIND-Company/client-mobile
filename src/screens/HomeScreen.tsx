@@ -1,4 +1,4 @@
-import {ActivityIndicator, BackHandler, ScrollView, StatusBar} from 'react-native';
+import {ActivityIndicator, BackHandler, ScrollView, StatusBar, Text} from 'react-native';
 import InfoComponent from '../components/forHomeScreen/InfoComponent';
 import AddCarComponent from '../components/forHomeScreen/AddCarComponent';
 import AddCardComponent from '../components/forHomeScreen/AddCardComponent';
@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
 import themeContext from '../../config/ThemeContext';
 import type {NavigationProp} from '@react-navigation/native';
+import PreviousParkingAndCardNumber from '../components/forHomeScreen/PreviousParkingAndCard&Number';
 
 export default function HomeScreen({navigation}: {navigation: NavigationProp<any>}) {
 	const theme = useContext(themeContext);
@@ -45,8 +46,13 @@ export default function HomeScreen({navigation}: {navigation: NavigationProp<any
 		try {
 			const number = await AsyncStorage.getItem('number');
 			const card = await AsyncStorage.getItem('card');
-			setNumber(number);
-			setCard(card);
+			if (number !== null) {
+				setNumber(number);
+			}
+
+			if (card !== null) {
+				setCard(card);
+			}
 		} finally {
 			setLoading(false);
 		}
@@ -62,11 +68,17 @@ export default function HomeScreen({navigation}: {navigation: NavigationProp<any
 				</>
 			) : (
 				<>
-					<AddCarComponent bg = {theme.backgroundComponent} func={goAddCar} number={number} numberFunc={setNumber}
-					/>
-					<AddCardComponent bg = {theme.backgroundComponent} func={goAddCard} card={card} cardFunc={setCard} />
-				</>
-			)}
+					{(number !== null && card !== null)
+						? (
+							<>
+								<PreviousParkingAndCardNumber height = {110} bg={theme.backgroundComponent} card = {card} number={number} />
+							</>) : (
+							<>
+								<AddCarComponent height = {220} bg={theme.backgroundComponent} func={goAddCar} number={number} numberFunc={setNumber} />
+								<AddCardComponent height ={220} bg={theme.backgroundComponent} func={goAddCard} card={card} cardFunc={setCard} />
+							</>)
+					}
+				</>)}
 			<StatusBar backgroundColor={theme.backgroundScreen} barStyle={theme.statusBarStyle}/>
 		</ScrollView>
 	);
