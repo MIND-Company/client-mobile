@@ -6,41 +6,43 @@ import TextInputComponent from '../components/forAuthorizationAndRegistrationScr
 import MainButton from '../components/forAuthorizationAndRegistrationScreen/MainButton';
 import React from 'react';
 import type {NavigationProp} from '@react-navigation/native';
+import {Loader} from '@ermolaev/mind-ui';
 
 export default function AuthorizationScreen({navigation}: {navigation: NavigationProp<any>}) {
 	const {isAuth, setIsAuth} = useAuth();
-	const [email, setEmail] = useState<string>('');
-	const [password, setPassword] = useState('');
+	const [phone, setPhone] = useState<string>('');
+	const [password, setPassword] = useState<string>('');
 	const [error, setError] = useState<boolean>(false);
 	const [textError, setTextError] = useState<string>('');
 	const [load, setLoad] = useState<boolean>(false);
 	const authFunction = async () => {
-		if (email !== '' && password !== '') {
+		if (phone !== '' && password !== '') {
 			try {
-				const url = '';
-				const request = await fetch(url, {
+				setLoad(true);
+				const request = await fetch('http://188.68.221.169/login/', {
 					method: 'POST',
 					headers: {
 						Accept: 'application/json',
 						'Content-Type': 'application/json',
 					},
 					body: JSON.stringify({
-						user: {
-							Email: email,
-							Password: password,
-						},
+						phone: phone,
+						password: password,
 					}),
-				}).then(async response => response.json());
+				});
+				const data = await request.json() as {access: string; refresh: string};
 				if (request.ok) {
-					await AsyncStorage.setItem('access_token', request.Access);
-					await AsyncStorage.setItem('refresh_token', request.Refresh);
+					await AsyncStorage.setItem('access_token', data.access);
+					await AsyncStorage.setItem('refresh_token', data.refresh);
 					setIsAuth();
 					navigation.navigate('MainNavigation');
 				} else {
-					request.status === 500 ? errorFunc('Ошибка сервера') : errorFunc('Ошибка в переданных данных');
+					request.status === 500 ? errorFunc('Ошибка сервера') : errorFunc('Неверный логин или пароль');
 				}
 			} catch (e: unknown) {
 				errorFunc('Ошибка сети');
+			} finally {
+				setLoad(false);
 			}
 		} else {
 			errorFunc('Не все поля заполнены');
@@ -53,11 +55,11 @@ export default function AuthorizationScreen({navigation}: {navigation: Navigatio
 		setPassword('');
 	};
 
-	const authRequest = () => {
-		if (email === '1' && password === '1') {
-			setLoad(true);
-			setTimeout(() => (navigation.navigate('MainNavigation'), setLoad(false)), 1000);
-		}
+	const goRegistrationScreen = () => {
+		navigation.navigate('Registration');
+		setPhone('');
+		setPassword('');
+		setError(false);
 	};
 
 	const clearError = () => {
@@ -69,27 +71,24 @@ export default function AuthorizationScreen({navigation}: {navigation: Navigatio
 			<View style={styles.borderedView}>
 				<View style={[{marginBottom: '13%', width: '80%', alignSelf: 'center', marginTop: '15%'}]}>
 					<Text style={[{color: 'gray', fontSize: 15}]}>Ещё нет аккаунта?</Text>
-					<TouchableOpacity style={[{maxWidth: '65%'}]} onPress={() => {
-						navigation.navigate('Registration'), setEmail(''), setPassword(''), setError(false);
-					}}>
+					<TouchableOpacity style={[{maxWidth: '65%'}]} onPress={goRegistrationScreen}>
 						<Text style={[{color: '#886DEC', fontSize: 15, fontWeight: 'bold'}]}>Зарегистрироваться</Text>
 					</TouchableOpacity>
 				</View>
-				<TextInputComponent clearError={clearError} value={email} func={setEmail} placeholder={'Электронная почта'} secure={false} />
+				<TextInputComponent clearError={clearError} value={phone} func={setPhone} placeholder={'Номер телефона'} secure={false} focus={() => {
+					setPhone('+7');
+				}}/>
 				<TextInputComponent clearError={clearError} value={password} func={setPassword} placeholder={'Пароль'} secure={true} />
 				{error && <Text style={[{marginBottom: '4%', fontSize: 15, color: '#963939', fontWeight: 'bold', alignSelf: 'center'}]}>{textError}</Text>}
 				<MainButton text={'Войти'} func={() => {
-					authRequest();
+					void authFunction();
 				}} />
 			</View>
-			<StatusBar backgroundColor='#886DEC'
-				barStyle='dark-content' translucent={false}/>
-
-			{load
-				&& <View style={styles.loading}>
-					<ActivityIndicator size={50} color={'black'}/>
-				</View>
+			{load && <View style={styles.loading}>
+				<ActivityIndicator size={50} color={'black'}/>
+			</View>
 			}
+			<StatusBar backgroundColor='#886DEC' barStyle='dark-content' translucent={false}/>
 		</View>
 	);
 }
