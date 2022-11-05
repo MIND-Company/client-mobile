@@ -1,4 +1,4 @@
-import {StyleSheet, Text, TouchableOpacity, View, Dimensions} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View, Dimensions, Alert} from 'react-native';
 import {useState} from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import TextInputComponent from '../components/forAuthorizationAndRegistrationScreen/TextInputComponent';
@@ -7,34 +7,37 @@ import React from 'react';
 import type {NavigationProp} from '@react-navigation/native';
 
 export default function RegistrationScreen({navigation}: {navigation: NavigationProp<any>}) {
-	const [login, setLogin] = useState<string>('');
-	const [email, setEmail] = useState<string>('');
+	const [phone, setPhone] = useState<string>('');
 	const [firstPassword, setFirstPassword] = useState<string>('');
 	const [secondPassword, setSecondPassword] = useState<string>('');
 	const [error, setError] = useState<boolean>(false);
 	const [textError, setTextError] = useState<string>('');
 
 	const registrationFunc = async () => {
-		if (login !== '' && email !== '' && firstPassword !== '' && secondPassword !== '') {
+		if (phone !== '' && firstPassword !== '' && secondPassword !== '') {
 			try {
-				const url = '';
-				const request = await fetch(url, {
+				const request = await fetch('http://188.68.221.169/register/', {
 					method: 'POST',
 					headers: {
 						Accept: 'application/json',
 						'Content-Type': 'application/json',
 					},
 					body: JSON.stringify({
-						Login: login,
-						Email: email,
+						phone: phone,
 						password: firstPassword,
 						password_retype: secondPassword,
 					}),
-				}).then(async response => response.json());
+				});
+				const data = await request.json();
 				if (request.ok) {
 					navigation.goBack();
+					// Alert.alert('Вы зарегистрированы', 'Окей', [
+					// 	{text: 'OK', onPress() {
+					// 		navigation.goBack();
+					// 	}},
+					// ]);
 				} else {
-					request.status === 500 ? errorFunc('Ошибка сервера') : errorFunc(request.ErrorMesage);
+					request.status === 500 ? errorFunc('Ошибка сервера') : errorFunc(data.password[0]);
 				}
 			} catch (e: unknown) {
 				errorFunc('Ошибка сети');
@@ -66,11 +69,10 @@ export default function RegistrationScreen({navigation}: {navigation: Navigation
 						<Text style={styles.backStyle}>Вернуться</Text>
 					</View>
 				</TouchableOpacity>
-				<TextInputComponent clearError={clearError} value={login} func={setLogin} placeholder={'Логин'} secure={false}/>
-				<TextInputComponent clearError={clearError} value={email} func={setEmail} placeholder={'Электронная почта'} secure={false}/>
+				<TextInputComponent clearError={clearError} value={phone} func={setPhone} placeholder={'Номер телефона'} secure={false} focus={() => setPhone('+7')}/>
 				<TextInputComponent clearError={clearError} value={firstPassword} func={setFirstPassword} placeholder={'Пароль'} secure={true} />
 				<TextInputComponent clearError={clearError} value={secondPassword} func={setSecondPassword} placeholder={'Повторите пароль'} secure={true}/>
-				{error && <Text style={[{marginBottom: '4%', fontSize: 15, color: '#963939', fontWeight: 'bold', alignSelf: 'center'}]}>{textError}</Text>}
+				{error && <Text style={[{marginHorizontal: '4%', marginBottom: '3%', fontSize: 15, color: '#963939', fontWeight: 'bold', alignSelf: 'center'}]}>{textError}</Text>}
 				<MainButton text={'Зарегистрироваться'} func={async () => registrationFunc()} />
 			</View>
 		</View>

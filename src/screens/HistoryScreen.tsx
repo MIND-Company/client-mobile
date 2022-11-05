@@ -54,7 +54,7 @@ export default function HistoryScreen({navigation}: {navigation: NavigationProp<
 	};
 
 	return (
-		<View style={[{backgroundColor: theme.backgroundScreen}]}>
+		<View style={[{backgroundColor: theme.backgroundScreen, paddingBottom: '10%'}]}>
 			<View style={[{width: '95%', height: '7%', alignSelf: 'center', backgroundColor: theme.backgroundScreen}]}>
 				<View style={[styles.upView, {backgroundColor: theme.backgroundComponent}]}>
 					<View style={[styles.upViewContainer, {alignItems: 'stretch'}]}><Text style={[{fontSize: 19, color: theme.textColor}]}>Название</Text></View>

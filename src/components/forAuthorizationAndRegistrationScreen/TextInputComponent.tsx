@@ -1,7 +1,7 @@
 import React from 'react';
 import {Dimensions, StyleSheet, TextInput, View} from 'react-native';
 
-export default function TextInputComponent(props: {clearError: any; value: string;func: any; secure: boolean; placeholder: string}) {
+export default function TextInputComponent(props: {focus?: any; clearError: any; value: string;func: any; secure: boolean; placeholder: string}) {
 	return (
 		<View style={styles.inputView}>
 			<TextInput style={styles.inputStyles}
@@ -10,7 +10,7 @@ export default function TextInputComponent(props: {clearError: any; value: strin
 				placeholder={props.placeholder}
 				placeholderTextColor='#9A9A9A'
 				secureTextEntry={props.secure}
-				onFocus={props.clearError}/>
+				onFocus={props.focus ? (props.clearError, props.focus) : props.clearError}/>
 		</View>
 	);
 }
