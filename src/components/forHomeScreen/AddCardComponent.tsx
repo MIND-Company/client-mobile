@@ -5,12 +5,10 @@ export default function AddCardComponent(props: {height: number; bg: string; fun
 	return (
 		<View style={[styles.view, {backgroundColor: props.bg, height: props.height}]}>
 			{props.card !== null
-				? <View style={[{alignItems: 'center', justifyContent: 'center'}]}>
-					<View style={[{flexDirection: 'row', alignItems: 'center'}]}>
-						<Text style={styles.mainText}> Ваша карта :</Text>
-						<View style={styles.cardView}>
-							<Text style={styles.cardText}> {props.card}</Text>
-						</View>
+				?					<View style={[{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}]}>
+					<Text style={styles.mainText}> Ваша карта :</Text>
+					<View style={styles.cardView}>
+						<Text style={styles.cardText}> {props.card}</Text>
 					</View>
 				</View>
 				: <>
@@ -50,7 +48,6 @@ const styles = StyleSheet.create({
 	},
 	view: {
 		alignSelf: 'center',
-		marginTop: '3%',
 		width: '95%',
 		borderRadius: 20,
 		marginBottom: '3%',

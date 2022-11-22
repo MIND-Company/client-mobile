@@ -10,17 +10,23 @@ export default function ParkingScreen() {
 
 	const markerArray = [
 		{lat: 56.8380620,
-			long: 60.6601190},
+			long: 60.6601190,
+			image: require('../images/mark.png')},
 		{lat: 56.8256,
-			long: 60.62609},
+			long: 60.62609,
+			image: require('../images/mark.png')},
 		{lat: 56.83,
-			long: 60.623},
+			long: 60.623,
+			image: require('../images/mark.png')},
 		{lat: 56.825,
-			long: 60.65},
+			long: 60.65,
+			image: require('../images/mark.png')},
 		{lat: 56.845,
-			long: 60.65},
+			long: 60.65,
+			image: require('../images/mark.png')},
 		{lat: 56.835,
-			long: 60.62},
+			long: 60.62,
+			image: require('../images/mark.png')},
 	];
 	return (
 		<>
@@ -38,7 +44,7 @@ export default function ParkingScreen() {
 				{/* eslint-disable-next-line no-mixed-spaces-and-tabs */}
 				 {markerArray.map((element, index) =>
 					<Marker key={index} point={{lat: element.lat, lon: element.long}}
-						source={require('../images/mark.png')} scale={0.8} onPress={() => {
+						source={element.image} scale={0.8} onPress={() => {
 							console.log(element.lat);
 						}}/>)}
 			</YaMap>
