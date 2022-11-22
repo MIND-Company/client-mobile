@@ -5,12 +5,10 @@ export default function AddCarComponent(props: {height: number; bg: string; func
 	return (
 		<View style={[styles.view, {backgroundColor: props.bg, height: props.height}]}>
 			{props.number !== null
-				? <View style={[{alignItems: 'center', justifyContent: 'center'}]}>
-					<View style={[{flexDirection: 'row', alignItems: 'center'}]}>
-						<Text style={styles.mainText}> Ваш номер :</Text>
-						<View style={styles.numberView}>
-							<Text style={styles.numberText}> {props.number}</Text>
-						</View>
+				? 					<View style={[{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}]}>
+					<Text style={styles.mainText}> Ваш номер :</Text>
+					<View style={styles.numberView}>
+						<Text style={styles.numberText}> {props.number}</Text>
 					</View>
 				</View>
 				: <>
@@ -32,7 +30,7 @@ const styles = StyleSheet.create({
 	numberView: {
 		paddingVertical: '1%',
 		width: '30%',
-		alignItems:'center',
+		alignItems: 'center',
 		backgroundColor: '#ECECEC',
 		borderRadius: 10,
 		borderWidth: 2,
@@ -52,7 +50,7 @@ const styles = StyleSheet.create({
 	},
 	view: {
 		alignSelf: 'center',
-		marginTop: '3%',
+		marginTop: '1.5%',
 		width: '95%',
 		borderRadius: 20,
 		marginBottom: '3%',

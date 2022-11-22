@@ -1,4 +1,4 @@
-import {ActivityIndicator, BackHandler, ScrollView, StatusBar, Text} from 'react-native';
+import {ActivityIndicator, BackHandler, ScrollView, StatusBar, StyleSheet, View} from 'react-native';
 import InfoComponent from '../components/forHomeScreen/InfoComponent';
 import AddCarComponent from '../components/forHomeScreen/AddCarComponent';
 import AddCardComponent from '../components/forHomeScreen/AddCardComponent';
@@ -59,12 +59,16 @@ export default function HomeScreen({navigation}: {navigation: NavigationProp<any
 	};
 
 	return (
-		<ScrollView style={[{width: '100%', backgroundColor: theme.backgroundScreen}]}>
+		<ScrollView style={[{width: '100%', backgroundColor: theme.backgroundScreen, paddingBottom: 20}]}>
 			<InfoComponent bg = {theme.backgroundComponent} textColor = {theme.textColor}/>
 			{loading ? (
 				<>
-					<ActivityIndicator animating={true} size='large' color='#C5C5C5' />
-					<ActivityIndicator animating={true} size='large' color='#C5C5C5' />
+					<View style={styles.View}>
+						<ActivityIndicator size={40} color='#886DEC' />
+					</View>
+					<View style={styles.View}>
+						<ActivityIndicator size={40} color='#886DEC' />
+					</View>
 				</>
 			) : (
 				<>
@@ -83,3 +87,20 @@ export default function HomeScreen({navigation}: {navigation: NavigationProp<any
 		</ScrollView>
 	);
 }
+
+const styles = StyleSheet.create({
+	View: {
+		backgroundColor: '#FFFFFF',
+		alignSelf: 'center',
+		marginTop: '3%',
+		width: '95%',
+		borderRadius: 20,
+		height: 220,
+		alignItems: 'center',
+		justifyContent: 'center',
+		shadowOpacity: 0.15,
+		elevation: 10,
+		shadowOffset: {width: 7, height: 7},
+	},
+});
+

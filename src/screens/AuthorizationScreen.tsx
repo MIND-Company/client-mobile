@@ -1,4 +1,4 @@
-import {StyleSheet, Text, TouchableOpacity, View, Dimensions, StatusBar, ActivityIndicator} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View, Dimensions, StatusBar, ActivityIndicator, Keyboard} from 'react-native';
 import {useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useAuth} from '../components/forAuth/useAuth';
@@ -7,14 +7,16 @@ import MainButton from '../components/forAuthorizationAndRegistrationScreen/Main
 import React from 'react';
 import type {NavigationProp} from '@react-navigation/native';
 import {Loader} from '@ermolaev/mind-ui';
+import {screenHeight} from '../utils/screenSize';
 
 export default function AuthorizationScreen({navigation}: {navigation: NavigationProp<any>}) {
 	const {isAuth, setIsAuth} = useAuth();
-	const [phone, setPhone] = useState<string>('');
+	const [phone, setPhone] = useState<string>('+7');
 	const [password, setPassword] = useState<string>('');
 	const [error, setError] = useState<boolean>(false);
 	const [textError, setTextError] = useState<string>('');
 	const [load, setLoad] = useState<boolean>(false);
+
 	const authFunction = async () => {
 		if (phone !== '' && password !== '') {
 			try {
@@ -26,12 +28,13 @@ export default function AuthorizationScreen({navigation}: {navigation: Navigatio
 						'Content-Type': 'application/json',
 					},
 					body: JSON.stringify({
-						phone: phone,
-						password: password,
+						phone,
+						password,
 					}),
 				});
 				const data = await request.json() as {access: string; refresh: string};
 				if (request.ok) {
+					Keyboard.dismiss();
 					await AsyncStorage.setItem('access_token', data.access);
 					await AsyncStorage.setItem('refresh_token', data.refresh);
 					setIsAuth();
@@ -57,13 +60,20 @@ export default function AuthorizationScreen({navigation}: {navigation: Navigatio
 
 	const goRegistrationScreen = () => {
 		navigation.navigate('Registration');
-		setPhone('');
+		setPhone('+7');
 		setPassword('');
 		setError(false);
 	};
 
 	const clearError = () => {
 		setError(false);
+	};
+
+	const onChangeForNumber = phone => {
+		setPhone(phone);
+		if (phone === '' || phone === '+') {
+			setPhone('+7');
+		}
 	};
 
 	return (
@@ -75,10 +85,10 @@ export default function AuthorizationScreen({navigation}: {navigation: Navigatio
 						<Text style={[{color: '#886DEC', fontSize: 15, fontWeight: 'bold'}]}>Зарегистрироваться</Text>
 					</TouchableOpacity>
 				</View>
-				<TextInputComponent clearError={clearError} value={phone} func={setPhone} placeholder={'Номер телефона'} secure={false} focus={() => {
-					setPhone('+7');
-				}}/>
-				<TextInputComponent clearError={clearError} value={password} func={setPassword} placeholder={'Пароль'} secure={true} />
+				<TextInputComponent type={'numeric'} length={12} clearError={clearError} value={phone} func={phone => {
+					onChangeForNumber(phone);
+				}} placeholder={'Номер телефона'} secure={false}/>
+				<TextInputComponent length={20} clearError={clearError} value={password} func={setPassword} placeholder={'Пароль'} secure={true} />
 				{error && <Text style={[{marginBottom: '4%', fontSize: 15, color: '#963939', fontWeight: 'bold', alignSelf: 'center'}]}>{textError}</Text>}
 				<MainButton text={'Войти'} func={() => {
 					void authFunction();
@@ -113,7 +123,7 @@ const styles = StyleSheet.create({
 		backgroundColor: '#EFF1FB',
 	},
 	container: {
-		minHeight: Math.round(Dimensions.get('window').height) + 100,
+		minHeight: Math.round(screenHeight) + 100,
 		flex: 1,
 		backgroundColor: '#886DEC',
 		alignItems: 'center',

@@ -1,48 +1,43 @@
-import { StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
+import {Image, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
 import React from 'react';
 import LinearGradient from 'react-native-linear-gradient';
+import {screenHeight} from '../../utils/screenSize';
 
 export default function NumberAndCardComponent(props: {func: any}) {
 	return (
 		<View style={styles.cardAndNumberView}>
-			<TouchableWithoutFeedback style={[{width: '48%', height: '100%'}]} onPress={props.func}>
-				<LinearGradient style={[styles.cardAndNumber, {backgroundColor: '#EF81F8'}]} colors={['#642b73', '#c642ce']}>
-					<Text style={styles.textStyle}>Добавить номер т/с</Text>
-				</LinearGradient>
-			</TouchableWithoutFeedback>
-			<TouchableWithoutFeedback style={[{width: '48%', height: '100%'}]} onPress={props.func}>
-				<LinearGradient style={[styles.cardAndNumber, {backgroundColor: '#886DEC'}]} colors={['#886DEC', '#56439E']}>
-					<Text style={styles.textStyle}>Добавить способ оплаты</Text>
-				</LinearGradient>
-			</TouchableWithoutFeedback>
+			<TouchableOpacity style={styles.cardAndNumber} onPress={props.func}>
+				<Image source={require('../../images/imagesForProfile/carProfile.png')} resizeMode={'stretch'} style={[{borderRadius: 20, position: 'absolute'}]}/>
+				<Text style={styles.textStyle}>Добавить номер т/с</Text>
+			</TouchableOpacity>
+			<TouchableOpacity style={styles.cardAndNumber} onPress={props.func}>
+				<Image source={require('../../images/imagesForProfile/cardProfile.png')} resizeMode={'stretch'} style={[{borderRadius: 20, position: 'absolute'}]}/>
+				<Text style={styles.textStyle}>Добавить способ оплаты</Text>
+			</TouchableOpacity>
 		</View>
 	);
 }
 
 const styles = StyleSheet.create({
 	textStyle: {
+		marginLeft: '5%',
 		fontSize: 20,
 		fontWeight: 'bold',
 		color: 'white',
 	},
 	cardAndNumber: {
-		paddingHorizontal: '7%',
 		justifyContent: 'center',
-		alignItems: 'center',
+		alignItems: 'flex-start',
 		borderRadius: 20,
 		width: '48%',
 		height: '100%',
-		shadowColor: '#000000',
-		shadowOpacity: 0.15,
-		elevation: 10,
-		shadowOffset: {width: 7, height: 7},
 	},
 	cardAndNumberView: {
 		flexDirection: 'row',
 		marginTop: '5%',
 		alignSelf: 'center',
 		justifyContent: 'space-between',
-		height: 180,
+		height: screenHeight / 4.16,
 		width: '90%',
 	},
 });
