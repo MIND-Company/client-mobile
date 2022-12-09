@@ -19,7 +19,7 @@ export default function MainNavigation() {
 				tabBarShowLabel: false, // Подписи под иконками
 				tabBarStyle: {
 					backgroundColor: theme.navigationColor,
-				}
+				},
 			}}
 			initialRouteName='HomeNavigations'>
 			<Tab.Screen name='HomeNavigations' component={HomeNavigations} options={{

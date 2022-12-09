@@ -1,9 +1,10 @@
-import {Modal, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Text, TouchableOpacity, View, StyleSheet} from 'react-native';
 import React, {useState} from 'react';
 import Icon from 'react-native-vector-icons/Feather';
 import CloseIcon from 'react-native-vector-icons/AntDesign';
 import {screenHeight} from '../../utils/screenSize';
 import TextInputComponent from '../forAuthorizationAndRegistrationScreen/TextInputComponent';
+import Modal from 'react-native-modal';
 
 export default function EmailAndPhoneComponent(props: {bg: string; textColor: string}) {
 	const [mainEmail, setMainEmail] = useState<string>('-');
@@ -28,32 +29,27 @@ export default function EmailAndPhoneComponent(props: {bg: string; textColor: st
 
 	return (
 		<View style={[styles.emailAndPhoneView, {backgroundColor: props.bg}]}>
-			<Modal
-				statusBarTranslucent={true}
-				animationType='none'
-				transparent={true}
-				visible={modalVisible}
-			>
-				<View style={styles.centeredView}>
-					<View style={styles.modalView}>
-						<TouchableOpacity style={[{alignSelf: 'flex-end', marginRight: '4%', marginTop: '3%'}]} onPress={() => setModalVisible(!modalVisible)}>
-							<CloseIcon name='close' size={28} color='#886DEC'/>
-						</TouchableOpacity>
-						<Text style={styles.modalHeadingText}>Введите новый адрес электронной почты</Text>
-						<View style={[{width: '100%', marginTop: '10%'}]}>
-							<TextInputComponent type={'email-address'} length={25} clearError={clearError} value={email} func={setEmail} secure={false} placeholder={'Новый email'} />
-						</View>
-						{error && <Text style={[{marginTop: '7%', marginBottom: '-3%', fontWeight: '400', color: 'red', fontSize: 16, textAlign: 'center'}]}>{errorText}</Text>}
-						<TouchableOpacity
-							style={styles.button}
-							onPress={() => {
-								emailFunc();
-								// Props.back;
-							}}
-						>
-							<Text style={[{color: 'white', fontSize: 15, fontWeight: '500'}]}>Сохранить</Text>
-						</TouchableOpacity>
+			<Modal isVisible={modalVisible} onSwipeComplete={() => setModalVisible(!modalVisible)} swipeDirection='left' statusBarTranslucent={true}>
+				<View style={styles.modalView}>
+					<TouchableOpacity style={[{alignSelf: 'flex-end', marginRight: '4%', marginTop: '3%'}]} onPress={() => {
+						setModalVisible(!modalVisible);
+					}}>
+						<CloseIcon name='close' size={28} color='#886DEC'/>
+					</TouchableOpacity>
+					<Text style={styles.modalHeadingText}>Введите новый адрес электронной почты</Text>
+					<View style={[{width: '100%', marginTop: '10%'}]}>
+						<TextInputComponent type={'email-address'} length={25} clearError={clearError} value={email} func={setEmail} secure={false} placeholder={'Новый email'} />
 					</View>
+					{error && <Text style={[{marginTop: '7%', marginBottom: '-3%', fontWeight: '400', color: 'red', fontSize: 16, textAlign: 'center'}]}>{errorText}</Text>}
+					<TouchableOpacity
+						style={styles.button}
+						onPress={() => {
+							emailFunc();
+							// Props.back;
+						}}
+					>
+						<Text style={[{color: 'white', fontSize: 15, fontWeight: '500'}]}>Сохранить</Text>
+					</TouchableOpacity>
 				</View>
 			</Modal>
 			<Text style={styles.textStyle}><Text style={[{color: props.textColor}]}>Номер телефона:</Text> +79223811755</Text>
@@ -85,6 +81,9 @@ const styles = StyleSheet.create({
 		width: '100%',
 	},
 	emailAndPhoneView: {
+		borderStyle: 'solid',
+		borderColor: '#886DEC',
+		borderWidth: 3,
 		marginTop: '3%',
 		alignSelf: 'center',
 		justifyContent: 'space-evenly',
@@ -96,13 +95,8 @@ const styles = StyleSheet.create({
 		elevation: 10,
 		shadowOffset: {width: 7, height: 7},
 	},
-	centeredView: {
-		backgroundColor: 'rgba(0, 0, 0, 0.3)',
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
 	modalView: {
+		alignSelf: 'center',
 		height: '35%',
 		width: '85%',
 		backgroundColor: 'white',
@@ -111,14 +105,6 @@ const styles = StyleSheet.create({
 		borderColor: '#886DEC',
 		borderWidth: 3,
 		alignItems: 'center',
-		shadowColor: '#000',
-		shadowOffset: {
-			width: 0,
-			height: 2,
-		},
-		shadowOpacity: 0.25,
-		shadowRadius: 4,
-		elevation: 5,
 	},
 	button: {
 		marginTop: '9%',

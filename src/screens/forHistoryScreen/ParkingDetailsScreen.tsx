@@ -1,54 +1,49 @@
 import themeContext from '../../../config/ThemeContext';
 import React, {useContext} from 'react';
-import {Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 export default function ParkingDetailsScreen({route, navigation}: {route: any;navigation: any}) {
 	const theme = useContext(themeContext);
 	const parking = route.params.element;
-	// console.log(parking);
+	console.log(parking)
 	return (
-		<View style={[{backgroundColor: theme.backgroundScreen, flex: 1}]}>
-			<TouchableOpacity style={[{marginBottom: '3%', maxWidth: '35%'}]} onPress={() => navigation.goBack()}>
+		<View style={[{backgroundColor: theme.backgroundScreen}]}>
+			<TouchableOpacity style={[{maxWidth: 200, position: 'absolute', zIndex: 2, marginTop: '2%'}]} onPress={() => navigation.goBack()}>
 				<View style={[{flexDirection: 'row', alignItems: 'center'}]}>
-					<Icon name='chevron-back' size={22} color='#886DEC' style={[{marginLeft: '3%'}]}/>
+					<Icon name='chevron-back' size={22} style={[{marginLeft: '3%'}]}/>
 					<Text style={styles.backStyle}>Вернуться</Text>
 				</View>
 			</TouchableOpacity>
 			<ScrollView>
-				<View style={[{alignItems: 'center', justifyContent: 'center'}]}>
-					<Text style={[{color: ' #282828', fontSize: 21, fontWeight: 'bold'}]}>Информация о парковке</Text>
-					<Image source={require('../../images/grin.jpg')} style={styles.ImageStyle} />
-					<View style={[{marginTop: '7%', width: '100%'}]}>
-						<View style={[{paddingTop: '3%', height: 120, flexDirection: 'row', justifyContent: 'space-between'}]}>
-							<View style={[{alignItems: 'center', height: '100%', width: '50%'}]}>
-								<Text style={styles.TextStyle}>НАЗВАНИЕ</Text>
-								<Text style={styles.TextStyle}>{parking.park.description}</Text>
-							</View>
-							<View style={[{alignItems: 'center', height: '100%', width: '50%'}]}>
-								<Text style={styles.TextStyle}> САЙТ</Text>
-								<Text style={styles.TextStyle}>{parking.park.webAddress}</Text>
-							</View>
+				<Image source={require('../../images/grin.jpg')} style={styles.imageStyle} />
+				<View style={[{alignItems: 'center'}]}>
+					<View style={styles.numberAndPriceView}>
+						<View style={styles.numberCarAndPriceTextView}>
+							<Text style={styles.headingTextStyle}>НОМЕР МАШИНЫ</Text>
 						</View>
-						<View style={[{alignItems: 'center', paddingTop: '3%', height: 120}]}>
-							<Text style={styles.TextStyle}>НОМЕР МАШИНЫ</Text>
-							<Text style={styles.TextStyle}>{parking.car}</Text>
+						<View style={styles.numberTextView}>
+							<Text style={styles.priceAndNumberText}>{parking.car.toUpperCase()}</Text>
 						</View>
-						<View style={[{paddingTop: '3%', height: 120, flexDirection: 'row', justifyContent: 'space-between'}]}>
-							<View style={[{alignItems: 'center', height: '100%', width: '50%'}]}>
-								<Text style={styles.TextStyle}>ДАТА ЗАЕЗДА</Text>
-								<Text style={styles.TextStyle}>{parking.entry_time.slice(0, 10)}</Text>
-								<Text style={styles.TextStyle}>{parking.entry_time.slice(11, 19)}</Text>
-							</View>
-							<View style={[{alignItems: 'center', height: '100%', width: '50%'}]}>
-								<Text style={styles.TextStyle}> ДАТА ВЫЕЗДА</Text>
-								<Text style={styles.TextStyle}>{parking.checkout_time.slice(0, 10)}</Text>
-								<Text style={styles.TextStyle}>{parking.checkout_time.slice(11, 19)}</Text>
-							</View>
+					</View>
+					<View style={styles.dateView}>
+						<View style={[styles.oneDateComponentView, {borderTopRightRadius: 20, borderBottomRightRadius: 20}]}>
+							<Text style={[{fontSize: 21, fontWeight: '700', marginBottom: '10%'}]}>Дата выезда</Text>
+							<Text style={styles.textStyle}>{parking.checkout_time.slice(0, 10)}</Text>
+							<Text style={styles.textStyle}>{parking.checkout_time.slice(11, 19)}</Text>
 						</View>
-						<View style={[{alignItems: 'center', paddingTop: '3%', height: 120}]}>
-							<Text style={styles.TextStyle}>СТОИМОСТЬ</Text>
-							<Text style={styles.TextStyle}>500Р</Text>
+						<View style={[styles.oneDateComponentView, {borderTopLeftRadius: 20, borderBottomLeftRadius: 20}]}>
+							<Text style={[{fontSize: 21, fontWeight: '700', marginBottom: '10%'}]}>Дата заезда</Text>
+							<Text style={styles.textStyle}>{parking.entry_time.slice(0, 10)}</Text>
+							<Text style={styles.textStyle}>{parking.entry_time.slice(11, 19)}</Text>
+						</View>
+					</View>
+					<View style={[styles.numberAndPriceView, {marginBottom: '5%'}]}>
+						<View style={styles.numberCarAndPriceTextView}>
+							<Text style={styles.headingTextStyle}>СТОИМОСТЬ</Text>
+						</View>
+						<View style={styles.numberTextView}>
+							<Text style={styles.priceAndNumberText}>500Р</Text>
 						</View>
 					</View>
 				</View>
@@ -58,20 +53,78 @@ export default function ParkingDetailsScreen({route, navigation}: {route: any;na
 }
 
 const styles = StyleSheet.create({
-	TextStyle: {
-		color: '#886DEC',
-		fontSize: 18,
-		fontWeight: '500',
+	priceAndNumberText: {
+		fontSize: 23,
+		fontWeight: 'bold',
+		color: '#45005E',
 	},
-	ImageStyle: {
-		height: 150,
-		width: 250,
+	headingTextStyle: {
+		fontSize: 19,
+		fontWeight: '800',
+		color: '#E6E6FA',
+	},
+	numberAndPriceView: {
+		height: 120,
+		width: '80%',
 		borderRadius: 20,
+		marginTop: '6%',
+		borderStyle: 'solid',
+		borderWidth: 3,
+		borderColor: '#886DEC',
+	},
+	numberTextView: {
+		width: '100%',
+		alignItems: 'center',
+		justifyContent: 'center',
+		height: '50%',
+	},
+	dateView: {
 		marginTop: '5%',
+		width: '100%',
+		height: 160,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+	},
+	oneDateComponentView: {
+		borderColor: '#886DEC',
+		borderStyle: 'solid',
+		borderWidth: 1,
+		backgroundColor: 'white',
+		width: '45%',
+		height: '95%',
+		alignItems: 'center',
+		justifyContent: 'center',
+		shadowColor: '#000000',
+		shadowOpacity: 0.15,
+		elevation: 10,
+		shadowOffset: {width: 7, height: 7},
+	},
+	numberCarAndPriceTextView: {
+		borderTopLeftRadius: 16,
+		borderTopRightRadius: 16,
+		width: '100%',
+		backgroundColor: '#9966cc',
+		height: '50%',
+		alignItems: 'center',
+		justifyContent: 'center',
+		shadowColor: '#000000',
+		shadowOpacity: 0.15,
+		elevation: 7,
+		shadowOffset: {width: 7, height: 7},
+	},
+	textStyle: {
+		color: '#330643',
+		fontSize: 20,
+		fontWeight: 'bold',
+	},
+	imageStyle: {
+		height: 190,
+		width: '100%',
+		borderBottomRightRadius: 15,
+		borderBottomLeftRadius: 15,
 	},
 	backStyle: {
-		color: '#886DEC',
 		fontSize: 16,
-		fontWeight: 'bold',
+		fontWeight: '700',
 	},
 });
