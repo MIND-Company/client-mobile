@@ -24,7 +24,7 @@ export default function HomeScreen({navigation}: {navigation: NavigationProp<any
 		return () => {
 			backHandler.remove();
 		};
-	}, []);
+	},[]);
 
 	const goAddCar = () => {
 		navigation.navigate('AddCar', {changeNumber});
@@ -83,7 +83,7 @@ export default function HomeScreen({navigation}: {navigation: NavigationProp<any
 							</>)
 					}
 				</>)}
-			<StatusBar backgroundColor={theme.backgroundScreen} barStyle={theme.statusBarStyle}/>
+			<StatusBar backgroundColor={theme.backgroundScreen} barStyle={theme.statusBarStyle} translucent={false}/>
 		</ScrollView>
 	);
 }
