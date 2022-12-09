@@ -4,7 +4,7 @@ import React from 'react';
 
 export default function StatsScreen({navigation}: {navigation: any}) {
 	return (
-		<>
+		<View style={[{backgroundColor: '#EFF1FB', flex: 1}]}>
 			<TouchableOpacity style={[{marginBottom: '7%', maxWidth: '35%'}]} onPress={() => navigation.goBack()}>
 				<View style={[{flexDirection: 'row', alignItems: 'center'}]}>
 					<Icon name='chevron-back' size={22} color='#886DEC' style={[{marginLeft: '3%'}]}/>
@@ -16,7 +16,7 @@ export default function StatsScreen({navigation}: {navigation: any}) {
 					<Text style={[{color: '#886DEC', fontSize: 18, fontWeight: 'bold'}]}>Stats</Text>
 				</View>
 			</View>
-		</>
+		</View>
 	);
 }
 

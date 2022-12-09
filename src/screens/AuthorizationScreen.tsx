@@ -98,7 +98,7 @@ export default function AuthorizationScreen({navigation}: {navigation: Navigatio
 				<ActivityIndicator size={50} color={'black'}/>
 			</View>
 			}
-			<StatusBar backgroundColor='#886DEC' barStyle='dark-content' translucent={false}/>
+			<StatusBar backgroundColor='transparent' translucent={true} />
 		</View>
 	);
 }
@@ -109,21 +109,21 @@ const styles = StyleSheet.create({
 		left: 0,
 		right: 0,
 		top: 0,
-		bottom: 100,
-		opacity: 0.1,
-		backgroundColor: 'gray',
+		bottom: 0,
+		opacity: 0.2,
+		backgroundColor: 'black',
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
 	borderedView: {
-		marginTop: '-30%',
+		marginBottom: (screenHeight < 700) ? screenHeight / 7.5 : '10%',
 		height: '50%',
 		width: '80%',
 		borderRadius: 20,
 		backgroundColor: '#EFF1FB',
 	},
 	container: {
-		minHeight: Math.round(screenHeight) + 100,
+		minHeight: Math.round(screenHeight) + (screenHeight / 7.5),
 		flex: 1,
 		backgroundColor: '#886DEC',
 		alignItems: 'center',

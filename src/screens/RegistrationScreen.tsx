@@ -4,11 +4,9 @@ import {
 	TouchableOpacity,
 	View,
 	Dimensions,
-	Alert,
 	ActivityIndicator,
 	Modal,
-	Pressable,
-	Keyboard,
+	Keyboard, StatusBar,
 } from 'react-native';
 import {useState} from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -16,7 +14,7 @@ import TextInputComponent from '../components/forAuthorizationAndRegistrationScr
 import MainButton from '../components/forAuthorizationAndRegistrationScreen/MainButton';
 import React from 'react';
 import type {NavigationProp} from '@react-navigation/native';
-import ModalForRegistration from '../components/forAuthorizationAndRegistrationScreen/ModalForRegistration';
+import {screenHeight} from '../utils/screenSize';
 
 export default function RegistrationScreen({navigation}: {navigation: NavigationProp<any>}) {
 	const [phone, setPhone] = useState<string>('+7');
@@ -79,10 +77,6 @@ export default function RegistrationScreen({navigation}: {navigation: Navigation
 		}
 	};
 
-	const goBackFunc = () => {
-		navigation.goBack();
-	};
-
 	const ErrorComponent = (props: {textError: string}) => (
 		<View style={[{alignItems: 'center', justifyContent: 'center'}]}>
 			<Text style={[{textAlign: 'center', marginHorizontal: '4%', marginBottom: '3%', fontSize: 15, color: '#963939', fontWeight: 'bold', alignSelf: 'center'}]}>{textError}</Text>
@@ -91,7 +85,6 @@ export default function RegistrationScreen({navigation}: {navigation: Navigation
 
 	return (
 		<View style={styles.container}>
-			{/*<ModalForRegistration setFunc={setModalVisible} modal={modalVisible} back={() => navigation.goBack}/>*/}
 			<Modal
 				statusBarTranslucent={true}
 				animationType='none'
@@ -106,7 +99,7 @@ export default function RegistrationScreen({navigation}: {navigation: Navigation
 							style={styles.button}
 							onPress={() => {
 								setModalVisible(!modalVisible);
-								navigation.goBack();
+								navigation.navigate('Authorization');
 							}}
 						>
 							<Text style={[{color: 'white', fontSize: 15, fontWeight: '500'}]}>Окей</Text>
@@ -135,6 +128,7 @@ export default function RegistrationScreen({navigation}: {navigation: Navigation
 				<ActivityIndicator size={50} color={'black'}/>
 			</View>
 			}
+			<StatusBar backgroundColor='transparent' translucent={true} />
 		</View>
 	);
 }
@@ -145,9 +139,9 @@ const styles = StyleSheet.create({
 		left: 0,
 		right: 0,
 		top: 0,
-		bottom: 100,
-		opacity: 0.1,
-		backgroundColor: 'gray',
+		bottom: 0,
+		opacity: 0.2,
+		backgroundColor: 'black',
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
@@ -157,7 +151,7 @@ const styles = StyleSheet.create({
 		fontWeight: 'bold',
 	},
 	borderedView: {
-		marginTop: '-30%',
+		marginBottom: (screenHeight < 700) ? screenHeight / 7.5 : '10%',
 		height: '50%',
 		width: '80%',
 		borderRadius: 20,
@@ -165,7 +159,7 @@ const styles = StyleSheet.create({
 		paddingTop: '5%',
 	},
 	container: {
-		minHeight: Math.round(Dimensions.get('window').height) + 100,
+		minHeight: Math.round(screenHeight) + (screenHeight / 7.5),
 		flex: 1,
 		backgroundColor: '#886DEC',
 		alignItems: 'center',

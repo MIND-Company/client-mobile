@@ -15,6 +15,9 @@ export default function OneHistoryComponent(props: {textColor: string; bg: strin
 
 const styles = StyleSheet.create({
 	parentsView: {
+		borderColor: '#886DEC',
+		borderStyle: 'dotted',
+		borderWidth: 1,
 		alignItems: 'center',
 		paddingHorizontal: '3%',
 		paddingVertical: '4%',

@@ -6,6 +6,7 @@ import StatsComponent from '../components/forProfileScreen/StatsComponent';
 import ThemeAndLanguageComponent from '../components/forProfileScreen/ThemeAndLanguageComponent';
 import themeContext from '../../config/ThemeContext';
 import type {NavigationProp} from '@react-navigation/native';
+import {StackActions} from '@react-navigation/native';
 import {CommonActions} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -14,7 +15,11 @@ export default function ProfileScreen({navigation}: {navigation: NavigationProp<
 	const theme = useContext(themeContext);
 
 	const goChangeCard = () => {
-		navigation.navigate('ChangeCard');
+		navigation.navigate('HomeNavigations', {screen: 'AddCard'});
+	};
+
+	const goChangeNumber = () => {
+		navigation.navigate('HomeNavigations', {screen: 'AddCar'});
 	};
 
 	const goStats = () => {
@@ -35,11 +40,10 @@ export default function ProfileScreen({navigation}: {navigation: NavigationProp<
 		);
 	};
 
-
 	return (
 		<ScrollView style={[{width: '100%', backgroundColor: theme.backgroundScreen}]}>
 			<EmailAndPhoneComponent bg = {theme.backgroundComponent} textColor = {theme.textColor}/>
-			<NumberAndCardComponent func={goChangeCard}/>
+			<NumberAndCardComponent func={goChangeCard} secondFunc={goChangeNumber}/>
 			<StatsComponent func={goStats} />
 			<ThemeAndLanguageComponent />
 			<View style={[{marginBottom: '3%', alignItems: 'center'}]}>

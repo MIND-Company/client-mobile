@@ -30,6 +30,7 @@ export default function HistoryScreen({navigation}: {navigation: NavigationProp<
 				},
 			});
 			const data = await request.json();
+			console.log(data);
 			setParkingArray(data);
 			if (request.status === 401) {
 				await updateAccessToken(setError, getHistoryParking(), setErrorText);
@@ -50,7 +51,7 @@ export default function HistoryScreen({navigation}: {navigation: NavigationProp<
 		void getHistoryParking();
 	}, []);
 
-	// const [refreshing, setRefreshing] = React.useState(false);
+	// Const [refreshing, setRefreshing] = React.useState(false);
 	// const wait = async timeout => new Promise(resolve => setTimeout(resolve, timeout));
 	// const onRefresh = React.useCallback(() => {
 	// 	setRefreshing(true);
@@ -68,15 +69,15 @@ export default function HistoryScreen({navigation}: {navigation: NavigationProp<
 				{ parkingArray.length === 0 || typeof parkingArray[0] === 'undefined'
 					? <NoPastParking />
 					: <>
-						<View style={[{width: '95%', height: '7%', alignSelf: 'center', backgroundColor: theme.backgroundScreen}]}>
+						<View style={[{width: '95%', height: '5.5%', alignSelf: 'center', backgroundColor: theme.backgroundScreen}]}>
 							<View style={[styles.upView, {backgroundColor: theme.backgroundComponent}]}>
 								<View style={[styles.upViewContainer, {alignItems: 'stretch'}]}><Text style={[{fontSize: 19, color: theme.textColor}]}>Название</Text></View>
 								<View style={styles.upViewContainer}><Text style={[{fontSize: 19, color: theme.textColor}]}>Номер</Text></View>
-								<View style={[{paddingVertical: '0.5%', width: '30%', alignItems: 'center'}]}><Text style={[{fontSize: 19, color: theme.textColor}]}>Дата</Text></View>
+								<View style={[{paddingVertical: '0.5%', alignSelf: 'center', width: '30%', alignItems: 'center'}]}><Text style={[{fontSize: 19, color: theme.textColor}]}>Дата</Text></View>
 							</View>
 						</View>
 						<ScrollView style={[{width: '100%'}]}
-							// refreshControl={
+							// RefreshControl={
 							// 	<RefreshControl
 							// 		refreshing={refreshing}
 							// 		onRefresh={onRefresh}
@@ -97,7 +98,7 @@ export default function HistoryScreen({navigation}: {navigation: NavigationProp<
 
 const styles = StyleSheet.create({
 	upViewContainer: {
-		paddingVertical: '0.5%',
+		alignSelf: 'center',
 		borderColor: '#886DEC',
 		borderRightWidth: 2,
 		width: '35%',
@@ -114,7 +115,11 @@ const styles = StyleSheet.create({
 		flexWrap: 'nowrap',
 		justifyContent: 'space-between',
 		paddingHorizontal: '5%',
-		marginTop: '3%',
+		paddingVertical: '0.5%',
+		// shadowColor: '#000000',
+		// shadowOpacity: 0.15,
+		// elevation: 3,
+		// shadowOffset: {width: 7, height: 7},
 	},
 	container: {
 		flex: 1,

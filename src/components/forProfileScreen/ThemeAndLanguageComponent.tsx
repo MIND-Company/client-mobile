@@ -1,6 +1,5 @@
-import {Image, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useContext, useState} from 'react';
-import LinearGradient from 'react-native-linear-gradient';
 import {EventRegister} from 'react-native-event-listeners';
 import themeContext from '../../../config/ThemeContext';
 import {screenHeight} from '../../utils/screenSize';
@@ -36,7 +35,6 @@ const styles = StyleSheet.create({
 	},
 	ThemeAndLanguage: {
 		justifyContent: 'center',
-		alignItems: 'center',
 		borderRadius: 20,
 		height: '100%',
 		width: '48%',
