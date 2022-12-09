@@ -1,4 +1,4 @@
-import {StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import FirstIcon from 'react-native-vector-icons/Ionicons';
 import SecondIcon from 'react-native-vector-icons/FontAwesome';
 import {useState} from 'react';
@@ -13,9 +13,14 @@ export default function AddCardScreen({route, navigation}: {route: any; navigati
 		route.params.changeCard(card);
 	};
 
+	const goBackFunc = () => {
+		Keyboard.dismiss();
+		navigation.goBack();
+	};
+
 	return (
-		<>
-			<TouchableOpacity style={[{marginBottom: '7%', maxWidth: '35%'}]} onPress={() => navigation.goBack()}>
+		<View style={{backgroundColor: '#EFF1FB', flex: 1}}>
+			<TouchableOpacity style={[{marginBottom: '7%', maxWidth: '35%'}]} onPress={goBackFunc}>
 				<View style={[{flexDirection: 'row', alignItems: 'center'}]}>
 					<FirstIcon name='chevron-back' size={22} color='#886DEC' style={[{marginLeft: '3%'}]}/>
 					<Text style={styles.backStyle}>Вернуться</Text>
@@ -38,12 +43,11 @@ export default function AddCardScreen({route, navigation}: {route: any; navigati
 					<Text style={[{color: 'white', fontSize: 16}]}>Добавить карту</Text>
 				</TouchableOpacity>
 			</View>
-		</>
+		</View>
 	);
 }
 
 const styles = StyleSheet.create({
-
 	buttonStyle: {
 		marginTop: '5%',
 		borderStyle: 'solid',

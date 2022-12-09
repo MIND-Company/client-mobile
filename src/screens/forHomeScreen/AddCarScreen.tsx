@@ -1,4 +1,4 @@
-import {StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -12,9 +12,14 @@ export default function AddCarScreen({route, navigation}: {route: any; navigatio
 		route.params.changeNumber(number);
 	};
 
+	const goBackFunc = () => {
+		Keyboard.dismiss();
+		navigation.goBack();
+	};
+
 	return (
-		<>
-			<TouchableOpacity style={[{marginBottom: '7%', maxWidth: '35%'}]} onPress={() => navigation.goBack()}>
+		<View style={{backgroundColor: '#EFF1FB', flex: 1}}>
+			<TouchableOpacity style={[{marginBottom: '7%', maxWidth: '35%'}]} onPress={goBackFunc}>
 				<View style={[{flexDirection: 'row', alignItems: 'center'}]}>
 					<Icon name='chevron-back' size={22} color='#886DEC' style={[{marginLeft: '3%'}]}/>
 					<Text style={styles.backStyle}>Вернуться</Text>
@@ -37,7 +42,7 @@ export default function AddCarScreen({route, navigation}: {route: any; navigatio
 					<Text style={[{color: 'white', fontSize: 16}]}>Добавить номер</Text>
 				</TouchableOpacity>
 			</View>
-		</>
+		</View>
 	);
 }
 

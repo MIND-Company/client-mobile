@@ -37,13 +37,14 @@ export default function App() {
 			if (token !== null) {
 				setIsAuth(true);
 				setIsLoading(false);
-			} else {
-				setIsLoading(false);
 			}
 		} catch (e: unknown) {
 			Alert.alert('Ошибка', 'Токен истёк', [
 				{text: 'OK'},
 			]);
+		}
+		finally {
+			setIsLoading(false);
 		}
 	};
 
