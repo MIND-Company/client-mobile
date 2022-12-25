@@ -1,4 +1,4 @@
-import { createStackNavigator, TransitionPresets } from "@react-navigation/stack";
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import HistoryScreen from '../../screens/HistoryScreen';
 import ParkingDetailsScreen from '../../screens/forHistoryScreen/ParkingDetailsScreen';
 import React from 'react';

@@ -1,52 +1,102 @@
+import type {FC} from 'react';
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {responsiveFontSize, responsiveHeight} from 'react-native-responsive-dimensions';
 
-export default function AddCarComponent(props: {height: number; bg: string; func?: any; number: any; numberFunc?: any}) {
-	return (
-		<View style={[styles.view, {backgroundColor: props.bg, height: props.height}]}>
-			{props.number !== null
-				? 					<View style={[{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}]}>
-					<Text style={styles.mainText}> Ваш номер :</Text>
-					<View style={styles.numberView}>
-						<Text style={styles.numberText}> {props.number}</Text>
+type AddCarComponentProps = {
+	color: string;
+	height: number;
+	bg: string;
+	func?: () => void;
+	number: string | undefined;
+};
+
+const AddCarComponent: FC<AddCarComponentProps> = ({color, height, bg, func, number}) => (
+	<View style={[styles.view, {backgroundColor: bg, height: responsiveHeight(height)}]}>
+		{/* eslint-disable-next-line no-negated-condition */}
+		{number !== null
+			? 					<View style={[{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}]}>
+				<Text style={[styles.mainText, {color: color}]}> Ваш номер :</Text>
+				<View style={styles.numberView}>
+					<View style={styles.numberCarView}>
+						<Text style={styles.numberText}> {number.slice(0, 6)} </Text>
+					</View>
+					<View style={ {height: '100%', width: '30%'}}>
+						<Text style={styles.numberRegionText}> {number.slice(6, 9)} </Text>
+						<View style={ {width: '100%', flexDirection: 'row', justifyContent: 'center', height: '30%'}}>
+							<Text style={[styles.numberRegionText, {fontSize: 12}]}> RUS </Text>
+							<View style={styles.regionView}>
+								<View style={{width: '100%', height: '33%', backgroundColor: 'white'}}>
+								</View>
+								<View style={{width: '100%', height: '33%', backgroundColor: 'blue'}}>
+								</View>
+								<View style={{width: '100%', height: '33%', backgroundColor: '#ed1b24'}}>
+								</View>
+							</View>
+						</View>
 					</View>
 				</View>
-				: <>
-					<Image source={require('../../images/car.png')} style={[{marginBottom: '3%', resizeMode: 'contain', height: '70%', width: '60%'}]}/>
-					<TouchableOpacity onPress={props.func}>
-						<Text style={styles.textStyle}>Добавьте транспорт</Text>
-					</TouchableOpacity>
-				</>}
-		</View>
-	);
-}
+			</View>
+			: <>
+				<Image source={require('../../images/car.png')} style={[{marginBottom: '3%', resizeMode: 'contain', height: '70%', width: '60%'}]}/>
+				<TouchableOpacity onPress={func}>
+					<Text style={styles.textStyle}>Добавьте транспорт</Text>
+				</TouchableOpacity>
+			</>}
+	</View>
+);
 
 const styles = StyleSheet.create({
+	regionView: {
+		backgroundColor: 'red',
+		width: '40%',
+		marginRight: '5%',
+		height: '100%',
+		borderColor: 'black',
+		borderWidth: 1,
+	},
+	numberCarView: {
+		height: '100%',
+		width: '70%',
+		borderRightColor: 'black',
+		borderRightWidth: 2,
+		justifyContent: 'center',
+	},
+	numberRegionText: {
+		fontFamily: 'Montserrat-Bold',
+		textAlign: 'center',
+		fontSize: 21,
+		fontWeight: '400',
+		color: 'black',
+	},
 	numberText: {
-		fontSize: 22,
+		letterSpacing: 2,
+		fontFamily: 'Montserrat-ExtraBold',
+		textAlign: 'center',
+		fontSize: 23,
 		fontWeight: '400',
 		color: 'black',
 	},
 	numberView: {
-		paddingVertical: '1%',
-		width: '30%',
+		borderRadius: 5,
+		height: 50,
+		flexDirection: 'row',
+		width: 180,
 		alignItems: 'center',
-		backgroundColor: '#ECECEC',
-		borderRadius: 10,
+		backgroundColor: 'white',
 		borderWidth: 2,
-		borderColor: '#C5C5C5',
+		borderColor: 'black',
 	},
 	mainText: {
-		fontSize: 18,
-		fontWeight: '500',
-		color: 'black',
+		fontSize: responsiveFontSize(2.4),
+		fontFamily: 'Montserrat-SemiBold',
 		marginRight: '5%',
 	},
 	textStyle: {
-		fontWeight: '500',
+		fontFamily: 'Montserrat-SemiBold',
 		color: '#886DEC',
 		marginBottom: '5%',
-		fontSize: 17,
+		fontSize: responsiveFontSize(2.3),
 	},
 	view: {
 		alignSelf: 'center',
@@ -61,3 +111,5 @@ const styles = StyleSheet.create({
 		shadowOffset: {width: 7, height: 7},
 	},
 });
+
+export default AddCarComponent;

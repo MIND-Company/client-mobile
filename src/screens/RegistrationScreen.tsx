@@ -3,7 +3,6 @@ import {
 	Text,
 	TouchableOpacity,
 	View,
-	Dimensions,
 	ActivityIndicator,
 	Modal,
 	Keyboard, StatusBar,
@@ -15,6 +14,7 @@ import MainButton from '../components/forAuthorizationAndRegistrationScreen/Main
 import React from 'react';
 import type {NavigationProp} from '@react-navigation/native';
 import {screenHeight} from '../utils/screenSize';
+import {responsiveFontSize} from 'react-native-responsive-dimensions';
 
 export default function RegistrationScreen({navigation}: {navigation: NavigationProp<any>}) {
 	const [phone, setPhone] = useState<string>('+7');
@@ -98,17 +98,19 @@ export default function RegistrationScreen({navigation}: {navigation: Navigation
 						<TouchableOpacity
 							style={styles.button}
 							onPress={() => {
+								Keyboard.dismiss();
 								setModalVisible(!modalVisible);
 								navigation.navigate('Authorization');
 							}}
 						>
-							<Text style={[{color: 'white', fontSize: 15, fontWeight: '500'}]}>Окей</Text>
+							<Text style={[{color: 'white', fontSize: responsiveFontSize(1.8), fontFamily: 'Montserrat-Bold'}]}>Окей</Text>
 						</TouchableOpacity>
 					</View>
 				</View>
 			</Modal>
 			<View style={styles.borderedView}>
 				<TouchableOpacity style={[{marginBottom: '13%', maxWidth: '35%'}]} onPress={() => {
+					Keyboard.dismiss();
 					navigation.goBack();
 				}}>
 					<View style={[{flexDirection: 'row', alignItems: 'center'}]}>
@@ -116,13 +118,16 @@ export default function RegistrationScreen({navigation}: {navigation: Navigation
 						<Text style={styles.backStyle}>Вернуться</Text>
 					</View>
 				</TouchableOpacity>
-				<TextInputComponent length={12} type={'numeric'} clearError={clearError} value={phone} func={phone => {
+				<TextInputComponent label={'Номер'} length={12} type={'numeric'} clearError={clearError} value={phone} func={phone => {
 					onChangeForNumber(phone);
-				}} placeholder={'Номер телефона'} secure={false}/>
-				<TextInputComponent length={20} clearError={clearError} value={firstPassword} func={setFirstPassword} placeholder={'Пароль'} secure={true} />
-				<TextInputComponent length={20} clearError={clearError} value={secondPassword} func={setSecondPassword} placeholder={'Повторите пароль'} secure={true}/>
+				}} placeholder={'Введите номер'} secure={false}/>
+				<TextInputComponent label={'Пароль'} length={20} clearError={clearError} value={firstPassword} func={setFirstPassword} placeholder={'Введите пароль'} secure={true} />
+				<TextInputComponent label={'Повторите пароль'} length={20} clearError={clearError} value={secondPassword} func={setSecondPassword} placeholder={'Повторите пароль'} secure={true}/>
 				{error && <ErrorComponent textError={textError}/>}
 				<MainButton text={'Зарегистрироваться'} func={async () => registrationFunc()} />
+				{/*<MainButton text={'Зарегистрироваться'} func={() => {*/}
+				{/*	navigation.navigate('VerifyCodeScreen');*/}
+				{/*}} />*/}
 			</View>
 			{load && <View style={styles.loading}>
 				<ActivityIndicator size={50} color={'black'}/>
@@ -146,9 +151,9 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	backStyle: {
+		fontFamily: 'Montserrat-Bold',
 		color: '#886DEC',
-		fontSize: 16,
-		fontWeight: 'bold',
+		fontSize: responsiveFontSize(1.9),
 	},
 	borderedView: {
 		marginBottom: (screenHeight < 700) ? screenHeight / 7.5 : '10%',
@@ -200,15 +205,15 @@ const styles = StyleSheet.create({
 	},
 	modalHeadingText: {
 		marginTop: '6%',
-		fontWeight: 'bold',
-		fontSize: 22,
+		fontFamily: 'Montserrat-Bold',
+		fontSize: responsiveFontSize(2.9),
 		color: '#886DEC',
 		textAlign: 'center',
 	},
 	modalText: {
 		marginTop: '11%',
-		fontWeight: '500',
-		fontSize: 20,
+		fontFamily: 'Montserrat-Bold',
+		fontSize: responsiveFontSize(2.3),
 		lineHeight: 20,
 		textAlign: 'center',
 	},

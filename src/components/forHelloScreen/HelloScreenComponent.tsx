@@ -1,14 +1,14 @@
 import {Image, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
+import {responsiveFontSize} from 'react-native-responsive-dimensions';
 
 export const HelloScreenComponent = (props: {headingText: string; h2Text: string; image: string}) => (
 	<View style={styles.slide}>
 		<View style={{height: '70%', width: '90%', justifyContent: 'center', alignItems: 'center'}}>
-			<Image source={require('../../images/helloScreenFirst.png')} resizeMode={'center'} />
+			<Image source={require('../../images/hello-screen.png')} resizeMode={'center'} />
 		</View>
 		<View style={{width: '90%'}}>
-			<Text style={styles.text}> {props.headingText} </Text>
-			<Text style={styles.h2text}> {props.h2Text} </Text>
+			<Text style={styles.h2text}>{props.h2Text} </Text>
 		</View>
 	</View>
 );
@@ -21,13 +21,13 @@ const styles = StyleSheet.create({
 		alignSelf: 'center',
 	},
 	text: {
+		fontFamily: 'Montserrat-Bold',
 		color: '#230D21',
-		fontSize: 25,
-		fontWeight: 'bold',
+		fontSize: responsiveFontSize(3),
 	},
 	h2text: {
-		color: 'gray',
-		fontSize: 20,
-		fontWeight: '400',
+		color: '#18091f',
+		fontSize: responsiveFontSize(2.5),
+		fontFamily: 'Montserrat-Bold',
 	},
 });

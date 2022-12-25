@@ -1,13 +1,12 @@
 import YaMap, {Marker} from 'react-native-yamap';
 import {
-	ActivityIndicator,
+	ActivityIndicator, Image,
 	PermissionsAndroid,
-	StatusBar,
 	StyleSheet,
 	Text,
 	TouchableOpacity,
 	View,
-} from "react-native";
+} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import themeContext from '../../config/ThemeContext';
 import Geolocation from 'react-native-geolocation-service';
@@ -24,7 +23,6 @@ const requestLocationPermission = async () => {
 				title: 'Запрос геолокации',
 				message: 'Хотите разрешить получение геолокации?',
 				buttonNeutral: 'Позже',
-				buttonNegative: 'Отмена',
 				buttonPositive: 'Ок',
 			},
 		);
@@ -36,7 +34,7 @@ const requestLocationPermission = async () => {
 
 		console.log('You cannot use Geolocation');
 		return false;
-	} catch (err) {
+	} catch (err: unknown) {
 		return false;
 	}
 };
@@ -46,6 +44,8 @@ export default function ParkingScreen() {
 	const [location, setLocation] = useState(false);
 	const [loading, setLoading] = useState(true);
 	const [currentCoordinates, setCurrentCoordinates] = useState({lat: null, long: null});
+	const [mark, setMark] = useState(99);
+
 	const getLocation = () => {
 		const result = requestLocationPermission();
 		result.then(res => {
@@ -64,40 +64,42 @@ export default function ParkingScreen() {
 					{enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
 				);
 			}
+		}).then(() => {
+			setLoading(false);
 		});
 		console.log(location);
-		setLoading(false);
 	};
 
 	const theme = useContext(themeContext);
 	const markerArray = [
-		{lat: 56.8380620,
-			long: 60.6601190,
-			image: require('../images/mark.png')},
+		{lat: 56.8500620,
+			long: 60.6701190,
+		},
 		{lat: 56.8256,
 			long: 60.62609,
-			image: require('../images/mark.png')},
-		{lat: 56.83,
-			long: 60.623,
-			image: require('../images/mark.png')},
-		{lat: 56.825,
+		},
+		{lat: 56.834,
+			long: 60.623},
+		{
+			lat: 56.825,
 			long: 60.65,
-			image: require('../images/mark.png')},
-		{lat: 56.845,
+		},
+		{lat: 56.847,
 			long: 60.65,
-			image: require('../images/mark.png')},
-		{lat: 56.835,
+		},
+		{lat: 56.841,
 			long: 60.62,
-			image: require('../images/mark.png')},
+		},
 	];
 
 	useEffect(() => {
 		getLocation();
 	}, []);
-
 	return (
 		<>
-			<Modal isVisible={modalVisible} onSwipeComplete={() => setModalVisible(!modalVisible)} swipeDirection= 'left' statusBarTranslucent={true}>
+			<Modal isVisible={modalVisible} onSwipeComplete={() => {
+				setModalVisible(!modalVisible);
+			}} swipeDirection= 'left' statusBarTranslucent={true}>
 				<View style={styles.modalView}>
 					<TouchableOpacity style={[{alignSelf: 'flex-end', marginRight: '4%', marginTop: '3%'}]}
 						onPress={() => {
@@ -109,12 +111,21 @@ export default function ParkingScreen() {
 					<Text style={styles.modalHeadingText}>{currentCoordinates.long}</Text>
 				</View>
 			</Modal>
-			{loading ? <ActivityIndicator animating={true} size='large' color='#C5C5C5' />
+			{loading ? (
+				<View style={{justifyContent: 'center', alignItems: 'center', flex: 1, backgroundColor: theme.backgroundScreen}}>
+					<ActivityIndicator animating={true} size={30} color='#C5C5C5' />
+				</View>
+			)
 				: <YaMap
+					onMapLoaded={() => {
+						setMark(100);
+					}
+					}
 					followUser={true}
 					nightMode={theme.nightMapColor}
+					userLocationAccuracyFillColor={'#d6dae2'}
 					userLocationIcon={require('../images/user.png')}
-					userLocationIconScale={0.7}
+					userLocationIconScale={0.4}
 					initialRegion={{
 						lat: location ? location.coords.latitude : 56.8519,
 						lon: location ? location.coords.longitude : 60.6122,
@@ -124,11 +135,10 @@ export default function ParkingScreen() {
 					}}
 					style={{flex: 1}}>
 					{markerArray.map((element, index) =>
-						<Marker key={index} point={{lat: element.lat, lon: element.long}}
-							source={require('../images/mark.png')} scale={0.8} onPress={() => {
-								setCurrentCoordinates({lat: element.lat, long: element.long});
-								setModalVisible(true);
-							}} />)}
+						<Marker source={require('../images/mark.png')} zIndex={mark} key={index} point={{lat: element.lat, lon: element.long}} scale={0.2} onPress={() => {
+							setCurrentCoordinates({lat: element.lat, long: element.long});
+							setModalVisible(true);
+						}} />)}
 				</YaMap>
 			}
 		</>

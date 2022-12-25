@@ -1,5 +1,6 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import {responsiveFontSize} from 'react-native-responsive-dimensions';
 
 export default function NoPastParking() {
 	return (
@@ -11,8 +12,8 @@ export default function NoPastParking() {
 
 const styles = StyleSheet.create({
 	TextStyle: {
-		fontWeight: 'bold',
-		fontSize: 19,
+		fontFamily: 'Montserrat-SemiBold',
+		fontSize: responsiveFontSize(2.5),
 		color: '#886DEC',
 	},
 	containerView: {

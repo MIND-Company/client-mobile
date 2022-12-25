@@ -6,6 +6,7 @@ import MainNavigation from './MainNavigation';
 import React from 'react';
 import {useAuth} from '../components/forAuth/useAuth';
 import HelloScreen from '../screens/HelloScreen';
+import VerifyCodeScreen from '../screens/VerifyCodeScreen';
 
 const Stack = createStackNavigator();
 
@@ -22,6 +23,7 @@ export default function AuthNavigation() {
 				<Stack.Screen name = {auth.isAuth ? 'HelloScreen' : 'MainNavigation'} component={auth.isAuth ? HelloScreen : MainNavigation} />
 				<Stack.Screen name='Authorization' component={AuthorizationScreen} />
 				<Stack.Screen name='Registration' component={RegistrationScreen} />
+				<Stack.Screen name='VerifyCodeScreen' component={VerifyCodeScreen} />
 			</Stack.Navigator>
 		</NavigationContainer>
 	);

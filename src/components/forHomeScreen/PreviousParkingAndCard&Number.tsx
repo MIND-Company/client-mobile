@@ -1,20 +1,34 @@
-import React, {useEffect, useState} from 'react';
+import type {FC} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
 import AddCarComponent from './AddCarComponent';
 import AddCardComponent from './AddCardComponent';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {updateAccessToken} from '../../utils/updateAccessTokenFunction';
+import PreviousParkingComponent from './PreviousParkingComponent';
+import CurrentParkingComponent from './CurrentParkingComponent';
+import ThemeContext from '../../../config/ThemeContext';
+import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
 
-export default function PreviousParkingAndCardNumber(props: {height: number; number: string; bg: string; card: string}) {
+type PreviousParkingAndCardNumberProps = {
+	navigationFunc: () => void;
+	height: number;
+	number: string | undefined;
+	bg: string;
+	card: string;
+};
+
+const PreviousParkingAndCardNumber: FC<PreviousParkingAndCardNumberProps> = ({navigationFunc, height, number, bg, card}) => {
 	const [load, setLoad] = useState<boolean>(true);
 	const [error, setError] = useState<boolean>(false);
 	const [errorText, setErrorText] = useState<string>('');
 	const [parkingArray, setParkingArray] = useState([]);
+	const theme = useContext(ThemeContext);
 
 	const getHistoryParking = async () => {
 		try {
 			const token = await AsyncStorage.getItem('access_token');
-			const request = await fetch('http://188.68.221.169/api/parkings/', {
+			const request = await fetch('http://188.68.221.169/api/parkings/?limit=1', {
 				method: 'GET',
 				headers: {
 					Authorization: 'Bearer ' + token,
@@ -23,7 +37,11 @@ export default function PreviousParkingAndCardNumber(props: {height: number; num
 				},
 			});
 			const data = await request.json();
-			setParkingArray(data);
+			console.log(data);
+			if (request.ok) {
+				setParkingArray(data.results);
+			}
+
 			if (request.status === 401) {
 				await updateAccessToken(setError, getHistoryParking(), setErrorText);
 			}
@@ -53,40 +71,34 @@ export default function PreviousParkingAndCardNumber(props: {height: number; num
 	return (
 		<>
 			{error && <Text>{errorText}</Text>}
-			<View style={styles.View}>
+			<View style={[styles.view, {backgroundColor: theme.backgroundComponent}]}>
 				{load ? <ActivityIndicator size={20} color={'#886DEC'} />
-					: (<>{typeof parkingArray[0] === 'undefined'
-						? <Text>У вас нет паркингов</Text>
-						: parkingArray[0].checkout_time === null ? <Text> Вы на парковке 0 сек.</Text>
-							: <Text>Прошлый паркинг</Text>
+					: (<>{!parkingArray[0]
+						? <Text style={{color: theme.color, fontFamily: 'Montserrat-SemiBold', fontSize: 17}}>У вас нет парковок</Text>
+						: parkingArray[0].checkout_time === null ? <CurrentParkingComponent color = {theme.color} element = {parkingArray[0]} />
+							: <PreviousParkingComponent color = {theme.color} navigationFunc={navigationFunc} element = {parkingArray[0]} />
 					}</>)}
 			</View>
 			<View>
-				<View style={[{height: 110, marginBottom: '3%', marginTop: '3%'}]}>
-					<AddCarComponent bg={props.bg} number = {props.number} height={props.height}/>
+				<View style={[{height: 110, marginBottom: '4%'}]}>
+					<AddCarComponent color = {theme.color} bg= {theme.backgroundComponent} number = {number} height={height}/>
 				</View>
-				<View style={[{height: 110, marginBottom: '3%', marginTop: '3%'}]}>
-					<AddCardComponent bg ={props.bg} card = {props.card} height={props.height}/>
+				<View style={[{height: 110, marginBottom: '2%'}]}>
+					<AddCardComponent color = {theme.color} bg= {theme.backgroundComponent} card = {card} height={height}/>
 				</View>
 			</View>
 		</>
 	);
-}
+};
 
 const styles = StyleSheet.create({
-	TextStyle: {
-		fontWeight: '500',
-		color: '#886DEC',
-		marginBottom: '5%',
-		fontSize: 17,
-	},
-	View: {
-		backgroundColor: '#FFFFFF',
+	view: {
 		alignSelf: 'center',
-		marginTop: '3%',
+		marginTop: '1.5%',
+		marginBottom: '2%',
 		width: '95%',
 		borderRadius: 20,
-		height: 220,
+		height: responsiveHeight(30),
 		alignItems: 'center',
 		justifyContent: 'center',
 		shadowOpacity: 0.15,
@@ -94,3 +106,5 @@ const styles = StyleSheet.create({
 		shadowOffset: {width: 7, height: 7},
 	},
 });
+
+export default PreviousParkingAndCardNumber;

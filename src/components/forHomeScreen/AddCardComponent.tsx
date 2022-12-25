@@ -1,50 +1,62 @@
+import type {FC} from 'react';
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {responsiveFontSize, responsiveHeight} from 'react-native-responsive-dimensions';
 
-export default function AddCardComponent(props: {height: number; bg: string; func?: any; card: any; cardFunc?: any}) {
-	return (
-		<View style={[styles.view, {backgroundColor: props.bg, height: props.height}]}>
-			{props.card !== null
-				?					<View style={[{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}]}>
-					<Text style={styles.mainText}> Ваша карта :</Text>
-					<View style={styles.cardView}>
-						<Text style={styles.cardText}> {props.card}</Text>
-					</View>
+type AddCardComponentProps = {
+	color: string;
+	height: number;
+	bg: string;
+	func?: () => void;
+	card: string | undefined;
+};
+
+const AddCardComponent: FC<AddCardComponentProps> = ({color, height, bg, func, card}) => (
+	<View style={[styles.view, {backgroundColor: bg, height: responsiveHeight(height)}]}>
+		{/* eslint-disable-next-line no-negated-condition */}
+		{card !== null
+			?					<View style={[{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}]}>
+				<Text style={[styles.mainText, {color}]}> Ваша карта :</Text>
+				<View style={styles.cardView}>
+					<Text style={styles.cardText}> {card.slice(0, 4)}</Text>
 				</View>
-				: <>
-					<Image source={require('../../images/card.png')} style={[{alignSelf: 'flex-start', resizeMode: 'contain', height: '80%', width: '80%'}]}/>
-					<TouchableOpacity onPress={props.func}>
-						<Text style={styles.textStyle}>Добавьте способ оплаты</Text>
-					</TouchableOpacity>
-				</>}
-		</View>
-	);
-}
+			</View>
+			: <>
+				<Image source={require('../../images/card.png')} style={[{alignSelf: 'flex-start', resizeMode: 'contain', height: '80%', width: '80%'}]}/>
+				<TouchableOpacity onPress={func}>
+					<Text style={styles.textStyle}>Добавьте способ оплаты</Text>
+				</TouchableOpacity>
+			</>}
+	</View>
+);
 
 const styles = StyleSheet.create({
 	cardText: {
-		fontSize: 22,
+		fontSize: responsiveFontSize(3),
+		fontFamily: 'Montserrat-SemiBold',
 		fontWeight: '400',
 		color: 'white',
 	},
 	cardView: {
 		paddingVertical: '1%',
-		width: '30%',
+		height: 50,
+		width: 180,
 		alignItems: 'center',
+		justifyContent: 'center',
 		backgroundColor: '#886DEC',
 		borderRadius: 10,
 	},
 	mainText: {
-		fontSize: 18,
-		fontWeight: '500',
+		fontSize: responsiveFontSize(2.4),
+		fontFamily: 'Montserrat-SemiBold',
 		color: 'black',
 		marginRight: '5%',
 	},
 	textStyle: {
-		fontWeight: '500',
+		fontFamily: 'Montserrat-SemiBold',
 		color: '#886DEC',
 		marginBottom: '5%',
-		fontSize: 17,
+		fontSize: responsiveFontSize(2.3),
 	},
 	view: {
 		alignSelf: 'center',
@@ -58,3 +70,5 @@ const styles = StyleSheet.create({
 		shadowOffset: {width: 7, height: 7},
 	},
 });
+
+export default AddCardComponent;

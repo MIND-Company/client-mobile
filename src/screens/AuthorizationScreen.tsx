@@ -1,4 +1,4 @@
-import {StyleSheet, Text, TouchableOpacity, View, Dimensions, StatusBar, ActivityIndicator, Keyboard} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View, StatusBar, ActivityIndicator, Keyboard} from 'react-native';
 import {useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useAuth} from '../components/forAuth/useAuth';
@@ -6,8 +6,8 @@ import TextInputComponent from '../components/forAuthorizationAndRegistrationScr
 import MainButton from '../components/forAuthorizationAndRegistrationScreen/MainButton';
 import React from 'react';
 import type {NavigationProp} from '@react-navigation/native';
-import {Loader} from '@ermolaev/mind-ui';
 import {screenHeight} from '../utils/screenSize';
+import {responsiveFontSize} from 'react-native-responsive-dimensions';
 
 export default function AuthorizationScreen({navigation}: {navigation: NavigationProp<any>}) {
 	const {isAuth, setIsAuth} = useAuth();
@@ -34,6 +34,7 @@ export default function AuthorizationScreen({navigation}: {navigation: Navigatio
 				});
 				const data = await request.json() as {access: string; refresh: string};
 				if (request.ok) {
+					await AsyncStorage.setItem('phone', phone);
 					Keyboard.dismiss();
 					await AsyncStorage.setItem('access_token', data.access);
 					await AsyncStorage.setItem('refresh_token', data.refresh);
@@ -69,26 +70,28 @@ export default function AuthorizationScreen({navigation}: {navigation: Navigatio
 		setError(false);
 	};
 
-	const onChangeForNumber = phone => {
-		setPhone(phone);
-		if (phone === '' || phone === '+') {
+	const numberInputFunction = (newPhone: string) => {
+		setPhone(newPhone);
+		if (newPhone === '+' || newPhone === '') {
 			setPhone('+7');
 		}
+	};
+
+	const passwordInputFunction = (newPassword: string) => {
+		setPassword(newPassword);
 	};
 
 	return (
 		<View style={styles.container}>
 			<View style={styles.borderedView}>
-				<View style={[{marginBottom: '13%', width: '80%', alignSelf: 'center', marginTop: '15%'}]}>
-					<Text style={[{color: 'gray', fontSize: 15}]}>Ещё нет аккаунта?</Text>
-					<TouchableOpacity style={[{maxWidth: '65%'}]} onPress={goRegistrationScreen}>
-						<Text style={[{color: '#886DEC', fontSize: 15, fontWeight: 'bold'}]}>Зарегистрироваться</Text>
+				<View style={styles.upView}>
+					<Text style={styles.accText}>Ещё нет аккаунта?</Text>
+					<TouchableOpacity style={[{maxWidth: '70%'}]} onPress={goRegistrationScreen}>
+						<Text style={styles.registrationText}>Зарегистрироваться</Text>
 					</TouchableOpacity>
 				</View>
-				<TextInputComponent type={'numeric'} length={12} clearError={clearError} value={phone} func={phone => {
-					onChangeForNumber(phone);
-				}} placeholder={'Номер телефона'} secure={false}/>
-				<TextInputComponent length={20} clearError={clearError} value={password} func={setPassword} placeholder={'Пароль'} secure={true} />
+				<TextInputComponent label={'Номер'} length={12} type={'numeric'} clearError={clearError} value={phone} func={numberInputFunction} placeholder={'Введите номер'} secure={false}/>
+				<TextInputComponent label={'Пароль'} length={20} clearError={clearError} value={password} func={passwordInputFunction} placeholder={'Введите пароль'} secure={true} />
 				{error && <Text style={[{marginBottom: '4%', fontSize: 15, color: '#963939', fontWeight: 'bold', alignSelf: 'center'}]}>{textError}</Text>}
 				<MainButton text={'Войти'} func={() => {
 					void authFunction();
@@ -98,13 +101,30 @@ export default function AuthorizationScreen({navigation}: {navigation: Navigatio
 				<ActivityIndicator size={50} color={'black'}/>
 			</View>
 			}
-			<StatusBar backgroundColor='transparent' translucent={true} />
+			<StatusBar barStyle={'dark-content'} translucent={true} backgroundColor={'transparent'} />
 		</View>
 	);
 }
 
 const styles = StyleSheet.create({
+	upView: {
+		marginBottom: '13%',
+		width: '80%',
+		alignSelf: 'center',
+		marginTop: '15%',
+	},
+	accText: {
+		color: 'gray',
+		fontSize: responsiveFontSize(1.8),
+		fontFamily: 'Montserrat-Medium',
+	},
+	registrationText: {
+		color: '#886DEC',
+		fontSize: responsiveFontSize(1.8),
+		fontFamily: 'Montserrat-Bold',
+	},
 	loading: {
+		zIndex: 100,
 		position: 'absolute',
 		left: 0,
 		right: 0,

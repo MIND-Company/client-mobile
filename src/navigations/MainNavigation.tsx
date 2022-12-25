@@ -2,7 +2,8 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import ParkingScreen from '../screens/ParkingScreen';
 import FirstIcon from 'react-native-vector-icons/MaterialIcons';
 import SecondIcon from 'react-native-vector-icons/AntDesign';
-import ThirdIcon from 'react-native-vector-icons/Ionicons';
+import ThirdIcon from 'react-native-vector-icons/Octicons';
+import FourthIcon from 'react-native-vector-icons/Feather';
 import HomeNavigations from './ScreensNavigations/HomeNavigations';
 import HistoryNavigations from './ScreensNavigations/HistoryNavigations';
 import ProfileNavigations from './ScreensNavigations/ProfileNavigations';
@@ -15,6 +16,7 @@ export default function MainNavigation() {
 	return (
 		<Tab.Navigator
 			screenOptions={{
+				tabBarHideOnKeyboard: true,
 				headerShown: false, // Название экрана сверху
 				tabBarShowLabel: false, // Подписи под иконками
 				tabBarStyle: {
@@ -36,7 +38,7 @@ export default function MainNavigation() {
 			}}/>
 			<Tab.Screen name='ProfileNavigations' component={ProfileNavigations} options={{
 				tabBarIcon: ({focused}) => (
-					<SecondIcon name='profile' size={28} color = {!focused ? theme.color : '#886DEC'} />),
+					<FourthIcon name='settings' size={28} color = {!focused ? theme.color : '#886DEC'} />),
 			}}/>
 		</Tab.Navigator>
 	);

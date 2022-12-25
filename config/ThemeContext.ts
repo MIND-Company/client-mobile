@@ -1,6 +1,7 @@
 import {createContext} from 'react';
 
 const themeContext = createContext({
+	buttonProfileAndAddCar: '#EFF1FB',
 	navigationColor: '#ffffff',
 	text: 'тёмную',
 	color: 'black',

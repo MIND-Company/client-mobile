@@ -1,4 +1,4 @@
-import { createStackNavigator, TransitionPresets } from "@react-navigation/stack";
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import AddCarScreen from '../../screens/forHomeScreen/AddCarScreen';
 import AddCardScreen from '../../screens/forHomeScreen/AddCardScreen';
 import HomeScreen from '../../screens/HomeScreen';

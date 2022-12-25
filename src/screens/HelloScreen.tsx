@@ -5,6 +5,7 @@ import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {HelloScreenComponent} from '../components/forHelloScreen/HelloScreenComponent';
 import type {NavigationProp} from '@react-navigation/native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {responsiveFontSize} from 'react-native-responsive-dimensions';
 
 export default function HelloScreen({navigation}: {navigation: NavigationProp<any>}) {
 	const goAuthScreen = () => {
@@ -17,23 +18,23 @@ export default function HelloScreen({navigation}: {navigation: NavigationProp<an
 
 	return (
 		<SafeAreaView style={{flex: 1, backgroundColor: '#ECECEC'}}>
-			<View style={{alignItems: 'center', justifyContent: 'center', marginTop: '2%'}}>
-				<Image source={require('../images/logo.png')} style={{width: 80, height: 80}}/>
+			<View style={{alignItems: 'center', justifyContent: 'center', marginTop: '3%'}}>
+				<Image source={require('../images/logo.png')} style={{width: 65, height: 65}}/>
 			</View>
 			<View style={styles.wrapper}>
-				<Swiper autoplay={true} autoplayTimeout={5} loop={false} activeDot={<View style={{backgroundColor: 'rgba(138, 56, 161, 0.4)', width: 25, height: 8, borderRadius: 4, marginLeft: 3, marginRight: 3}} />} dot={<View style={{backgroundColor: 'rgba(0,0,0,.2)', width: 8, height: 8, borderRadius: 4, marginLeft: 3, marginRight: 3}} />}>
-					<HelloScreenComponent headingText={'Почему мы?'} h2Text={ 'У нас полностью бесшовная система'} image={'First'}/>
-					<HelloScreenComponent headingText={'Почему мы?'} h2Text={ 'У нас полностью бесшовная система'} image={'Second'}/>
-					<HelloScreenComponent headingText={'Почему мы?'} h2Text={ 'У нас полностью бесшовная система'} image={'Third'}/>
+				<Swiper autoplay={true} autoplayTimeout={5} loop={false}>
+					<HelloScreenComponent headingText={'1 шаг:'} h2Text={ 'Зарегистрируйтесь и привяжите номер своего т/с и банковскую карту'} image={'First'}/>
+					<HelloScreenComponent headingText={'2 шаг:'} h2Text={ 'Убедитесь, что номер автомобиля читаем и заезжайте на парковку'} image={'Second'}/>
+					<HelloScreenComponent headingText={'3 шаг:'} h2Text={ 'Выезжайте с парковки, оплата спишется с вашей карты автоматически'} image={'Third'}/>
 				</Swiper>
 			</View>
 			<TouchableWithoutFeedback style={styles.buttonStyle} onPress={goRegistrationScreen} >
 				<Text style={styles.buttonText}>Зарегистрироваться</Text>
 			</TouchableWithoutFeedback>
 			<View style={styles.bottomTextView}>
-				<Text style={[{color: 'gray', fontSize: 15, fontWeight: '400'}]}> Вы уже имеете аккаунт? </Text>
+				<Text style={[{color: 'gray', fontSize: 15, fontFamily: 'Montserrat-Medium'}]}> Вы уже имеете аккаунт? </Text>
 				<TouchableWithoutFeedback onPress={goAuthScreen}>
-					<Text style={[{color: '#886DEC', fontSize: 17, fontWeight: 'bold'}]}>Войти</Text>
+					<Text style={[{color: '#886DEC', fontSize: 17, fontFamily: 'Montserrat-Medium'}]}>Войти</Text>
 				</TouchableWithoutFeedback>
 			</View>
 			<StatusBar backgroundColor='transparent' barStyle='dark-content' translucent={true}/>
@@ -43,15 +44,16 @@ export default function HelloScreen({navigation}: {navigation: NavigationProp<an
 
 const styles = StyleSheet.create({
 	buttonText: {
+		fontFamily: 'Montserrat-Medium',
 		color: 'white',
-		fontSize: 19,
+		fontSize: responsiveFontSize(2.3),
 		fontWeight: '400',
 	},
 	bottomTextView: {
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'center',
-		marginTop: '8%',
+		marginTop: '9%',
 	},
 	wrapper: {
 		// BorderStyle: 'solid',
@@ -60,12 +62,12 @@ const styles = StyleSheet.create({
 		// borderRadius: 20,
 		width: '95%',
 		alignSelf: 'center',
-		marginTop: '5%',
+		marginTop: '1%',
 		height: '60%',
 	},
 	buttonStyle: {
 		elevation: 7,
-		marginTop: '5%',
+		marginTop: '8%',
 		borderRadius: 10,
 		backgroundColor: '#886DEC',
 		alignSelf: 'center',

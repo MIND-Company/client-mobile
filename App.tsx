@@ -34,16 +34,23 @@ export default function App() {
 	const checkAuth = async () => {
 		try {
 			const token = await AsyncStorage.getItem('refresh_token');
-			if (token !== null) {
+			const request = await fetch('http://188.68.221.169/token/refresh/', {
+				method: 'POST',
+				headers: {
+					Accept: 'application/json',
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					refresh: token,
+				}),
+			});
+			if (request.status === 200) {
 				setIsAuth(true);
 				setIsLoading(false);
 			}
 		} catch (e: unknown) {
-			Alert.alert('Ошибка', 'Токен истёк', [
-				{text: 'OK'},
-			]);
-		}
-		finally {
+			console.log(e);
+		} finally {
 			setIsLoading(false);
 		}
 	};

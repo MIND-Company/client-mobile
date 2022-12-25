@@ -1,33 +1,46 @@
-import {ActivityIndicator, BackHandler, ScrollView, StatusBar, StyleSheet, View} from 'react-native';
+import {ActivityIndicator, BackHandler, ScrollView, StatusBar, StyleSheet, Text, View} from 'react-native';
 import InfoComponent from '../components/forHomeScreen/InfoComponent';
 import AddCarComponent from '../components/forHomeScreen/AddCarComponent';
 import AddCardComponent from '../components/forHomeScreen/AddCardComponent';
-import {useContext, useEffect, useState} from 'react';
+import {useCallback, useContext, useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
 import themeContext from '../../config/ThemeContext';
 import type {NavigationProp} from '@react-navigation/native';
 import PreviousParkingAndCardNumber from '../components/forHomeScreen/PreviousParkingAndCard&Number';
+import {updateAccessToken} from '../utils/updateAccessTokenFunction';
+import {CommonActions, useFocusEffect} from '@react-navigation/native';
+import {responsiveHeight} from 'react-native-responsive-dimensions';
 
 export default function HomeScreen({navigation}: {navigation: NavigationProp<any>}) {
 	const theme = useContext(themeContext);
 	const [number, setNumber] = useState<string | undefined>(null);
 	const [loading, setLoading] = useState <boolean>(true);
 	const [card, setCard] = useState<string | undefined>(null);
+	const [error, setError] = useState<boolean>(false);
+	const [errorText, setErrorText] = useState<string>('');
 
 	useEffect(() => {
-		void checkCar();
+		void checkCard();
 		const backHandler = BackHandler.addEventListener(
 			'hardwareBackPress',
 			() => true,
 		);
-		return () => {
-			backHandler.remove();
-		};
-	},[]);
+	}, []);
+
+	const checkCard = async () => {
+		await AsyncStorage.removeItem('card');
+		setCard(null);
+	};
+
+	useFocusEffect(
+		useCallback(() => {
+			void checkCar();
+		}, []),
+	);
 
 	const goAddCar = () => {
-		navigation.navigate('AddCar', {changeNumber});
+		navigation.navigate('AddCar');
 	};
 
 	const goAddCard = () => {
@@ -38,35 +51,59 @@ export default function HomeScreen({navigation}: {navigation: NavigationProp<any
 		setCard(card);
 	};
 
-	const changeNumber = (number: string) => {
-		setNumber(number);
-	};
-
 	const checkCar = async () => {
 		try {
-			const number = await AsyncStorage.getItem('number');
-			const card = await AsyncStorage.getItem('card');
-			if (number !== null) {
-				setNumber(number);
+			setLoading(true);
+			const token = await AsyncStorage.getItem('access_token');
+			const request = await fetch('http://188.68.221.169/api/cars', {
+				method: 'GET',
+				headers: {
+					Authorization: 'Bearer ' + token,
+					Accept: 'application/json',
+					'Content-Type': 'application/json',
+				},
+			});
+			const data = await request.json();
+			console.log(data);
+			console.log(request.status);
+			if (request.ok) {
+				if (data[0]) {
+					await AsyncStorage.setItem('number', data[0].number);
+					setNumber(data[0].number);
+				} else {
+					setNumber(null);
+				}
 			}
 
-			if (card !== null) {
-				setCard(card);
+			if (request.status === 401) {
+				await updateAccessToken(setError, checkCar(), setErrorText);
 			}
+
+			if (request.status === 500) {
+				setError(true);
+				setErrorText('Ошибка сервера');
+			}
+		} catch (e: unknown) {
+			console.log(e);
 		} finally {
 			setLoading(false);
 		}
 	};
 
+	const goPreviousParkingScreen = () => {
+		navigation.navigate('HistoryNavigations');
+	};
+
 	return (
-		<ScrollView style={[{width: '100%', backgroundColor: theme.backgroundScreen, paddingBottom: 20}]}>
-			<InfoComponent bg = {theme.backgroundComponent} textColor = {theme.textColor}/>
+		<ScrollView style={[{width: '100%', backgroundColor: theme.backgroundScreen}]}>
+			<InfoComponent bgColor = {theme.backgroundComponent} textColor = {theme.textColor}/>
+			{error && <Text style={[{color: 'black', fontSize: 20}]}>{errorText}</Text>}
 			{loading ? (
 				<>
-					<View style={styles.View}>
+					<View style={[styles.View, {backgroundColor: theme.backgroundComponent}]}>
 						<ActivityIndicator size={40} color='#886DEC' />
 					</View>
-					<View style={styles.View}>
+					<View style={[styles.View, {marginBottom: '3%', marginTop: 0, backgroundColor: theme.backgroundComponent}]}>
 						<ActivityIndicator size={40} color='#886DEC' />
 					</View>
 				</>
@@ -75,11 +112,11 @@ export default function HomeScreen({navigation}: {navigation: NavigationProp<any
 					{(number !== null && card !== null)
 						? (
 							<>
-								<PreviousParkingAndCardNumber height = {110} bg={theme.backgroundComponent} card = {card} number={number} />
+								<PreviousParkingAndCardNumber navigationFunc = {goPreviousParkingScreen} height = {14} bg={theme.backgroundComponent} card = {card} number={number} />
 							</>) : (
 							<>
-								<AddCarComponent height = {220} bg={theme.backgroundComponent} func={goAddCar} number={number} numberFunc={setNumber} />
-								<AddCardComponent height ={220} bg={theme.backgroundComponent} func={goAddCard} card={card} cardFunc={setCard} />
+								<AddCarComponent color={theme.color} height = {30} bg={theme.backgroundComponent} func={goAddCar} number={number} />
+								<AddCardComponent color={theme.color} height ={30} bg={theme.backgroundComponent} func={goAddCard} card={card} />
 							</>)
 					}
 				</>)}
@@ -90,12 +127,12 @@ export default function HomeScreen({navigation}: {navigation: NavigationProp<any
 
 const styles = StyleSheet.create({
 	View: {
-		backgroundColor: '#FFFFFF',
 		alignSelf: 'center',
-		marginTop: '3%',
+		marginTop: '1.5%',
+		marginBottom: '3%',
 		width: '95%',
 		borderRadius: 20,
-		height: 220,
+		height: responsiveHeight(30),
 		alignItems: 'center',
 		justifyContent: 'center',
 		shadowOpacity: 0.15,

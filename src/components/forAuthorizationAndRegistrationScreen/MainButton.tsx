@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, Text} from 'react-native';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 
-export default function MainButton(props: {text: string; func: any}) {
+export default function MainButton(props: {text: string; func: () => void}) {
 	return (
 		<>
 			<TouchableWithoutFeedback style={styles.buttonStyle} onPress={props.func}>
@@ -14,11 +14,13 @@ export default function MainButton(props: {text: string; func: any}) {
 
 const styles = StyleSheet.create({
 	buttonStyle: {
+		marginTop: '5%',
 		borderStyle: 'solid',
 		borderRadius: 11,
 		backgroundColor: '#886DEC',
 		alignSelf: 'center',
 		paddingHorizontal: 18,
 		paddingVertical: 8,
+		elevation: 5,
 	},
 });

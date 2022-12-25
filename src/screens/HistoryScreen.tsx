@@ -1,11 +1,24 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {ActivityIndicator, RefreshControl, ScrollView, StyleSheet, Text, View} from 'react-native';
+import React, {useCallback, useContext, useState} from 'react';
+import {ActivityIndicator, ScrollView, StyleSheet, Text, View} from 'react-native';
 import OneHistoryComponent from '../components/OneHistoryComponent';
 import themeContext from '../../config/ThemeContext';
 import type {NavigationProp} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NoPastParking from '../components/forHistoryScreen/NoPastParking';
 import {updateAccessToken} from '../utils/updateAccessTokenFunction';
+import {responsiveFontSize} from 'react-native-responsive-dimensions';
+import {useFocusEffect} from '@react-navigation/native';
+
+type ElementType = {
+	calculated_price: string | undefined;
+	car: string;
+	checkout_time: string;
+	entry_time: string;
+	park: {
+		description: string;
+		id: number;
+		web_address: string;};
+};
 
 export default function HistoryScreen({navigation}: {navigation: NavigationProp<any>}) {
 	const theme = useContext(themeContext);
@@ -14,12 +27,13 @@ export default function HistoryScreen({navigation}: {navigation: NavigationProp<
 	const [errorText, setErrorText] = useState<string>('');
 	const [parkingArray, setParkingArray] = useState([]);
 
-	const goParkingDetails = (element: Record<string, unknown>) => {
+	const goParkingDetails = (element: ElementType) => {
 		navigation.navigate('ParkingDetails', {element});
 	};
 
 	const getHistoryParking = async () => {
 		try {
+			setLoad(true);
 			const token = await AsyncStorage.getItem('access_token');
 			const request = await fetch('http://188.68.221.169/api/parkings/', {
 				method: 'GET',
@@ -30,8 +44,10 @@ export default function HistoryScreen({navigation}: {navigation: NavigationProp<
 				},
 			});
 			const data = await request.json();
-			console.log(data);
-			setParkingArray(data);
+			if (request.ok) {
+				setParkingArray(data);
+			}
+
 			if (request.status === 401) {
 				await updateAccessToken(setError, getHistoryParking(), setErrorText);
 			}
@@ -47,9 +63,11 @@ export default function HistoryScreen({navigation}: {navigation: NavigationProp<
 		}
 	};
 
-	useEffect(() => {
-		void getHistoryParking();
-	}, []);
+	useFocusEffect(
+		useCallback(() => {
+			void getHistoryParking();
+		}, []),
+	);
 
 	// Const [refreshing, setRefreshing] = React.useState(false);
 	// const wait = async timeout => new Promise(resolve => setTimeout(resolve, timeout));
@@ -69,11 +87,11 @@ export default function HistoryScreen({navigation}: {navigation: NavigationProp<
 				{ parkingArray.length === 0 || typeof parkingArray[0] === 'undefined'
 					? <NoPastParking />
 					: <>
-						<View style={[{width: '95%', height: '5.5%', alignSelf: 'center', backgroundColor: theme.backgroundScreen}]}>
+						<View style={[{width: '95%', height: '5.5%', alignSelf: 'center', backgroundColor: theme.backgroundScreen, marginTop: '2%'}]}>
 							<View style={[styles.upView, {backgroundColor: theme.backgroundComponent}]}>
-								<View style={[styles.upViewContainer, {alignItems: 'stretch'}]}><Text style={[{fontSize: 19, color: theme.textColor}]}>Название</Text></View>
-								<View style={styles.upViewContainer}><Text style={[{fontSize: 19, color: theme.textColor}]}>Номер</Text></View>
-								<View style={[{paddingVertical: '0.5%', alignSelf: 'center', width: '30%', alignItems: 'center'}]}><Text style={[{fontSize: 19, color: theme.textColor}]}>Дата</Text></View>
+								<View style={[styles.upViewContainer, {alignItems: 'stretch'}]}><Text style={[{fontSize: responsiveFontSize(2.4), color: theme.textColor, fontFamily: 'Montserrat-Medium'}]}>Название</Text></View>
+								<View style={styles.upViewContainer}><Text style={[{fontSize: responsiveFontSize(2.4), color: theme.textColor, fontFamily: 'Montserrat-Medium'}]}>Номер</Text></View>
+								<View style={[{paddingVertical: '0.5%', alignSelf: 'center', width: '30%', alignItems: 'center'}]}><Text style={[{fontSize: responsiveFontSize(2.4), color: theme.textColor, fontFamily: 'Montserrat-Medium'}]}>Дата</Text></View>
 							</View>
 						</View>
 						<ScrollView style={[{width: '100%'}]}
@@ -86,7 +104,7 @@ export default function HistoryScreen({navigation}: {navigation: NavigationProp<
 						>
 							{parkingArray.map((element, index) =>
 								element.checkout_time !== null
-								&& <OneHistoryComponent textColor = {theme.textColor} bg = {theme.backgroundComponent} key = {index} name = {element.park.description} car = {element.car} date = {element.checkout_time.slice(0, 10)} func = {() => {
+								&& <OneHistoryComponent textColor = {theme.textColor} bg = {theme.backgroundComponent} key = {index} name = {element.park.description} car = {element.car} date = {element.entry_time.slice(0, 10)} func = {() => {
 									goParkingDetails(element);
 								}}/>)}
 						</ScrollView>
@@ -116,7 +134,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		paddingHorizontal: '5%',
 		paddingVertical: '0.5%',
-		// shadowColor: '#000000',
+		// ShadowColor: '#000000',
 		// shadowOpacity: 0.15,
 		// elevation: 3,
 		// shadowOffset: {width: 7, height: 7},

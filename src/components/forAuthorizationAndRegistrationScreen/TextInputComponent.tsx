@@ -1,37 +1,36 @@
+import type {FC} from 'react';
 import React from 'react';
-import {Dimensions, StyleSheet, TextInput, View} from 'react-native';
+import {View} from 'react-native';
+import {TextInput} from 'react-native-paper';
 
-export default function TextInputComponent(props: {length: number; type?: 'email-address' | 'numeric'; focus?: any; clearError: any; value: string;func: any; secure: boolean; placeholder: string}) {
-	return (
-		<View style={styles.inputView}>
-			<TextInput style={styles.inputStyles}
-				value={props.value}
-				onChangeText={props.func}
-				placeholder={props.placeholder}
-				placeholderTextColor='#9A9A9A'
-				secureTextEntry={props.secure}
-				onFocus={props.focus ? (props.clearError, props.focus) : props.clearError}
-				keyboardType={props.type ? props.type : 'default'}
-				maxLength={props.length}
-			/>
-		</View>
-	);
-}
+type TextInputComponentProps = {
+	length: number;
+	type?: 'email-address' | 'numeric';
+	clearError: () => void;
+	value: string;
+	func: (value: string) => void;
+	secure: boolean;
+	placeholder: string;
+	label: string;
+};
 
-const styles = StyleSheet.create({
-	inputView: {
-		alignItems: 'center',
-		height: '14%',
-	},
-	inputStyles: {
-		height: Math.round(Dimensions.get('window').height) / 16,
-		borderStyle: 'solid',
-		borderColor: '#886DEC',
-		borderRadius: 14,
-		paddingLeft: '5%',
-		borderWidth: 2,
-		width: '80%',
-		color: '#151719',
-		fontSize: 16,
-	},
-});
+export const TextInputComponent: FC<TextInputComponentProps> = ({label, length, type, clearError, value, func, secure, placeholder}) => (
+	<View style={{alignItems: 'center', height: '14%', marginBottom: '1%'}}>
+		<TextInput
+			value={value}
+			onChangeText={func}
+			secureTextEntry={secure}
+			maxLength={length}
+			placeholderTextColor = {'gray'}
+			placeholder = {placeholder}
+			outlineColor = {'#886DEC'}
+			outlineStyle = {{borderRadius: 12, borderWidth: 2}}
+			mode = {'outlined'}
+			style = {{width: '80%', backgroundColor: '#EFF1FB'}}
+			label ={label}
+			onFocus = {clearError}
+		/>
+	</View>
+);
+
+export default TextInputComponent;

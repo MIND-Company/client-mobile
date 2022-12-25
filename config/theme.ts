@@ -1,7 +1,8 @@
 import type {StatusBarStyle} from 'react-native';
 
-type LightAndDarkInterface = {
-	statusBarStyle: StatusBarStyle;
+type LightAndDark = {
+	buttonProfileAndAddCar: string;
+	statusBarStyle: 'default' | 'light-content' | 'dark-content';
 	navigationColor: string;
 	text: string;
 	color: string;
@@ -12,13 +13,14 @@ type LightAndDarkInterface = {
 	themeViewColor: [string, string];
 };
 
-type ThemeInterface = {
-	light: LightAndDarkInterface;
-	dark: LightAndDarkInterface;
+type Theme = {
+	light: LightAndDark;
+	dark: LightAndDark;
 };
 
-const theme: ThemeInterface = {
+const theme: Theme = {
 	light: {
+		buttonProfileAndAddCar: '#544d4d',
 		navigationColor: '#ffffff',
 		text: 'тёмную',
 		color: 'black',
@@ -30,6 +32,7 @@ const theme: ThemeInterface = {
 		themeViewColor: ['#100f12', '#25144a'],
 	},
 	dark: {
+		buttonProfileAndAddCar: '#EFF1FB',
 		navigationColor: '#000000',
 		text: 'светлую',
 		color: 'white',
