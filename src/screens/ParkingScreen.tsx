@@ -1,17 +1,16 @@
 import YaMap, {Marker} from 'react-native-yamap';
 import {
-	ActivityIndicator, Image,
-	PermissionsAndroid,
+	ActivityIndicator,
+	PermissionsAndroid, StatusBar,
 	StyleSheet,
 	Text,
-	TouchableOpacity,
 	View,
-} from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
+} from "react-native";
+import React, {useCallback, useContext, useEffect, useMemo, useRef, useState} from 'react';
 import themeContext from '../../config/ThemeContext';
 import Geolocation from 'react-native-geolocation-service';
-import CloseIcon from 'react-native-vector-icons/AntDesign';
-import Modal from 'react-native-modal';
+import BottomSheet, {BottomSheetBackdrop} from '@gorhom/bottom-sheet';
+import {responsiveFontSize} from 'react-native-responsive-dimensions';
 
 void YaMap.init('11ce9ef3-ae3c-4fbd-ac01-2df7ac5f8432');
 void YaMap.setLocale('ru_RU');
@@ -40,11 +39,28 @@ const requestLocationPermission = async () => {
 };
 
 export default function ParkingScreen() {
-	const [modalVisible, setModalVisible] = useState<boolean>(false);
 	const [location, setLocation] = useState(false);
 	const [loading, setLoading] = useState(true);
-	const [currentCoordinates, setCurrentCoordinates] = useState({lat: null, long: null});
+	const [detailsPerking, setDetailsPerking] = useState({lat: null,
+		long: null,
+		details: {
+			description: '',
+			address: '',
+			places: null,
+			freePlaces: null,
+			pricePerHour: null,
+			freeParking: '',
+		},
+	});
 	const [mark, setMark] = useState(99);
+
+	const toggleBottomNavigationView = () => {
+		bottomSheetRef.current.close();
+	};
+
+	const bottomSheetRef = useRef<BottomSheet>(null);
+	const mapRef = useRef<YaMap>(null);
+	const snapPoints = useMemo(() => ['30%', '40%'], []);
 
 	const getLocation = () => {
 		const result = requestLocationPermission();
@@ -74,49 +90,96 @@ export default function ParkingScreen() {
 	const markerArray = [
 		{lat: 56.8500620,
 			long: 60.6701190,
+			details: {
+				description: 'ТЦ Гринвич',
+				address: 'ул. 8 Марта, 46',
+				places: 250,
+				freePlaces: 233,
+				pricePerHour: 200,
+				freeParking: '2 часа',
+			},
 		},
 		{lat: 56.8256,
 			long: 60.62609,
+			details: {
+				description: 'ТЦ Пассаж',
+				address: 'ул. Вайнера, 9',
+				places: 200,
+				freePlaces: 149,
+				pricePerHour: 300,
+				freeParking: '2 часа',
+			},
 		},
 		{lat: 56.834,
-			long: 60.623},
+			long: 60.623,
+			details: {
+				description: 'ТЦ Алатырь',
+				address: 'ул. Малышева, 5',
+				places: 360,
+				freePlaces: 223,
+				pricePerHour: 250,
+				freeParking: '3 часа',
+			},
+		},
 		{
 			lat: 56.825,
 			long: 60.65,
+			details: {
+				description: 'ТЦ Парк-Хаус',
+				address: 'ул. Сулимова, 50',
+				places: 200,
+				freePlaces: 149,
+				pricePerHour: 300,
+				freeParking: '2 часа',
+			},
 		},
 		{lat: 56.847,
 			long: 60.65,
+			details: {
+				description: 'Универмаг Bolshoy',
+				address: 'ул. Малышева, 71',
+				places: 400,
+				freePlaces: 341,
+				pricePerHour: 200,
+				freeParking: '2 часа',
+			},
 		},
 		{lat: 56.841,
 			long: 60.62,
+			details: {
+				description: 'БЦ Высоцкий',
+				address: 'ул. Малышева, 51',
+				places: 200,
+				freePlaces: 154,
+				pricePerHour: 400,
+				freeParking: '2 часа',
+			},
 		},
 	];
 
 	useEffect(() => {
 		getLocation();
 	}, []);
+
+	const renderBackdrop = useCallback(
+		props => (
+			<BottomSheetBackdrop
+				{...props}
+				disappearsOnIndex={-1}
+			/>
+		),
+		[],
+	);
+
 	return (
 		<>
-			<Modal isVisible={modalVisible} onSwipeComplete={() => {
-				setModalVisible(!modalVisible);
-			}} swipeDirection= 'left' statusBarTranslucent={true}>
-				<View style={styles.modalView}>
-					<TouchableOpacity style={[{alignSelf: 'flex-end', marginRight: '4%', marginTop: '3%'}]}
-						onPress={() => {
-							setModalVisible(!modalVisible);
-						}}>
-						<CloseIcon name='close' size={28} color='#886DEC' />
-					</TouchableOpacity>
-					<Text style={styles.modalHeadingText}>{currentCoordinates.lat}</Text>
-					<Text style={styles.modalHeadingText}>{currentCoordinates.long}</Text>
-				</View>
-			</Modal>
 			{loading ? (
 				<View style={{justifyContent: 'center', alignItems: 'center', flex: 1, backgroundColor: theme.backgroundScreen}}>
 					<ActivityIndicator animating={true} size={30} color='#C5C5C5' />
 				</View>
 			)
 				: <YaMap
+					ref = {mapRef}
 					onMapLoaded={() => {
 						setMark(100);
 					}
@@ -136,33 +199,61 @@ export default function ParkingScreen() {
 					style={{flex: 1}}>
 					{markerArray.map((element, index) =>
 						<Marker source={require('../images/mark.png')} zIndex={mark} key={index} point={{lat: element.lat, lon: element.long}} scale={0.2} onPress={() => {
-							setCurrentCoordinates({lat: element.lat, long: element.long});
-							setModalVisible(true);
+							setDetailsPerking(element);
+							// MapRef.current.findRoutes([{lat: 56.841, lon: 60.62}, {lat: location.coords.latitude, lon: location.coords.longitude}], ['car'], () => console.log('a'));
+							bottomSheetRef.current.snapToIndex(0);
 						}} />)}
 				</YaMap>
 			}
+			<BottomSheet
+				backdropComponent={renderBackdrop}
+				index={-1}
+				ref={bottomSheetRef}
+				snapPoints={snapPoints}
+			>
+				{/* Bottom Sheet inner View */}
+				<View style={styles.bottomNavigationView}>
+					<View>
+						<Text style={{fontFamily: 'Montserrat-SemiBold', fontSize: responsiveFontSize(2.9), color: '#886DEC'}}>{detailsPerking.details.description}</Text>
+					</View>
+					<View
+						style={{
+							height: 10,
+							width: '100%',
+							borderBottomColor: 'gray',
+							borderBottomWidth: 2.5,
+						}}
+					/>
+					<View style={{alignSelf: 'flex-start', marginLeft: '5%', marginTop: '2%'}}>
+						<Text style={styles.sheetDetailText}>Адрес: <Text style={{color: '#886DEC', fontSize: responsiveFontSize(2.5)}}>{detailsPerking.details.address}</Text></Text>
+					</View>
+					<View style={{alignSelf: 'flex-start', marginLeft: '5%', marginTop: '2%'}}>
+						<Text style={styles.sheetDetailText}>Количество мест: <Text style={{color: '#886DEC', fontSize: responsiveFontSize(2.5)}}>{detailsPerking.details.places}</Text></Text>
+					</View>
+					<View style={{alignSelf: 'flex-start', marginLeft: '5%', marginTop: '2%'}}>
+						<Text style={styles.sheetDetailText}>Свободных мест: <Text style={{color: '#886DEC', fontSize: responsiveFontSize(2.5)}}>{detailsPerking.details.freePlaces}</Text></Text>
+					</View>
+					<View style={{alignSelf: 'flex-start', marginLeft: '5%', marginTop: '2%'}}>
+						<Text style={styles.sheetDetailText}>Цена за час сегодня: <Text style={{color: '#886DEC', fontSize: responsiveFontSize(2.5)}}>{detailsPerking.details.pricePerHour}₽</Text></Text>
+					</View>
+					<View style={{alignSelf: 'flex-start', marginLeft: '5%', marginTop: '2%'}}>
+						<Text style={styles.sheetDetailText}>Бесплатная стоянка: <Text style={{color: '#886DEC', fontSize: responsiveFontSize(2.5)}}>{detailsPerking.details.freeParking}</Text></Text>
+					</View>
+				</View>
+			</BottomSheet>
 		</>
 	);
 }
 
 const styles = StyleSheet.create({
-	modalView: {
-		alignSelf: 'center',
-		height: '35%',
-		width: '85%',
-		backgroundColor: 'white',
-		borderRadius: 20,
-		borderStyle: 'solid',
-		borderColor: '#886DEC',
-		borderWidth: 3,
-		alignItems: 'center',
+	sheetDetailText: {
+		fontSize: responsiveFontSize(2.2),
+		fontFamily: 'Montserrat-Regular',
 	},
-	modalHeadingText: {
-		marginTop: '2%',
-		fontWeight: 'bold',
-		fontSize: 18,
-		color: '#886DEC',
-		textAlign: 'center',
+	bottomNavigationView: {
+		width: '100%',
+		height: '100%',
+		alignItems: 'center',
 	},
 });
 

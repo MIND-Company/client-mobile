@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
 import type {NavigationProp} from '@react-navigation/native';
 import ThemeContext from "../../../config/ThemeContext";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function AddCardScreen({route, navigation}: {route: any; navigation: NavigationProp<any>}) {
 	const [card, setCard] = useState('');
@@ -22,7 +23,7 @@ export default function AddCardScreen({route, navigation}: {route: any; navigati
 	};
 
 	return (
-		<View style={{backgroundColor: theme.backgroundScreen, flex: 1}}>
+		<SafeAreaView style={{backgroundColor: theme.backgroundScreen, flex: 1}}>
 			<TouchableOpacity style={[{marginBottom: '7%', maxWidth: '35%'}]} onPress={goBackFunc}>
 				<View style={[{flexDirection: 'row', alignItems: 'center'}]}>
 					<FirstIcon name='chevron-back' size={22} color='#886DEC' style={[{marginLeft: '3%'}]}/>
@@ -46,7 +47,7 @@ export default function AddCardScreen({route, navigation}: {route: any; navigati
 					<Text style={[{color: 'white', fontSize: 16}]}>Добавить карту</Text>
 				</TouchableOpacity>
 			</View>
-		</View>
+		</SafeAreaView>
 	);
 }
 

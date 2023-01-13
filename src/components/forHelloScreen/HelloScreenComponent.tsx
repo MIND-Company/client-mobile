@@ -2,10 +2,10 @@ import {Image, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {responsiveFontSize} from 'react-native-responsive-dimensions';
 
-export const HelloScreenComponent = (props: {headingText: string; h2Text: string; image: string}) => (
+export const HelloScreenComponent = (props: {headingText: string; h2Text: string; image: any}) => (
 	<View style={styles.slide}>
 		<View style={{height: '70%', width: '90%', justifyContent: 'center', alignItems: 'center'}}>
-			<Image source={require('../../images/hello-screen.png')} resizeMode={'center'} />
+			<Image source={props.image} resizeMode={'center'} />
 		</View>
 		<View style={{width: '90%'}}>
 			<Text style={styles.h2text}>{props.h2Text} </Text>

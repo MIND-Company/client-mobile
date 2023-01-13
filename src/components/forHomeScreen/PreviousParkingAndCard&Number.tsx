@@ -8,7 +8,7 @@ import {updateAccessToken} from '../../utils/updateAccessTokenFunction';
 import PreviousParkingComponent from './PreviousParkingComponent';
 import CurrentParkingComponent from './CurrentParkingComponent';
 import ThemeContext from '../../../config/ThemeContext';
-import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
+import {responsiveHeight} from 'react-native-responsive-dimensions';
 
 type PreviousParkingAndCardNumberProps = {
 	navigationFunc: () => void;
@@ -23,6 +23,7 @@ const PreviousParkingAndCardNumber: FC<PreviousParkingAndCardNumberProps> = ({na
 	const [error, setError] = useState<boolean>(false);
 	const [errorText, setErrorText] = useState<string>('');
 	const [parkingArray, setParkingArray] = useState([]);
+	const [session, setSession] = useState<boolean>(false);
 	const theme = useContext(ThemeContext);
 
 	const getHistoryParking = async () => {
@@ -40,6 +41,14 @@ const PreviousParkingAndCardNumber: FC<PreviousParkingAndCardNumberProps> = ({na
 			console.log(data);
 			if (request.ok) {
 				setParkingArray(data.results);
+				// if (parkingArray[0]?.checkout_time_utc === null) {
+				// 	if (!session) {
+				// 		console.log('b');
+				// 		setSessionParking();
+				// 	}
+				//
+				// 	setSession(true);
+				// }
 			}
 
 			if (request.status === 401) {
@@ -57,16 +66,16 @@ const PreviousParkingAndCardNumber: FC<PreviousParkingAndCardNumberProps> = ({na
 		}
 	};
 
+	// const setSessionParking = () => {
+	// 	const timer = setInterval(() => {
+	// 		void getHistoryParking();
+	// 		console.log('a');
+	// 	}, 15000);
+	// };
+
 	useEffect(() => {
 		void getHistoryParking();
 	}, []);
-	// Const timer = () => {
-	// 	const entryTime = parkingArray[0].entry_time.slice(0, 19).replace(/-/g, '/').replace('T', ' ');
-	// 	const currentTime = new Date();
-	// 	const cur = `${currentTime.getFullYear()}/${currentTime.getMonth()}/${currentTime.getDay()} ${currentTime.getHours()}:${currentTime.getMinutes()}:${currentTime.getSeconds()}`;
-	// 	var diff = Math.abs(new Date() - new Date(cur))
-	// 	return diff
-	// };
 
 	return (
 		<>
@@ -74,8 +83,8 @@ const PreviousParkingAndCardNumber: FC<PreviousParkingAndCardNumberProps> = ({na
 			<View style={[styles.view, {backgroundColor: theme.backgroundComponent}]}>
 				{load ? <ActivityIndicator size={20} color={'#886DEC'} />
 					: (<>{!parkingArray[0]
-						? <Text style={{color: theme.color, fontFamily: 'Montserrat-SemiBold', fontSize: 17}}>У вас нет парковок</Text>
-						: parkingArray[0].checkout_time === null ? <CurrentParkingComponent color = {theme.color} element = {parkingArray[0]} />
+						? <Text style={{textAlign: 'center', color: theme.color, fontFamily: 'Montserrat-SemiBold', fontSize: 17}}>У вас пока нет законченных или активных парковок</Text>
+						: parkingArray[0].checkout_time_local === null ? <CurrentParkingComponent color = {theme.color} element = {parkingArray[0]} screen = {'home'} />
 							: <PreviousParkingComponent color = {theme.color} navigationFunc={navigationFunc} element = {parkingArray[0]} />
 					}</>)}
 			</View>

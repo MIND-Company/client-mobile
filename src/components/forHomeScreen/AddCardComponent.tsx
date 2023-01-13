@@ -18,7 +18,7 @@ const AddCardComponent: FC<AddCardComponentProps> = ({color, height, bg, func, c
 			?					<View style={[{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}]}>
 				<Text style={[styles.mainText, {color}]}> Ваша карта :</Text>
 				<View style={styles.cardView}>
-					<Text style={styles.cardText}> {card.slice(0, 4)}</Text>
+					<Text style={styles.cardText}> ****{card.slice(0, 4)}</Text>
 				</View>
 			</View>
 			: <>
@@ -32,12 +32,14 @@ const AddCardComponent: FC<AddCardComponentProps> = ({color, height, bg, func, c
 
 const styles = StyleSheet.create({
 	cardText: {
+		letterSpacing: 5,
 		fontSize: responsiveFontSize(3),
 		fontFamily: 'Montserrat-SemiBold',
 		fontWeight: '400',
 		color: 'white',
 	},
 	cardView: {
+		paddingRight: '2%',
 		paddingVertical: '1%',
 		height: 50,
 		width: 180,

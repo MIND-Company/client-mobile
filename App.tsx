@@ -4,10 +4,11 @@ import 'react-native-gesture-handler';
 import AuthNavigation from './src/navigations/AllScreensNavigation';
 import YaMap from 'react-native-yamap';
 import {EventRegister} from 'react-native-event-listeners';
-import themeContext from './config/ThemeContext';
+import ThemeContext from './config/ThemeContext';
 import theme from './config/theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AuthContext} from './src/components/forAuth/AuthContext';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 void YaMap.init('11ce9ef3-ae3c-4fbd-ac01-2df7ac5f8432');
 
@@ -60,16 +61,18 @@ export default function App() {
 	}, []);
 
 	return (
-		<AuthContext.Provider value={{isAuth, setIsAuth}}>
-			<themeContext.Provider value={mode ? theme.dark : theme.light}>
-				<View style={[{backgroundColor: mode ? '#151719' : '#EFF1FB', height: '100%'}]}>
-					<StatusBar backgroundColor={mode ? '#151719' : '#EFF1FB'} barStyle={mode ? 'dark-content' : ' light-content'}/>
-					{isLoading ? <View style={[{marginTop: '50%'}]}>
-						<ActivityIndicator animating={true} size='large' color='#C5C5C5' />
-					</View> : <AuthNavigation />
-					}
-				</View>
-			</themeContext.Provider>
-		</AuthContext.Provider>
+		<GestureHandlerRootView>
+			<AuthContext.Provider value={{isAuth, setIsAuth}}>
+				<ThemeContext.Provider value={mode ? theme.dark : theme.light}>
+					<View style={[{backgroundColor: mode ? '#151719' : '#EFF1FB', height: '100%'}]}>
+						<StatusBar backgroundColor={'transparent'} barStyle={!mode ? 'dark-content' : ' light-content'} translucent={true}/>
+						{isLoading ? <View style={[{marginTop: '50%'}]}>
+							<ActivityIndicator animating={true} size='large' color='#C5C5C5' />
+						</View> : <AuthNavigation />
+						}
+					</View>
+				</ThemeContext.Provider>
+			</AuthContext.Provider>
+		</GestureHandlerRootView>
 	);
 }

@@ -1,8 +1,15 @@
-import {ActivityIndicator, BackHandler, ScrollView, StatusBar, StyleSheet, Text, View} from 'react-native';
+import {
+	ActivityIndicator,
+	BackHandler,
+	ScrollView,
+	StyleSheet,
+	Text,
+	View,
+} from 'react-native';
 import InfoComponent from '../components/forHomeScreen/InfoComponent';
 import AddCarComponent from '../components/forHomeScreen/AddCarComponent';
 import AddCardComponent from '../components/forHomeScreen/AddCardComponent';
-import {useCallback, useContext, useEffect, useState} from 'react';
+import {useCallback, useContext, useEffect, useRef, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
 import themeContext from '../../config/ThemeContext';
@@ -11,6 +18,7 @@ import PreviousParkingAndCardNumber from '../components/forHomeScreen/PreviousPa
 import {updateAccessToken} from '../utils/updateAccessTokenFunction';
 import {CommonActions, useFocusEffect} from '@react-navigation/native';
 import {responsiveHeight} from 'react-native-responsive-dimensions';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 export default function HomeScreen({navigation}: {navigation: NavigationProp<any>}) {
 	const theme = useContext(themeContext);
@@ -19,6 +27,8 @@ export default function HomeScreen({navigation}: {navigation: NavigationProp<any
 	const [card, setCard] = useState<string | undefined>(null);
 	const [error, setError] = useState<boolean>(false);
 	const [errorText, setErrorText] = useState<string>('');
+
+	const scrollViewRef = useRef(null);
 
 	useEffect(() => {
 		void checkCard();
@@ -35,6 +45,10 @@ export default function HomeScreen({navigation}: {navigation: NavigationProp<any
 
 	useFocusEffect(
 		useCallback(() => {
+			if (scrollViewRef.current) {
+				scrollViewRef.current.scrollTo({y: 0, animated: true});
+			}
+
 			void checkCar();
 		}, []),
 	);
@@ -64,8 +78,6 @@ export default function HomeScreen({navigation}: {navigation: NavigationProp<any
 				},
 			});
 			const data = await request.json();
-			console.log(data);
-			console.log(request.status);
 			if (request.ok) {
 				if (data[0]) {
 					await AsyncStorage.setItem('number', data[0].number);
@@ -95,33 +107,34 @@ export default function HomeScreen({navigation}: {navigation: NavigationProp<any
 	};
 
 	return (
-		<ScrollView style={[{width: '100%', backgroundColor: theme.backgroundScreen}]}>
-			<InfoComponent bgColor = {theme.backgroundComponent} textColor = {theme.textColor}/>
-			{error && <Text style={[{color: 'black', fontSize: 20}]}>{errorText}</Text>}
-			{loading ? (
-				<>
-					<View style={[styles.View, {backgroundColor: theme.backgroundComponent}]}>
-						<ActivityIndicator size={40} color='#886DEC' />
-					</View>
-					<View style={[styles.View, {marginBottom: '3%', marginTop: 0, backgroundColor: theme.backgroundComponent}]}>
-						<ActivityIndicator size={40} color='#886DEC' />
-					</View>
-				</>
-			) : (
-				<>
-					{(number !== null && card !== null)
-						? (
-							<>
-								<PreviousParkingAndCardNumber navigationFunc = {goPreviousParkingScreen} height = {14} bg={theme.backgroundComponent} card = {card} number={number} />
-							</>) : (
-							<>
-								<AddCarComponent color={theme.color} height = {30} bg={theme.backgroundComponent} func={goAddCar} number={number} />
-								<AddCardComponent color={theme.color} height ={30} bg={theme.backgroundComponent} func={goAddCard} card={card} />
-							</>)
-					}
-				</>)}
-			<StatusBar backgroundColor={theme.backgroundScreen} barStyle={theme.statusBarStyle} translucent={false}/>
-		</ScrollView>
+		<SafeAreaView style={{height: '100%', backgroundColor: theme.backgroundScreen}}>
+			<ScrollView ref={scrollViewRef}>
+				<InfoComponent bgColor = {theme.backgroundComponent} textColor = {theme.textColor}/>
+				{error && <Text style={[{color: 'black', fontSize: 20}]}>{errorText}</Text>}
+				{loading ? (
+					<>
+						<View style={[styles.View, {backgroundColor: theme.backgroundComponent}]}>
+							<ActivityIndicator size={40} color='#886DEC' />
+						</View>
+						<View style={[styles.View, {marginBottom: '3%', marginTop: 0, backgroundColor: theme.backgroundComponent}]}>
+							<ActivityIndicator size={40} color='#886DEC' />
+						</View>
+					</>
+				) : (
+					<>
+						{(number !== null && card !== null)
+							? (
+								<>
+									<PreviousParkingAndCardNumber navigationFunc = {goPreviousParkingScreen} height = {14} bg={theme.backgroundComponent} card = {card} number={number} />
+								</>) : (
+								<>
+									<AddCarComponent color={theme.color} height = {30} bg={theme.backgroundComponent} func={goAddCar} number={number} />
+									<AddCardComponent color={theme.color} height ={30} bg={theme.backgroundComponent} func={goAddCard} card={card} />
+								</>)
+						}
+					</>)}
+			</ScrollView>
+		</SafeAreaView>
 	);
 }
 

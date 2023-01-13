@@ -16,6 +16,10 @@ export default function HelloScreen({navigation}: {navigation: NavigationProp<an
 		navigation.navigate('Registration');
 	};
 
+	const firstImage = require('../images/hello-screen1.png');
+	const secondImage = require('../images/hello-screen2.png');
+	const thirdImage = require('../images/hello-screen3.png');
+
 	return (
 		<SafeAreaView style={{flex: 1, backgroundColor: '#ECECEC'}}>
 			<View style={{alignItems: 'center', justifyContent: 'center', marginTop: '3%'}}>
@@ -23,9 +27,9 @@ export default function HelloScreen({navigation}: {navigation: NavigationProp<an
 			</View>
 			<View style={styles.wrapper}>
 				<Swiper autoplay={true} autoplayTimeout={5} loop={false}>
-					<HelloScreenComponent headingText={'1 шаг:'} h2Text={ 'Зарегистрируйтесь и привяжите номер своего т/с и банковскую карту'} image={'First'}/>
-					<HelloScreenComponent headingText={'2 шаг:'} h2Text={ 'Убедитесь, что номер автомобиля читаем и заезжайте на парковку'} image={'Second'}/>
-					<HelloScreenComponent headingText={'3 шаг:'} h2Text={ 'Выезжайте с парковки, оплата спишется с вашей карты автоматически'} image={'Third'}/>
+					<HelloScreenComponent headingText={'1 шаг:'} h2Text={ 'Зарегистрируйтесь и привяжите номер своего т/с и банковскую карту'} image={firstImage}/>
+					<HelloScreenComponent headingText={'2 шаг:'} h2Text={ 'Убедитесь, что номер вашего автомобиля читаем и заезжайте на парковку'} image={secondImage}/>
+					<HelloScreenComponent headingText={'3 шаг:'} h2Text={ 'Выезжайте с парковки, деньги спишутся с вашей карты автоматически'} image={thirdImage}/>
 				</Swiper>
 			</View>
 			<TouchableWithoutFeedback style={styles.buttonStyle} onPress={goRegistrationScreen} >
@@ -60,7 +64,7 @@ const styles = StyleSheet.create({
 		// borderColor: '#886DEC',
 		// borderWidth: 5,
 		// borderRadius: 20,
-		width: '95%',
+		width: '100%',
 		alignSelf: 'center',
 		marginTop: '1%',
 		height: '60%',

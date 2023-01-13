@@ -1,5 +1,5 @@
 import React, {useCallback, useContext, useState} from 'react';
-import {ActivityIndicator, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {ActivityIndicator, ScrollView, StatusBar, StyleSheet, Text, View} from 'react-native';
 import OneHistoryComponent from '../components/OneHistoryComponent';
 import themeContext from '../../config/ThemeContext';
 import type {NavigationProp} from '@react-navigation/native';
@@ -8,6 +8,8 @@ import NoPastParking from '../components/forHistoryScreen/NoPastParking';
 import {updateAccessToken} from '../utils/updateAccessTokenFunction';
 import {responsiveFontSize} from 'react-native-responsive-dimensions';
 import {useFocusEffect} from '@react-navigation/native';
+import CurrentParkingComponent from '../components/forHomeScreen/CurrentParkingComponent';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 type ElementType = {
 	calculated_price: string | undefined;
@@ -44,6 +46,7 @@ export default function HistoryScreen({navigation}: {navigation: NavigationProp<
 				},
 			});
 			const data = await request.json();
+			console.log(data);
 			if (request.ok) {
 				setParkingArray(data);
 			}
@@ -69,48 +72,40 @@ export default function HistoryScreen({navigation}: {navigation: NavigationProp<
 		}, []),
 	);
 
-	// Const [refreshing, setRefreshing] = React.useState(false);
-	// const wait = async timeout => new Promise(resolve => setTimeout(resolve, timeout));
-	// const onRefresh = React.useCallback(() => {
-	// 	setRefreshing(true);
-	// 	 getHistoryParking().then(() => {
-	// 		setRefreshing(false);
-	// 	});
-	// }, []);
+	const goParkingScreen = () => {
+		navigation.navigate('Parking');
+	};
 
 	return (
-		<View style={[{height: '100%', backgroundColor: theme.backgroundScreen}]}>
+		<SafeAreaView style={{height: '100%', backgroundColor: theme.backgroundScreen}}>
 			{error && <Text style={[{color: 'black', fontSize: 20}]}>{errorText}</Text>}
 			{load ? <View style={[{height: '100%', justifyContent: 'center', alignItems: 'center'}]}>
 				<ActivityIndicator size={40} color={'#886DEC'}/>
 			</View> : <>
 				{ parkingArray.length === 0 || typeof parkingArray[0] === 'undefined'
-					? <NoPastParking />
+					? <NoPastParking func = {goParkingScreen}/>
 					: <>
-						<View style={[{width: '95%', height: '5.5%', alignSelf: 'center', backgroundColor: theme.backgroundScreen, marginTop: '2%'}]}>
-							<View style={[styles.upView, {backgroundColor: theme.backgroundComponent}]}>
-								<View style={[styles.upViewContainer, {alignItems: 'stretch'}]}><Text style={[{fontSize: responsiveFontSize(2.4), color: theme.textColor, fontFamily: 'Montserrat-Medium'}]}>Название</Text></View>
-								<View style={styles.upViewContainer}><Text style={[{fontSize: responsiveFontSize(2.4), color: theme.textColor, fontFamily: 'Montserrat-Medium'}]}>Номер</Text></View>
-								<View style={[{paddingVertical: '0.5%', alignSelf: 'center', width: '30%', alignItems: 'center'}]}><Text style={[{fontSize: responsiveFontSize(2.4), color: theme.textColor, fontFamily: 'Montserrat-Medium'}]}>Дата</Text></View>
+						{ parkingArray[0].checkout_time_local === null && <CurrentParkingComponent color = {theme.color} element = {parkingArray[0]} screen = {'history'}/> }
+
+						{ (parkingArray.length > 1 || (parkingArray.length === 1 && parkingArray[0].checkout_time_local !== null)) ? (<>
+							<View style={[{borderRadius: 15, width: '95%', height: '5.5%', alignSelf: 'center', backgroundColor: theme.backgroundScreen, marginTop: '2%'}]}>
+								<View style={[styles.upView, {backgroundColor: theme.backgroundComponent}]}>
+									<View style={[styles.upViewContainer, {alignItems: 'stretch'}]}><Text style={[{fontSize: responsiveFontSize(2.4), color: theme.textColor, fontFamily: 'Montserrat-Medium'}]}>Название</Text></View>
+									<View style={styles.upViewContainer}><Text style={[{fontSize: responsiveFontSize(2.4), color: theme.textColor, fontFamily: 'Montserrat-Medium'}]}>Номер</Text></View>
+									<View style={[{paddingVertical: '0.5%', alignSelf: 'center', width: '30%', alignItems: 'center'}]}><Text style={[{fontSize: responsiveFontSize(2.4), color: theme.textColor, fontFamily: 'Montserrat-Medium'}]}>Дата</Text></View>
+								</View>
 							</View>
-						</View>
-						<ScrollView style={[{width: '100%'}]}
-							// RefreshControl={
-							// 	<RefreshControl
-							// 		refreshing={refreshing}
-							// 		onRefresh={onRefresh}
-							// 	/>
-							// }
-						>
-							{parkingArray.map((element, index) =>
-								element.checkout_time !== null
-								&& <OneHistoryComponent textColor = {theme.textColor} bg = {theme.backgroundComponent} key = {index} name = {element.park.description} car = {element.car} date = {element.entry_time.slice(0, 10)} func = {() => {
+							<ScrollView style={[{width: '100%'}]}>
+								{parkingArray.map((element, index) =>
+									element.checkout_time_local !== null
+								&& <OneHistoryComponent key = {index} keys = {parkingArray[0].checkout_time_local === null ? index - 1 : index} textColor = {theme.textColor} bg = {theme.backgroundComponent} name = {element.park.description} car = {element.car} date = {element.entry_time_local.slice(0, 10)} func = {() => {
 									goParkingDetails(element);
 								}}/>)}
-						</ScrollView>
+							</ScrollView>
+						</>) : null}
 					</>}
 			</>}
-		</View>
+		</SafeAreaView>
 	);
 }
 

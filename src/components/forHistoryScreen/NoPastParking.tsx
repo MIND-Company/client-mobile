@@ -1,11 +1,14 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {responsiveFontSize} from 'react-native-responsive-dimensions';
 
-export default function NoPastParking() {
+export default function NoPastParking(props: {func: () => void}) {
 	return (
 		<View style={styles.containerView}>
-			<Text style={styles.TextStyle}>У вас пока нет парковок;(</Text>
+			<Text style={styles.TextStyle}>У вас пока нет законченных парковок;(</Text>
+			<TouchableOpacity style={{marginTop: '3%'}} onPress={props.func}>
+				<Text style={{fontFamily: 'Montserrat-Medium', fontSize: responsiveFontSize(2.1), color: '#886DEC'}}>Искать парковку</Text>
+			</TouchableOpacity>
 		</View>
 	);
 }
@@ -14,7 +17,7 @@ const styles = StyleSheet.create({
 	TextStyle: {
 		fontFamily: 'Montserrat-SemiBold',
 		fontSize: responsiveFontSize(2.5),
-		color: '#886DEC',
+		textAlign: 'center',
 	},
 	containerView: {
 		height: '100%',

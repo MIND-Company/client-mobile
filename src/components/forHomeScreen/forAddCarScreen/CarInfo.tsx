@@ -118,7 +118,6 @@ const styles = StyleSheet.create({
 		borderStyle: 'solid',
 		borderColor: '#886DEC',
 		borderWidth: 3,
-		marginVertical: '2%',
 		height: responsiveHeight(27),
 		borderRadius: 18,
 		alignSelf: 'center',

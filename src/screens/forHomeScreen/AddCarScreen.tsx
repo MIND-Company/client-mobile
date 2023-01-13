@@ -10,6 +10,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import {CarInfo} from '../../components/forHomeScreen/forAddCarScreen/CarInfo';
 import {screenHeight} from '../../utils/screenSize';
 import ThemeContext from '../../../config/ThemeContext';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 export default function AddCarScreen({navigation}: {navigation: NavigationProp<any>}) {
 	const [numberArray, setNumberArray] = useState<string>('');
@@ -38,7 +39,7 @@ export default function AddCarScreen({navigation}: {navigation: NavigationProp<a
 		[]),
 	);
 	return (
-		<View style={{backgroundColor: theme.backgroundScreen, flex: 1, minHeight: Math.round(screenHeight), paddingTop: '9%'}}>
+		<SafeAreaView style={{backgroundColor: theme.backgroundScreen, flex: 1, minHeight: Math.round(screenHeight), paddingTop: '9%'}}>
 			<BackComponent goBackFunc={goBackFunc}/>
 			<View style={{height: '100%'}}>
 				{numberArray !== '' && <CarInfo />}
@@ -46,6 +47,6 @@ export default function AddCarScreen({navigation}: {navigation: NavigationProp<a
 				<ChangeCarComponent />
 				<DeleteCarNumberComponent deleteCar = {setNumberArray} />
 			</View>
-		</View>
+		</SafeAreaView>
 	);
 }

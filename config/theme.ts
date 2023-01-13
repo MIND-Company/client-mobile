@@ -1,6 +1,7 @@
 import type {StatusBarStyle} from 'react-native';
 
 type LightAndDark = {
+	parkingDetailsText: string;
 	buttonProfileAndAddCar: string;
 	statusBarStyle: 'default' | 'light-content' | 'dark-content';
 	navigationColor: string;
@@ -10,7 +11,6 @@ type LightAndDark = {
 	backgroundScreen: string;
 	textColor: string;
 	nightMapColor: boolean;
-	themeViewColor: [string, string];
 };
 
 type Theme = {
@@ -20,6 +20,7 @@ type Theme = {
 
 const theme: Theme = {
 	light: {
+		parkingDetailsText: '#45005E',
 		buttonProfileAndAddCar: '#544d4d',
 		navigationColor: '#ffffff',
 		text: 'тёмную',
@@ -29,9 +30,9 @@ const theme: Theme = {
 		textColor: 'black',
 		nightMapColor: false,
 		statusBarStyle: 'dark-content',
-		themeViewColor: ['#100f12', '#25144a'],
 	},
 	dark: {
+		parkingDetailsText: 'white',
 		buttonProfileAndAddCar: '#EFF1FB',
 		navigationColor: '#000000',
 		text: 'светлую',
@@ -41,7 +42,6 @@ const theme: Theme = {
 		textColor: 'white',
 		nightMapColor: true,
 		statusBarStyle: 'light-content',
-		themeViewColor: ['#A8A8A8', '#9d50bb'],
 	},
 };
 

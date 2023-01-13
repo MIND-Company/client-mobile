@@ -1,30 +1,38 @@
 import themeContext from '../../../config/ThemeContext';
 import React, {useContext} from 'react';
-import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import type {NavigationProp, RouteProp} from '@react-navigation/native';
-import {BackComponent} from '../../components/BackComponent';
 import {responsiveFontSize, responsiveHeight} from 'react-native-responsive-dimensions';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 type ParkingDetailScreenElement = {
+	current_price: string | undefined;
 	calculated_price: string | undefined;
 	car: string;
-	checkout_time: string;
-	entry_time: string;
+	checkout_time_utc: string;
+	checkout_time_local: string;
+	entry_time_utc: string;
+	entry_time_local: string;
 	park: {
 		description: string;
 		id: number;
-		web_address: string;};
+		web_address: string;
+	};
 };
 
 export default function ParkingDetailsScreen({route, navigation}: {route: RouteProp<{params: {element: ParkingDetailScreenElement}}, 'params'>; navigation: NavigationProp<any>}) {
 	const theme = useContext(themeContext);
 	const parking = route.params.element;
 	return (
-		<View style={[{flex: 1, backgroundColor: theme.backgroundScreen}]}>
-			<BackComponent goBackFunc={() => {
+		<SafeAreaView style={[{flex: 1, backgroundColor: theme.backgroundScreen}]}>
+			<TouchableOpacity style={[{marginTop: '13%', width: '25%', position: 'absolute', zIndex: 999}]} onPress={() => {
 				navigation.goBack();
-			}}/>
+			}}>
+				<View style={[{flexDirection: 'row', alignItems: 'center'}]}>
+					<Icon name='chevron-back' size={40} color='#886DEC' style={[{marginLeft: '3%'}]}/>
+				</View>
+			</TouchableOpacity>
 			<ScrollView>
 				<Image source={require('../../images/grin.jpg')} style={styles.imageStyle} />
 				<View style={[{alignItems: 'center'}]}>
@@ -33,19 +41,19 @@ export default function ParkingDetailsScreen({route, navigation}: {route: RouteP
 							<Text style={styles.headingTextStyle}>НОМЕР Т/С</Text>
 						</View>
 						<View style={styles.numberTextView}>
-							<Text style={styles.priceAndNumberText}>{parking.car.toUpperCase()}</Text>
+							<Text style={[styles.priceAndNumberText, {color: theme.parkingDetailsText}]}>{parking.car.toUpperCase()}</Text>
 						</View>
 					</View>
 					<View style={styles.dateView}>
 						<View style={[styles.oneDateComponentView, {backgroundColor: theme.backgroundComponent, borderTopRightRadius: 20, borderBottomRightRadius: 20}]}>
 							<Text style={[{color: theme.color, fontSize: 21, fontWeight: '700', marginBottom: '10%'}]}>Дата заезда</Text>
-							<Text style={styles.textStyle}>{parking.entry_time.slice(0, 10)}</Text>
-							<Text style={styles.textStyle}>{parking.entry_time.slice(11, 19)}</Text>
+							<Text style={[styles.textStyle, {color: theme.parkingDetailsText}]}>{parking.entry_time_local.slice(0, 10)}</Text>
+							<Text style={[styles.textStyle, {color: theme.parkingDetailsText}]}>{parking.entry_time_local.slice(11, 19)}</Text>
 						</View>
 						<View style={[styles.oneDateComponentView, {backgroundColor: theme.backgroundComponent, borderTopLeftRadius: 20, borderBottomLeftRadius: 20}]}>
 							<Text style={[{color: theme.color, fontSize: 21, fontWeight: '700', marginBottom: '10%'}]}>Дата выезда</Text>
-							<Text style={styles.textStyle}>{parking.checkout_time.slice(0, 10)}</Text>
-							<Text style={styles.textStyle}>{parking.checkout_time.slice(11, 19)}</Text>
+							<Text style={[styles.textStyle, {color: theme.parkingDetailsText}]}>{parking.checkout_time_local.slice(0, 10)}</Text>
+							<Text style={[styles.textStyle, {color: theme.parkingDetailsText}]}>{parking.checkout_time_local.slice(11, 19)}</Text>
 						</View>
 					</View>
 					<View style={[styles.numberAndPriceView, {marginBottom: '5%', marginTop: '4%'}]}>
@@ -53,12 +61,12 @@ export default function ParkingDetailsScreen({route, navigation}: {route: RouteP
 							<Text style={styles.headingTextStyle}>СТОИМОСТЬ</Text>
 						</View>
 						<View style={styles.numberTextView}>
-							<Text style={styles.priceAndNumberText}>500Р</Text>
+							<Text style={[styles.priceAndNumberText, {color: theme.parkingDetailsText}]}>{parking.calculated_price}₽</Text>
 						</View>
 					</View>
 				</View>
 			</ScrollView>
-		</View>
+		</SafeAreaView>
 	);
 }
 
@@ -66,7 +74,6 @@ const styles = StyleSheet.create({
 	priceAndNumberText: {
 		fontSize: 23,
 		fontWeight: 'bold',
-		color: '#45005E',
 	},
 	headingTextStyle: {
 		fontFamily: 'Montserrat-Bold',

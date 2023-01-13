@@ -72,8 +72,15 @@ export default function EmailAndPhoneComponent(props: {bgColor: string; textColo
 					</TouchableOpacity>
 				</View>
 			</Modal>
-			{loading ? <ActivityIndicator color={'#ffffff'} size={20}/> : <Text style={styles.textStyle}><Text style={[{color: props.textColor}]}>Номер телефона:</Text> {phone !== '' ? phone : 'Ошибка'}</Text>}
-			<Text style={styles.textStyle}><Text style={[{color: props.textColor}]}>Электронная почта:</Text> {mainEmail}</Text>
+			<View style={{flexDirection: 'row', marginLeft: '5%'}}>
+				<Text style={[styles.textStyle, {color: props.textColor}]}>Номер телефона:</Text>
+				{loading ? <ActivityIndicator color={'#886DEC'} size={'small'}/>
+					: <Text style={[styles.textStyle]}> {phone !== '' ? phone : 'Ошибка'}</Text>}
+			</View>
+			<View style={{flexDirection: 'row', marginLeft: '5%'}}>
+				<Text style={[styles.textStyle, {color: props.textColor}]}>Электронная почта:</Text>
+				<Text style={[styles.textStyle]}> {mainEmail}</Text>
+			</View>
 			<TouchableOpacity style={[{width: '35%', alignSelf: 'center'}]} onPress={() => {
 				setModalVisible(!modalVisible);
 			}}>
@@ -92,7 +99,6 @@ const styles = StyleSheet.create({
 		fontWeight: '400',
 		color: '#7d746d',
 		fontSize: 18,
-		marginLeft: '8%',
 		marginRight: '2%',
 	},
 	changeView: {

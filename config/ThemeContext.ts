@@ -1,6 +1,8 @@
 import {createContext} from 'react';
 
-const themeContext = createContext({
+// eslint-disable-next-line @typescript-eslint/naming-convention
+export const ThemeContext = createContext({
+	parkingDetailsText: '#45005E',
 	buttonProfileAndAddCar: '#EFF1FB',
 	navigationColor: '#ffffff',
 	text: 'тёмную',
@@ -10,7 +12,6 @@ const themeContext = createContext({
 	textColor: 'black',
 	nightMapColor: false,
 	statusBarStyle: 'dark-content',
-	themeViewColor: ['#100f12', '#25144a'],
 });
 
-export default themeContext;
+export default ThemeContext;

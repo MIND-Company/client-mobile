@@ -2,10 +2,11 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import React from 'react';
 import type {NavigationProp} from '@react-navigation/native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 export default function StatsScreen({navigation}: {navigation: NavigationProp<any>}) {
 	return (
-		<View style={[{backgroundColor: '#EFF1FB', flex: 1}]}>
+		<SafeAreaView style={[{backgroundColor: '#EFF1FB', flex: 1}]}>
 			<TouchableOpacity style={[{marginBottom: '7%', maxWidth: '35%'}]} onPress={() => {
 				navigation.goBack();
 			}}>
@@ -19,7 +20,7 @@ export default function StatsScreen({navigation}: {navigation: NavigationProp<an
 					<Text style={[{color: '#886DEC', fontSize: 18, fontWeight: 'bold'}]}>Stats</Text>
 				</View>
 			</View>
-		</View>
+		</SafeAreaView>
 	);
 }
 
