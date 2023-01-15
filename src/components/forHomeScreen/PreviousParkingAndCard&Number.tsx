@@ -23,7 +23,6 @@ const PreviousParkingAndCardNumber: FC<PreviousParkingAndCardNumberProps> = ({na
 	const [error, setError] = useState<boolean>(false);
 	const [errorText, setErrorText] = useState<string>('');
 	const [parkingArray, setParkingArray] = useState([]);
-	const [session, setSession] = useState<boolean>(false);
 	const theme = useContext(ThemeContext);
 
 	const getHistoryParking = async () => {
@@ -41,14 +40,6 @@ const PreviousParkingAndCardNumber: FC<PreviousParkingAndCardNumberProps> = ({na
 			console.log(data);
 			if (request.ok) {
 				setParkingArray(data.results);
-				// if (parkingArray[0]?.checkout_time_utc === null) {
-				// 	if (!session) {
-				// 		console.log('b');
-				// 		setSessionParking();
-				// 	}
-				//
-				// 	setSession(true);
-				// }
 			}
 
 			if (request.status === 401) {
@@ -66,13 +57,6 @@ const PreviousParkingAndCardNumber: FC<PreviousParkingAndCardNumberProps> = ({na
 		}
 	};
 
-	// const setSessionParking = () => {
-	// 	const timer = setInterval(() => {
-	// 		void getHistoryParking();
-	// 		console.log('a');
-	// 	}, 15000);
-	// };
-
 	useEffect(() => {
 		void getHistoryParking();
 	}, []);
@@ -84,7 +68,7 @@ const PreviousParkingAndCardNumber: FC<PreviousParkingAndCardNumberProps> = ({na
 				{load ? <ActivityIndicator size={20} color={'#886DEC'} />
 					: (<>{!parkingArray[0]
 						? <Text style={{textAlign: 'center', color: theme.color, fontFamily: 'Montserrat-SemiBold', fontSize: 17}}>У вас пока нет законченных или активных парковок</Text>
-						: parkingArray[0].checkout_time_local === null ? <CurrentParkingComponent color = {theme.color} element = {parkingArray[0]} screen = {'home'} />
+						: parkingArray[0].checkout_time_local === null ? <CurrentParkingComponent element = {parkingArray[0]} screen = {'home'} />
 							: <PreviousParkingComponent color = {theme.color} navigationFunc={navigationFunc} element = {parkingArray[0]} />
 					}</>)}
 			</View>

@@ -1,6 +1,7 @@
-import {StyleSheet, View, Text, ActivityIndicator} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {responsiveFontSize, responsiveHeight} from 'react-native-responsive-dimensions';
+import {StyleSheet, View, Text, ActivityIndicator, Image} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
+import {responsiveFontSize, responsiveHeight, responsiveWidth} from 'react-native-responsive-dimensions';
+import ThemeContext from '../../../config/ThemeContext';
 
 type CurrentParkingComponentProps = {
 	current_price: string | undefined;
@@ -16,10 +17,11 @@ type CurrentParkingComponentProps = {
 		web_address: string;};
 };
 
-const CurrentParkingComponent = (props: {screen: string; color: string; element: CurrentParkingComponentProps}) => {
+const CurrentParkingComponent = (props: {screen: string; element: CurrentParkingComponentProps}) => {
 	const [time, setTime] = useState<string>('0:00:00');
 	const [load, setLoad] = useState<boolean>(true);
 	const entry = props.element.entry_time_utc;
+	const theme = useContext(ThemeContext);
 
 	useEffect(() => {
 		const setTimer
@@ -32,7 +34,7 @@ const CurrentParkingComponent = (props: {screen: string; color: string; element:
 	}, []);
 
 	const timer = () => {
-		const milliseconds = Math.abs(new Date() - Date.parse(entry));
+		const milliseconds: number = Math.abs(new Date() - Date.parse(entry));
 		const seconds = Math.floor((milliseconds / 1000) % 60);
 		let finalSeconds = '';
 		if (seconds < 10) {
@@ -85,7 +87,7 @@ const CurrentParkingComponent = (props: {screen: string; color: string; element:
 						<Text style={{
 							fontSize: responsiveFontSize(6.8),
 							alignSelf: 'center',
-							color: props.color,
+							color: theme.textColor,
 							fontFamily: 'Montserrat-SemiBold',
 						}}>{props.element.current_price}₽</Text>
 					</View>
@@ -109,12 +111,18 @@ const CurrentParkingComponent = (props: {screen: string; color: string; element:
 					}
 				</View>
 				: <View>
-					<Text style={{marginLeft: '2.5%', fontSize: responsiveFontSize(2.2), fontFamily: 'Montserrat-Medium', color: 'black'}}>Текущий паркинг:</Text>
-					<View style={[styles.parentsView]}>
-						<View style={[{width: '36%'}]}><Text style={[{fontSize: responsiveFontSize(2.4), fontFamily: 'Montserrat-Medium', color: 'black'}]}>{props.element.park.description}</Text></View>
-						<View style={[{width: '33%', alignItems: 'center'}]}><Text style={[{fontSize: responsiveFontSize(2.4), fontFamily: 'Montserrat-Medium', color: 'black'}]}>{props.element.current_price}₽</Text></View>
-						{load ? <ActivityIndicator style={{marginLeft: '14%'}} size={'small'} color={'#886DEC'} />
-							:							<View style={[{alignItems: 'center', width: '31%'}]}><Text style={[{fontSize: responsiveFontSize(2.3), fontFamily: 'Montserrat-Medium', color: 'black'}]}>{time}</Text></View>}
+					<Text style={{fontSize: responsiveFontSize(2.6), fontFamily: 'Montserrat-SemiBold', color: theme.textColor, textAlign: 'center'}}>Текущий паркинг:</Text>
+					<View style={[styles.parentsView, {backgroundColor: theme.backgroundComponent}]}>
+						<View style={{marginLeft: '3%', width: '82%', height: '100%'}}>
+							<View style={{flexDirection: 'row'}}>
+								<Text style={{fontFamily: 'Montserrat-SemiBold', fontSize: responsiveFontSize(2.8), color: theme.textColor}}>Парковка на</Text>
+								{load ? <ActivityIndicator size={'small'} color = {'#886DEC'} style={{marginLeft: '14.5%'}} /> : <Text style={{marginLeft: '2.5%', fontFamily: 'Montserrat-SemiBold', fontSize: responsiveFontSize(2.8), color: theme.textColor}}>{time}</Text>}
+							</View>
+							<Text style={{fontFamily: 'Montserrat-Regular', fontSize: responsiveFontSize(2.2), color: theme.textColor}}>{props.element.park.description}, {props.element.current_price}₽</Text>
+						</View>
+						<View style={styles.imageView}>
+							<Image source={require('../../images/parking.png')} style={{width: responsiveWidth(11), height: responsiveHeight(6.1)}} />
+						</View>
 					</View>
 				</View>
 			}
@@ -123,15 +131,22 @@ const CurrentParkingComponent = (props: {screen: string; color: string; element:
 };
 
 const styles = StyleSheet.create({
-	parentsView: {
-		backgroundColor: 'white',
-		borderColor: '#886DEC',
-		borderStyle: 'solid',
-		borderWidth: 1,
+	imageView: {
+		width: '13%',
+		height: '100%',
+		borderTopRightRadius: 19,
+		borderBottomRightRadius: 19,
+		justifyContent: 'center',
 		alignItems: 'center',
-		paddingHorizontal: '3%',
-		paddingVertical: '4%',
-		borderRadius: 15,
+	},
+	parentsView: {
+		borderStyle: 'solid',
+		borderColor: '#886DEC',
+		borderWidth: 2,
+		alignItems: 'center',
+		height: responsiveHeight(8.9),
+		paddingVertical: '1%',
+		borderRadius: 19,
 		alignSelf: 'center',
 		marginTop: '2%',
 		width: '95%',

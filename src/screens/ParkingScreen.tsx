@@ -1,16 +1,19 @@
 import YaMap, {Marker} from 'react-native-yamap';
 import {
 	ActivityIndicator,
-	PermissionsAndroid, StatusBar,
+	Alert,
+	PermissionsAndroid,
 	StyleSheet,
 	Text,
 	View,
-} from "react-native";
+} from 'react-native';
 import React, {useCallback, useContext, useEffect, useMemo, useRef, useState} from 'react';
 import themeContext from '../../config/ThemeContext';
 import Geolocation from 'react-native-geolocation-service';
 import BottomSheet, {BottomSheetBackdrop} from '@gorhom/bottom-sheet';
 import {responsiveFontSize} from 'react-native-responsive-dimensions';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {updateAccessToken} from '../utils/updateAccessTokenFunction';
 
 void YaMap.init('11ce9ef3-ae3c-4fbd-ac01-2df7ac5f8432');
 void YaMap.setLocale('ru_RU');
@@ -39,28 +42,43 @@ const requestLocationPermission = async () => {
 };
 
 export default function ParkingScreen() {
+	type DetailsParkingElement = {
+		address: string | undefined;
+		description: string;
+		id: number;
+		latitude: string;
+		longitude: string;
+		place_count: number;
+		price_list: any;
+		taken: 0;
+		web_address: string | undefined;
+	};
+
 	const [location, setLocation] = useState(false);
 	const [loading, setLoading] = useState(true);
-	const [detailsPerking, setDetailsPerking] = useState({lat: null,
-		long: null,
-		details: {
-			description: '',
-			address: '',
-			places: null,
-			freePlaces: null,
-			pricePerHour: null,
-			freeParking: '',
-		},
+	const [error, setError] = useState(true);
+	const [errorText, setErrorText] = useState(true);
+	const [detailsParking, setDetailsParking] = useState({
+		address: '',
+		description: '',
+		id: 0,
+		latitude: '',
+		longitude: '',
+		place_count: 0,
+		price_list: null,
+		taken: 0,
+		web_address: '',
 	});
+	const [allParks, setAllParks] = useState<DetailsParkingElement[]>([]);
 	const [mark, setMark] = useState(99);
+	const theme = useContext(themeContext);
+	const bottomSheetRef = useRef<BottomSheet>(null);
+	const mapRef = useRef<YaMap>(null);
+	const snapPoints = useMemo(() => ['30%', '40%'], []);
 
 	const toggleBottomNavigationView = () => {
 		bottomSheetRef.current.close();
 	};
-
-	const bottomSheetRef = useRef<BottomSheet>(null);
-	const mapRef = useRef<YaMap>(null);
-	const snapPoints = useMemo(() => ['30%', '40%'], []);
 
 	const getLocation = () => {
 		const result = requestLocationPermission();
@@ -80,84 +98,44 @@ export default function ParkingScreen() {
 					{enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
 				);
 			}
-		}).then(() => {
-			setLoading(false);
 		});
 		console.log(location);
 	};
 
-	const theme = useContext(themeContext);
-	const markerArray = [
-		{lat: 56.8500620,
-			long: 60.6701190,
-			details: {
-				description: 'ТЦ Гринвич',
-				address: 'ул. 8 Марта, 46',
-				places: 250,
-				freePlaces: 233,
-				pricePerHour: 200,
-				freeParking: '2 часа',
-			},
-		},
-		{lat: 56.8256,
-			long: 60.62609,
-			details: {
-				description: 'ТЦ Пассаж',
-				address: 'ул. Вайнера, 9',
-				places: 200,
-				freePlaces: 149,
-				pricePerHour: 300,
-				freeParking: '2 часа',
-			},
-		},
-		{lat: 56.834,
-			long: 60.623,
-			details: {
-				description: 'ТЦ Алатырь',
-				address: 'ул. Малышева, 5',
-				places: 360,
-				freePlaces: 223,
-				pricePerHour: 250,
-				freeParking: '3 часа',
-			},
-		},
-		{
-			lat: 56.825,
-			long: 60.65,
-			details: {
-				description: 'ТЦ Парк-Хаус',
-				address: 'ул. Сулимова, 50',
-				places: 200,
-				freePlaces: 149,
-				pricePerHour: 300,
-				freeParking: '2 часа',
-			},
-		},
-		{lat: 56.847,
-			long: 60.65,
-			details: {
-				description: 'Универмаг Bolshoy',
-				address: 'ул. Малышева, 71',
-				places: 400,
-				freePlaces: 341,
-				pricePerHour: 200,
-				freeParking: '2 часа',
-			},
-		},
-		{lat: 56.841,
-			long: 60.62,
-			details: {
-				description: 'БЦ Высоцкий',
-				address: 'ул. Малышева, 51',
-				places: 200,
-				freePlaces: 154,
-				pricePerHour: 400,
-				freeParking: '2 часа',
-			},
-		},
-	];
+	const getAllParks = async () => {
+		try {
+			const token = await AsyncStorage.getItem('access_token');
+			const request = await fetch('http://188.68.221.169/api/all-parks/', {
+				method: 'GET',
+				headers: {
+					Authorization: 'Bearer ' + token,
+					Accept: 'application/json',
+					'Content-Type': 'application/json',
+				},
+			});
+			const data = await request.json();
+			console.log(data);
+			if (request.ok) {
+				setAllParks(data);
+			}
+
+			if (request.status === 401) {
+				await updateAccessToken(setError, getAllParks(), setErrorText);
+			}
+
+			if (request.status === 500) {
+				Alert.alert('Ошибка', 'Ошибка сервера');
+			}
+		} catch (e: unknown) {
+			console.log(e);
+		} finally {
+			setLoading(false);
+		}
+	};
 
 	useEffect(() => {
+		// MapRef.current.setTrafficVisible(true)
+		void getAllParks();
 		getLocation();
 	}, []);
 
@@ -179,12 +157,17 @@ export default function ParkingScreen() {
 				</View>
 			)
 				: <YaMap
+					onMapLongPress={() => {
+						console.log(allParks);
+					}}
 					ref = {mapRef}
 					onMapLoaded={() => {
 						setMark(100);
 					}
 					}
 					followUser={true}
+					tiltGesturesEnabled={false}
+					rotateGesturesEnabled={false}
 					nightMode={theme.nightMapColor}
 					userLocationAccuracyFillColor={'#d6dae2'}
 					userLocationIcon={require('../images/user.png')}
@@ -193,14 +176,13 @@ export default function ParkingScreen() {
 						lat: location ? location.coords.latitude : 56.8519,
 						lon: location ? location.coords.longitude : 60.6122,
 						zoom: 17,
-						azimuth: 90,
 						tilt: 30,
 					}}
 					style={{flex: 1}}>
-					{markerArray.map((element, index) =>
-						<Marker source={require('../images/mark.png')} zIndex={mark} key={index} point={{lat: element.lat, lon: element.long}} scale={0.2} onPress={() => {
-							setDetailsPerking(element);
-							// MapRef.current.findRoutes([{lat: 56.841, lon: 60.62}, {lat: location.coords.latitude, lon: location.coords.longitude}], ['car'], () => console.log('a'));
+					{allParks.map((element, index) =>
+						<Marker source={require('../images/mark.png')} zIndex={mark} key={index} point={{lat: parseFloat(element.latitude), lon: parseFloat(element.longitude)}} scale={0.2} onPress={() => {
+							mapRef.current.setCenter({lon: parseFloat(element.longitude), lat: parseFloat(element.latitude)}, 17, 0, 30, 1);
+							setDetailsParking(element);
 							bottomSheetRef.current.snapToIndex(0);
 						}} />)}
 				</YaMap>
@@ -214,7 +196,7 @@ export default function ParkingScreen() {
 				{/* Bottom Sheet inner View */}
 				<View style={styles.bottomNavigationView}>
 					<View>
-						<Text style={{fontFamily: 'Montserrat-SemiBold', fontSize: responsiveFontSize(2.9), color: '#886DEC'}}>{detailsPerking.details.description}</Text>
+						<Text style={{fontFamily: 'Montserrat-SemiBold', fontSize: responsiveFontSize(2.9), color: '#886DEC'}}>{detailsParking.description}</Text>
 					</View>
 					<View
 						style={{
@@ -225,19 +207,19 @@ export default function ParkingScreen() {
 						}}
 					/>
 					<View style={{alignSelf: 'flex-start', marginLeft: '5%', marginTop: '2%'}}>
-						<Text style={styles.sheetDetailText}>Адрес: <Text style={{color: '#886DEC', fontSize: responsiveFontSize(2.5)}}>{detailsPerking.details.address}</Text></Text>
+						<Text style={styles.sheetDetailText}>Адрес: <Text style={{color: '#886DEC', fontSize: responsiveFontSize(2.5)}}>{detailsParking.address}</Text></Text>
 					</View>
 					<View style={{alignSelf: 'flex-start', marginLeft: '5%', marginTop: '2%'}}>
-						<Text style={styles.sheetDetailText}>Количество мест: <Text style={{color: '#886DEC', fontSize: responsiveFontSize(2.5)}}>{detailsPerking.details.places}</Text></Text>
+						<Text style={styles.sheetDetailText}>Количество мест: <Text style={{color: '#886DEC', fontSize: responsiveFontSize(2.5)}}>{detailsParking.place_count}</Text></Text>
 					</View>
 					<View style={{alignSelf: 'flex-start', marginLeft: '5%', marginTop: '2%'}}>
-						<Text style={styles.sheetDetailText}>Свободных мест: <Text style={{color: '#886DEC', fontSize: responsiveFontSize(2.5)}}>{detailsPerking.details.freePlaces}</Text></Text>
+						<Text style={styles.sheetDetailText}>Свободных мест: <Text style={{color: '#886DEC', fontSize: responsiveFontSize(2.5)}}>{detailsParking.place_count - detailsParking.taken}</Text></Text>
 					</View>
 					<View style={{alignSelf: 'flex-start', marginLeft: '5%', marginTop: '2%'}}>
-						<Text style={styles.sheetDetailText}>Цена за час сегодня: <Text style={{color: '#886DEC', fontSize: responsiveFontSize(2.5)}}>{detailsPerking.details.pricePerHour}₽</Text></Text>
+						<Text style={styles.sheetDetailText}>Цена за час сегодня: <Text style={{color: '#886DEC', fontSize: responsiveFontSize(2.5)}}>200₽</Text></Text>
 					</View>
 					<View style={{alignSelf: 'flex-start', marginLeft: '5%', marginTop: '2%'}}>
-						<Text style={styles.sheetDetailText}>Бесплатная стоянка: <Text style={{color: '#886DEC', fontSize: responsiveFontSize(2.5)}}>{detailsPerking.details.freeParking}</Text></Text>
+						<Text style={styles.sheetDetailText}>Бесплатная стоянка: <Text style={{color: '#886DEC', fontSize: responsiveFontSize(2.5)}}>2 часа</Text></Text>
 					</View>
 				</View>
 			</BottomSheet>

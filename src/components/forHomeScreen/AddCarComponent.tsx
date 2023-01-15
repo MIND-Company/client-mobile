@@ -19,7 +19,7 @@ const AddCarComponent: FC<AddCarComponentProps> = ({color, height, bg, func, num
 				<Text style={[styles.mainText, {color: color}]}> Ваш номер :</Text>
 				<View style={styles.numberView}>
 					<View style={styles.numberCarView}>
-						<Text style={styles.numberText}> {number.slice(0, 6)} </Text>
+						<Text style={styles.numberText}> {number.slice(0, 1)}<Text style={{fontSize: responsiveFontSize(3.3)}}>{number.slice(1, 4)}</Text>{number.slice(4, 6)} </Text>
 					</View>
 					<View style={ {height: '100%', width: '30%'}}>
 						<Text style={styles.numberRegionText}> {number.slice(6, 9)} </Text>
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
 	regionView: {
 		backgroundColor: 'red',
 		width: '40%',
-		marginRight: '5%',
+		marginRight: '7%',
 		height: '100%',
 		borderColor: 'black',
 		borderWidth: 1,
@@ -65,23 +65,23 @@ const styles = StyleSheet.create({
 	numberRegionText: {
 		fontFamily: 'Montserrat-Bold',
 		textAlign: 'center',
-		fontSize: 21,
+		fontSize: responsiveFontSize(2.6),
 		fontWeight: '400',
 		color: 'black',
 	},
 	numberText: {
-		letterSpacing: 2,
+		letterSpacing: 1,
 		fontFamily: 'Montserrat-ExtraBold',
 		textAlign: 'center',
-		fontSize: 23,
-		fontWeight: '400',
+		fontSize: responsiveFontSize(3),
 		color: 'black',
+		marginRight: '1%',
 	},
 	numberView: {
 		borderRadius: 5,
 		height: 50,
 		flexDirection: 'row',
-		width: 180,
+		width: 190,
 		alignItems: 'center',
 		backgroundColor: 'white',
 		borderWidth: 2,

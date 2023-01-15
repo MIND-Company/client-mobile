@@ -26,6 +26,8 @@ export default function AddCarScreen({navigation}: {navigation: NavigationProp<a
 			const number = await AsyncStorage.getItem('number');
 			if (number !== null) {
 				setNumberArray(number);
+			} else {
+				setNumberArray('');
 			}
 		} catch (e: unknown) {
 			console.log(e);

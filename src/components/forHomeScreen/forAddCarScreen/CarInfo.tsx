@@ -1,15 +1,15 @@
-import React, { useContext } from "react";
+import React, {useContext} from 'react';
 import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {updateAccessToken} from '../../../utils/updateAccessTokenFunction';
 import {useCallback, useState} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
 import {responsiveFontSize, responsiveHeight} from 'react-native-responsive-dimensions';
-import ThemeContext from "../../../../config/ThemeContext";
+import ThemeContext from '../../../../config/ThemeContext';
 
 export const CarInfo = () => {
 	const [loading, setLoading] = useState <boolean>(true);
-	const [number, setNumber] = useState([]);
+	const [number, setNumber] = useState({});
 	const [error, setError] = useState<boolean>(false);
 	const [errorText, setErrorText] = useState<string>('');
 	const theme = useContext(ThemeContext);
@@ -26,10 +26,11 @@ export const CarInfo = () => {
 				},
 			});
 			const data = await request.json();
-			console.log(data);
-			console.log(request.status);
 			if (request.ok) {
 				setNumber(data[0]);
+				if (typeof data[0] === 'undefined') {
+					await AsyncStorage.removeItem('number');
+				}
 			}
 
 			if (request.status === 401) {
@@ -67,7 +68,7 @@ export const CarInfo = () => {
 								<Text style={[styles.propertyText, {color: theme.buttonProfileAndAddCar}]}>Модель:</Text>
 							</View>
 							<View style={styles.propertyTextView}>
-								<Text style={[styles.propertyText, {color: theme.buttonProfileAndAddCar}]}>{number.brand ? number.brand + ' ' + number.model : 'Ошибка'}</Text>
+								<Text style={[styles.propertyText, {color: theme.buttonProfileAndAddCar}]}>{(typeof number !== 'undefined') ? number.brand + ' ' + number.model : 'Ошибка'}</Text>
 							</View>
 						</View>
 						<View style={styles.propertyView}>
@@ -75,7 +76,7 @@ export const CarInfo = () => {
 								<Text style={[styles.propertyText, {color: theme.buttonProfileAndAddCar}]}>Номер:</Text>
 							</View>
 							<View style={styles.propertyTextView}>
-								<Text style={[styles.propertyText, {color: theme.buttonProfileAndAddCar}]}>{number.number ? number.number : 'Ошибка'}</Text>
+								<Text style={[styles.propertyText, {color: theme.buttonProfileAndAddCar}]}>{(typeof number !== 'undefined') ? number.number : 'Ошибка'}</Text>
 							</View>
 						</View>
 						<View style={styles.propertyView}>
@@ -83,7 +84,7 @@ export const CarInfo = () => {
 								<Text style={[styles.propertyText, {color: theme.buttonProfileAndAddCar}]}>Цвет:</Text>
 							</View>
 							<View style={styles.propertyTextView}>
-								<Text style={[styles.propertyText, {color: theme.buttonProfileAndAddCar}]}>{number.color ? number.color : 'Ошибка'}</Text>
+								<Text style={[styles.propertyText, {color: theme.buttonProfileAndAddCar}]}>{(typeof number !== 'undefined') ? number.color : 'Ошибка'}</Text>
 							</View>
 						</View>
 					</View>
