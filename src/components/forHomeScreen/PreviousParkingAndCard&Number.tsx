@@ -58,9 +58,12 @@ const PreviousParkingAndCardNumber: FC<PreviousParkingAndCardNumberProps> = ({na
 	};
 
 	useEffect(() => {
+		const timer = setInterval(async () => getHistoryParking(), 5000);
 		void getHistoryParking();
+		return () => {
+			clearInterval(timer);
+		};
 	}, []);
-
 	return (
 		<>
 			{error && <Text>{errorText}</Text>}

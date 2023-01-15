@@ -99,10 +99,12 @@ export default function HistoryScreen({navigation}: {navigation: NavigationProp<
 	};
 
 	const monthNames = ['Января', 'Февраля', 'Марта', 'Апреля', 'Мая', 'Июня', 'Июля', 'Августа', 'Сентября', 'Октября', 'Ноября', 'Декабря'];
-	const dayNames = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
+	const dayNames = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
 	const getData = (checkoutTime: string) => {
 		const newDate = checkoutTime[19] === '+' ? (new Date(Date.parse(checkoutTime) + (parseInt(checkoutTime.slice(21, 22), 10) * 3600 * 1000))) : (new Date(Date.parse(checkoutTime) - (parseInt(checkoutTime.slice(21, 22), 10) * 3600 * 1000)));
-		return (checkoutTime.slice(8, 10) + ' ' + monthNames[parseInt(checkoutTime.slice(5, 7), 10) - 1].toLowerCase() + ', ' + dayNames[parseInt(newDate.getDay().toString(), 10) - 1].toLowerCase());
+		console.log(newDate)
+		console.log(newDate.getDay().toString());
+		return (checkoutTime.slice(8, 10) + ' ' + monthNames[parseInt(checkoutTime.slice(5, 7), 10) - 1].toLowerCase() + ', ' + dayNames[parseInt(newDate.getDay().toString(), 10)].toLowerCase());
 	};
 
 	// const bottomSheetRef = useRef<BottomSheet>(null);

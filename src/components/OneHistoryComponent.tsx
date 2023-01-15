@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
 	parentsView: {
 		alignItems: 'center',
 		height: responsiveHeight(8.9),
-		paddingVertical: '1%',
+		paddingVertical: '1.4%',
 		borderRadius: 19,
 		width: '100%',
 		flexDirection: 'row',

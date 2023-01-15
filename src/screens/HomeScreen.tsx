@@ -39,8 +39,8 @@ export default function HomeScreen({navigation}: {navigation: NavigationProp<any
 	}, []);
 
 	const checkCard = async () => {
-		await AsyncStorage.removeItem('card');
-		setCard(null);
+		const card = await AsyncStorage.getItem('card');
+		setCard(card);
 	};
 
 	useFocusEffect(

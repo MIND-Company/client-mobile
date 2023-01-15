@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
 		letterSpacing: 1,
 		fontFamily: 'Montserrat-ExtraBold',
 		textAlign: 'center',
-		fontSize: responsiveFontSize(3),
+		fontSize: responsiveFontSize(2.9),
 		color: 'black',
 		marginRight: '1%',
 	},
