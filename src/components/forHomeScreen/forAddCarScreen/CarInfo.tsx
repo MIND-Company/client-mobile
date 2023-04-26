@@ -6,6 +6,7 @@ import {useCallback, useState} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
 import {responsiveFontSize, responsiveHeight} from 'react-native-responsive-dimensions';
 import ThemeContext from '../../../../config/ThemeContext';
+import { bazeUrl } from '../../../utils/bazeURL';
 
 export const CarInfo = () => {
 	const [loading, setLoading] = useState <boolean>(true);
@@ -17,7 +18,7 @@ export const CarInfo = () => {
 		try {
 			setLoading(true);
 			const token = await AsyncStorage.getItem('access_token');
-			const request = await fetch('http://188.68.221.169/api/cars', {
+			const request = await fetch(bazeUrl + '/api/cars', {
 				method: 'GET',
 				headers: {
 					Authorization: 'Bearer ' + token,

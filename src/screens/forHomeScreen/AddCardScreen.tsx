@@ -1,12 +1,12 @@
 import {Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import FirstIcon from 'react-native-vector-icons/Ionicons';
 import SecondIcon from 'react-native-vector-icons/FontAwesome';
-import { useContext, useState } from "react";
+import {useContext, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
 import type {NavigationProp} from '@react-navigation/native';
-import ThemeContext from "../../../config/ThemeContext";
-import { SafeAreaView } from "react-native-safe-area-context";
+import ThemeContext from '../../../config/ThemeContext';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 export default function AddCardScreen({route, navigation}: {route: any; navigation: NavigationProp<any>}) {
 	const [card, setCard] = useState('');

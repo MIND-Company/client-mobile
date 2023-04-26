@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo, useRef, useState } from "react";
+import React, {useCallback, useContext, useMemo, useRef, useState} from 'react';
 import {ActivityIndicator, ScrollView, StyleSheet, Text, View} from 'react-native';
 import OneHistoryComponent from '../components/OneHistoryComponent';
 import themeContext from '../../config/ThemeContext';
@@ -11,6 +11,7 @@ import CurrentParkingComponent from '../components/forHomeScreen/CurrentParkingC
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {responsiveFontSize, responsiveHeight} from 'react-native-responsive-dimensions';
 import BottomSheet, {BottomSheetBackdrop} from '@gorhom/bottom-sheet';
+import {bazeUrl} from '../utils/bazeURL';
 
 type ElementType = {
 	calculated_price: string | undefined;
@@ -38,7 +39,7 @@ export default function HistoryScreen({navigation}: {navigation: NavigationProp<
 		try {
 			setLoad(true);
 			const token = await AsyncStorage.getItem('access_token');
-			const request = await fetch('http://188.68.221.169/api/parkings/', {
+			const request = await fetch(bazeUrl + '/api/parkings/', {
 				method: 'GET',
 				headers: {
 					Authorization: 'Bearer ' + token,
@@ -47,7 +48,6 @@ export default function HistoryScreen({navigation}: {navigation: NavigationProp<
 				},
 			});
 			const data = await request.json();
-			console.log(data);
 			if (request.ok) {
 				setParkingArray(data);
 			}
@@ -102,12 +102,10 @@ export default function HistoryScreen({navigation}: {navigation: NavigationProp<
 	const dayNames = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
 	const getData = (checkoutTime: string) => {
 		const newDate = checkoutTime[19] === '+' ? (new Date(Date.parse(checkoutTime) + (parseInt(checkoutTime.slice(21, 22), 10) * 3600 * 1000))) : (new Date(Date.parse(checkoutTime) - (parseInt(checkoutTime.slice(21, 22), 10) * 3600 * 1000)));
-		console.log(newDate)
-		console.log(newDate.getDay().toString());
 		return (checkoutTime.slice(8, 10) + ' ' + monthNames[parseInt(checkoutTime.slice(5, 7), 10) - 1].toLowerCase() + ', ' + dayNames[parseInt(newDate.getDay().toString(), 10)].toLowerCase());
 	};
 
-	// const bottomSheetRef = useRef<BottomSheet>(null);
+	// Const bottomSheetRef = useRef<BottomSheet>(null);
 	// const snapPoints = useMemo(() => ['50%', '70%'], []);
 	// const renderBackdrop = useCallback(
 	// 	props => (
@@ -151,42 +149,42 @@ export default function HistoryScreen({navigation}: {navigation: NavigationProp<
 						</>) : null}
 					</>}
 			</>}
-			{/*<BottomSheet*/}
-			{/*	backdropComponent={renderBackdrop}*/}
-			{/*	index={-1}*/}
-			{/*	ref={bottomSheetRef}*/}
-			{/*	snapPoints={snapPoints}*/}
-			{/*>*/}
-			{/*	/!* Bottom Sheet inner View *!/*/}
-			{/*	<View style={styles.bottomNavigationView}>*/}
-			{/*		<View>*/}
-			{/*			<Text style={{fontFamily: 'Montserrat-SemiBold', fontSize: responsiveFontSize(2.9), color: '#886DEC'}}>5</Text>*/}
-			{/*		</View>*/}
-			{/*		<View*/}
-			{/*			style={{*/}
-			{/*				height: 10,*/}
-			{/*				width: '100%',*/}
-			{/*				borderBottomColor: 'gray',*/}
-			{/*				borderBottomWidth: 2.5,*/}
-			{/*			}}*/}
-			{/*		/>*/}
-			{/*		<View style={{alignSelf: 'flex-start', marginLeft: '5%', marginTop: '2%'}}>*/}
-			{/*			<Text style={styles.sheetDetailText}>Адрес: <Text style={{color: '#886DEC', fontSize: responsiveFontSize(2.5)}}>5</Text></Text>*/}
-			{/*		</View>*/}
-			{/*		<View style={{alignSelf: 'flex-start', marginLeft: '5%', marginTop: '2%'}}>*/}
-			{/*			<Text style={styles.sheetDetailText}>Количество мест: <Text style={{color: '#886DEC', fontSize: responsiveFontSize(2.5)}}>5</Text></Text>*/}
-			{/*		</View>*/}
-			{/*		<View style={{alignSelf: 'flex-start', marginLeft: '5%', marginTop: '2%'}}>*/}
-			{/*			<Text style={styles.sheetDetailText}>Свободных мест: <Text style={{color: '#886DEC', fontSize: responsiveFontSize(2.5)}}>5</Text></Text>*/}
-			{/*		</View>*/}
-			{/*		<View style={{alignSelf: 'flex-start', marginLeft: '5%', marginTop: '2%'}}>*/}
-			{/*			<Text style={styles.sheetDetailText}>Цена за час сегодня: <Text style={{color: '#886DEC', fontSize: responsiveFontSize(2.5)}}>5</Text></Text>*/}
-			{/*		</View>*/}
-			{/*		<View style={{alignSelf: 'flex-start', marginLeft: '5%', marginTop: '2%'}}>*/}
-			{/*			<Text style={styles.sheetDetailText}>Бесплатная стоянка: <Text style={{color: '#886DEC', fontSize: responsiveFontSize(2.5)}}>5</Text></Text>*/}
-			{/*		</View>*/}
-			{/*	</View>*/}
-			{/*</BottomSheet>*/}
+			{/* <BottomSheet */}
+			{/*	backdropComponent={renderBackdrop} */}
+			{/*	index={-1} */}
+			{/*	ref={bottomSheetRef} */}
+			{/*	snapPoints={snapPoints} */}
+			{/* > */}
+			{/*	/!* Bottom Sheet inner View *!/ */}
+			{/*	<View style={styles.bottomNavigationView}> */}
+			{/*		<View> */}
+			{/*			<Text style={{fontFamily: 'Montserrat-SemiBold', fontSize: responsiveFontSize(2.9), color: '#886DEC'}}>5</Text> */}
+			{/*		</View> */}
+			{/*		<View */}
+			{/*			style={{ */}
+			{/*				height: 10, */}
+			{/*				width: '100%', */}
+			{/*				borderBottomColor: 'gray', */}
+			{/*				borderBottomWidth: 2.5, */}
+			{/*			}} */}
+			{/*		/> */}
+			{/*		<View style={{alignSelf: 'flex-start', marginLeft: '5%', marginTop: '2%'}}> */}
+			{/*			<Text style={styles.sheetDetailText}>Адрес: <Text style={{color: '#886DEC', fontSize: responsiveFontSize(2.5)}}>5</Text></Text> */}
+			{/*		</View> */}
+			{/*		<View style={{alignSelf: 'flex-start', marginLeft: '5%', marginTop: '2%'}}> */}
+			{/*			<Text style={styles.sheetDetailText}>Количество мест: <Text style={{color: '#886DEC', fontSize: responsiveFontSize(2.5)}}>5</Text></Text> */}
+			{/*		</View> */}
+			{/*		<View style={{alignSelf: 'flex-start', marginLeft: '5%', marginTop: '2%'}}> */}
+			{/*			<Text style={styles.sheetDetailText}>Свободных мест: <Text style={{color: '#886DEC', fontSize: responsiveFontSize(2.5)}}>5</Text></Text> */}
+			{/*		</View> */}
+			{/*		<View style={{alignSelf: 'flex-start', marginLeft: '5%', marginTop: '2%'}}> */}
+			{/*			<Text style={styles.sheetDetailText}>Цена за час сегодня: <Text style={{color: '#886DEC', fontSize: responsiveFontSize(2.5)}}>5</Text></Text> */}
+			{/*		</View> */}
+			{/*		<View style={{alignSelf: 'flex-start', marginLeft: '5%', marginTop: '2%'}}> */}
+			{/*			<Text style={styles.sheetDetailText}>Бесплатная стоянка: <Text style={{color: '#886DEC', fontSize: responsiveFontSize(2.5)}}>5</Text></Text> */}
+			{/*		</View> */}
+			{/*	</View> */}
+			{/* </BottomSheet> */}
 		</SafeAreaView>
 	);
 }

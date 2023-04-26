@@ -15,6 +15,7 @@ import React from 'react';
 import type {NavigationProp} from '@react-navigation/native';
 import {screenHeight} from '../utils/screenSize';
 import {responsiveFontSize} from 'react-native-responsive-dimensions';
+import {bazeUrl} from '../utils/bazeURL';
 
 export default function RegistrationScreen({navigation}: {navigation: NavigationProp<any>}) {
 	const [phone, setPhone] = useState<string>('+7');
@@ -29,7 +30,7 @@ export default function RegistrationScreen({navigation}: {navigation: Navigation
 			setLoad(true);
 			try {
 				Keyboard.dismiss();
-				const request = await fetch('http://188.68.221.169/register/', {
+				const request = await fetch(bazeUrl + '/register/', {
 					method: 'POST',
 					headers: {
 						Accept: 'application/json',
@@ -125,9 +126,9 @@ export default function RegistrationScreen({navigation}: {navigation: Navigation
 				<TextInputComponent label={'Повторите пароль'} length={20} clearError={clearError} value={secondPassword} func={setSecondPassword} placeholder={'Повторите пароль'} secure={true}/>
 				{error && <ErrorComponent textError={textError}/>}
 				<MainButton text={'Зарегистрироваться'} func={async () => registrationFunc()} />
-				{/*<MainButton text={'Зарегистрироваться'} func={() => {*/}
-				{/*	navigation.navigate('VerifyCodeScreen');*/}
-				{/*}} />*/}
+				{/* <MainButton text={'Зарегистрироваться'} func={() => { */}
+				{/*	navigation.navigate('VerifyCodeScreen'); */}
+				{/* }} /> */}
 			</View>
 			{load && <View style={styles.loading}>
 				<ActivityIndicator size={50} color={'black'}/>

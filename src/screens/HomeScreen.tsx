@@ -19,6 +19,7 @@ import {updateAccessToken} from '../utils/updateAccessTokenFunction';
 import {CommonActions, useFocusEffect} from '@react-navigation/native';
 import {responsiveHeight} from 'react-native-responsive-dimensions';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import { bazeUrl } from "../utils/bazeURL";
 
 export default function HomeScreen({navigation}: {navigation: NavigationProp<any>}) {
 	const theme = useContext(themeContext);
@@ -69,7 +70,7 @@ export default function HomeScreen({navigation}: {navigation: NavigationProp<any
 		try {
 			setLoading(true);
 			const token = await AsyncStorage.getItem('access_token');
-			const request = await fetch('http://188.68.221.169/api/cars', {
+			const request = await fetch(bazeUrl + '/api/cars', {
 				method: 'GET',
 				headers: {
 					Authorization: 'Bearer ' + token,

@@ -10,6 +10,7 @@ import AddIcon from 'react-native-vector-icons/FontAwesome';
 import {responsiveFontSize, responsiveHeight} from 'react-native-responsive-dimensions';
 import {TextInput} from 'react-native-paper';
 import {TextInputForAddCar} from './TextInputForAddCar';
+import { bazeUrl } from "../../../utils/bazeURL";
 
 const AddCarNumberComponent = (props: {addCar: (value) => void}) => {
 	const [load, setLoad] = useState(false);
@@ -28,7 +29,7 @@ const AddCarNumberComponent = (props: {addCar: (value) => void}) => {
 		try {
 			setLoad(true);
 			const token = await AsyncStorage.getItem('access_token');
-			const request = await fetch('http://188.68.221.169/api/cars/', {
+			const request = await fetch(bazeUrl + '/api/cars/', {
 				method: 'POST',
 				headers: {
 					Authorization: 'Bearer ' + token,

@@ -9,6 +9,7 @@ import PreviousParkingComponent from './PreviousParkingComponent';
 import CurrentParkingComponent from './CurrentParkingComponent';
 import ThemeContext from '../../../config/ThemeContext';
 import {responsiveHeight} from 'react-native-responsive-dimensions';
+import { bazeUrl } from "../../utils/bazeURL";
 
 type PreviousParkingAndCardNumberProps = {
 	navigationFunc: () => void;
@@ -28,7 +29,7 @@ const PreviousParkingAndCardNumber: FC<PreviousParkingAndCardNumberProps> = ({na
 	const getHistoryParking = async () => {
 		try {
 			const token = await AsyncStorage.getItem('access_token');
-			const request = await fetch('http://188.68.221.169/api/parkings/?limit=1', {
+			const request = await fetch(bazeUrl + '/api/parkings/?limit=1', {
 				method: 'GET',
 				headers: {
 					Authorization: 'Bearer ' + token,
@@ -37,7 +38,6 @@ const PreviousParkingAndCardNumber: FC<PreviousParkingAndCardNumberProps> = ({na
 				},
 			});
 			const data = await request.json();
-			console.log(data);
 			if (request.ok) {
 				setParkingArray(data.results);
 			}

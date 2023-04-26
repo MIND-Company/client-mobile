@@ -9,6 +9,7 @@ import theme from './config/theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AuthContext} from './src/components/forAuth/AuthContext';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import { bazeUrl } from "./src/utils/bazeURL";
 
 void YaMap.init('11ce9ef3-ae3c-4fbd-ac01-2df7ac5f8432');
 
@@ -35,7 +36,7 @@ export default function App() {
 	const checkAuth = async () => {
 		try {
 			const token = await AsyncStorage.getItem('refresh_token');
-			const request = await fetch('http://188.68.221.169/token/refresh/', {
+			const request = await fetch(bazeUrl + '/token/refresh/', {
 				method: 'POST',
 				headers: {
 					Accept: 'application/json',

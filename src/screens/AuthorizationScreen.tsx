@@ -8,6 +8,7 @@ import React from 'react';
 import type {NavigationProp} from '@react-navigation/native';
 import {screenHeight} from '../utils/screenSize';
 import {responsiveFontSize} from 'react-native-responsive-dimensions';
+import { bazeUrl } from "../utils/bazeURL";
 
 export default function AuthorizationScreen({navigation}: {navigation: NavigationProp<any>}) {
 	const {isAuth, setIsAuth} = useAuth();
@@ -21,7 +22,7 @@ export default function AuthorizationScreen({navigation}: {navigation: Navigatio
 		if (phone !== '' && password !== '') {
 			try {
 				setLoad(true);
-				const request = await fetch('http://188.68.221.169/login/', {
+				const request = await fetch(bazeUrl + '/login/', {
 					method: 'POST',
 					headers: {
 						Accept: 'application/json',

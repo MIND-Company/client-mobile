@@ -14,6 +14,7 @@ import BottomSheet, {BottomSheetBackdrop} from '@gorhom/bottom-sheet';
 import {responsiveFontSize} from 'react-native-responsive-dimensions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {updateAccessToken} from '../utils/updateAccessTokenFunction';
+import {bazeUrl} from '../utils/bazeURL';
 
 void YaMap.init('11ce9ef3-ae3c-4fbd-ac01-2df7ac5f8432');
 void YaMap.setLocale('ru_RU');
@@ -105,7 +106,7 @@ export default function ParkingScreen() {
 	const getAllParks = async () => {
 		try {
 			const token = await AsyncStorage.getItem('access_token');
-			const request = await fetch('http://188.68.221.169/api/all-parks/', {
+			const request = await fetch(bazeUrl + '/api/all-parks/', {
 				method: 'GET',
 				headers: {
 					Authorization: 'Bearer ' + token,
@@ -114,7 +115,6 @@ export default function ParkingScreen() {
 				},
 			});
 			const data = await request.json();
-			console.log(data);
 			if (request.ok) {
 				setAllParks(data);
 			}
