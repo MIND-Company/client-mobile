@@ -10,7 +10,7 @@ import AddIcon from 'react-native-vector-icons/FontAwesome';
 import {responsiveFontSize, responsiveHeight} from 'react-native-responsive-dimensions';
 import {TextInput} from 'react-native-paper';
 import {TextInputForAddCar} from './TextInputForAddCar';
-import { bazeUrl } from "../../../utils/bazeURL";
+import {bazeUrl} from '../../../utils/bazeURL';
 
 const AddCarNumberComponent = (props: {addCar: (value) => void}) => {
 	const [load, setLoad] = useState(false);

@@ -23,6 +23,7 @@
     "install": "^0.13.0",
     "react": "18.1.0",
     "react-native": "0.70.1",
+    "react-native-camera-kit": "^13.0.0",
     "react-native-confirmation-code-field": "^7.3.1",
     "react-native-event-listeners": "^1.0.7",
     "react-native-extra-dimensions-android": "^1.2.5",
@@ -38,7 +39,6 @@
     "react-native-splash-screen": "^3.3.0",
     "react-native-swiper": "^1.6.0",
     "react-native-vector-icons": "^9.2.0",
-    "react-native-vision-camera": "^2.15.4",
     "react-native-yamap": "^4.1.14"
   },
   "devDependencies": {

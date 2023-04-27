@@ -17,7 +17,7 @@ export default function ProfileScreen({navigation}: {navigation: NavigationProp<
 	};
 
 	const goChangeNumber = () => {
-		navigation.navigate('HomeNavigations', {screen: 'AddCar'});
+		navigation.navigate('HomeNavigations', {screen: 'RefactorCar'});
 	};
 
 	const goStats = () => {
