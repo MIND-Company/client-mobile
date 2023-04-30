@@ -19,7 +19,7 @@ import {updateAccessToken} from '../utils/updateAccessTokenFunction';
 import {CommonActions, useFocusEffect} from '@react-navigation/native';
 import {responsiveHeight} from 'react-native-responsive-dimensions';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import { bazeUrl } from "../utils/bazeURL";
+import {bazeUrl} from '../utils/bazeURL';
 
 export default function HomeScreen({navigation}: {navigation: NavigationProp<any>}) {
 	const theme = useContext(themeContext);
@@ -55,7 +55,7 @@ export default function HomeScreen({navigation}: {navigation: NavigationProp<any
 	);
 
 	const goAddCar = () => {
-		navigation.navigate('AddCar');
+		navigation.navigate('RefactorCar');
 	};
 
 	const goAddCard = () => {

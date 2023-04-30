@@ -40,17 +40,17 @@ export default function RefactorCarScreen({navigation}: {navigation: NavigationP
 		},
 		[]),
 	);
+
+	const goQrScreen = () => {
+		navigation.navigate('ScanQRcode');
+	};
+
 	return (
 		<SafeAreaView style={{backgroundColor: theme.backgroundScreen, flex: 1, minHeight: Math.round(screenHeight), paddingTop: '9%'}}>
 			<BackComponent goBackFunc={goBackFunc}/>
 			<View style={{height: '100%'}}>
-				<TouchableOpacity onPress={() => {
-					navigation.navigate('ScanQRcode');
-				} }>
-					<Text>Добавить</Text>
-				</TouchableOpacity>
 				{numberArray !== '' && <CarInfo />}
-				<AddCarNumberComponent addCar = {setNumberArray}/>
+				<AddCarNumberComponent addCar = {setNumberArray} goQrScan={goQrScreen}/>
 				<ChangeCarComponent />
 				<DeleteCarNumberComponent deleteCar = {setNumberArray} />
 			</View>
