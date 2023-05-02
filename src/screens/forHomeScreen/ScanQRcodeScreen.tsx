@@ -5,8 +5,8 @@ import {
 	TouchableOpacity,
 	PermissionsAndroid,
 	ActivityIndicator,
-	StyleSheet,
-} from 'react-native';
+	StyleSheet, Dimensions,
+} from "react-native";
 import React, {useEffect, useState} from 'react';
 import type {NavigationProp} from '@react-navigation/native';
 import {BackComponent} from '../../components/BackComponent';
@@ -75,7 +75,7 @@ export default function ScanQRcodeScreen({navigation}: {navigation: NavigationPr
 				: <>
 					{ !statusOk ? <View style={styles.textInputView}>
 						<View style={[{alignSelf: 'center', marginTop: '5%'}]}>
-							<Text style={styles.mainTextStyle}>Введите номер с чека:</Text>
+							<Text style={styles.mainTextStyle}>Введите код с чека:</Text>
 						</View>
 						<TextInput
 							value={qrNumber}
@@ -89,13 +89,13 @@ export default function ScanQRcodeScreen({navigation}: {navigation: NavigationPr
 							outlineStyle = {{borderRadius: 12, borderWidth: 2}}
 							mode = {'outlined'}
 							style = {{width: '90%', backgroundColor: '#fafbff', marginTop: '10%'}}
-							label ={'Номер'}
+							label ={'Код'}
 						/>
-						{oldStatusOk && <TouchableOpacity style={[styles.buttonStyle, {backgroundColor: 'black', borderColor: 'white'}]} onPress={() => {
+						{oldStatusOk && <TouchableOpacity style={[{marginTop: '5%',alignSelf: 'center'}]} onPress={() => {
 							void requestCameraPermission();
 							setStatusOk(true);
 						}}>
-							<Text style={styles.buttonTextStyle}>Считать QR-код камерой</Text>
+							<Text style={[{fontFamily: 'Montserrat-SemiBold',textDecorationLine: 'underline', fontSize: responsiveFontSize(1.8), color: '#886DEC'}]}>Считать QR-код камерой</Text>
 						</TouchableOpacity>
 						}
 						<TouchableOpacity onPress={(() => {

@@ -48,6 +48,9 @@ export default function AddCarScreen({navigation, route}: {route: any; navigatio
 			<TouchableOpacity style={styles.buttonStyle}>
 				<Text style={styles.buttonTextStyle}>Добавить</Text>
 			</TouchableOpacity>
+			<View style={[{width: '90%', alignSelf: 'center', marginTop: '85%'}]}>
+				<Text selectable={true} style={[{fontFamily: 'Montserrat-SemiBold', fontSize: responsiveFontSize(1.7)}]}>Если у вас возникли какие-либо вопросы или <Text style={[{color: '#886DEC', fontSize: responsiveFontSize(1.7)}]}>ваш номер определён неправильно</Text>, отправьте запрос в тех. поддержку на почту <Text style={[{color: '#886DEC', fontSize: responsiveFontSize(1.7), textDecorationLine: 'underline'}]}>mindcc@internet.ru</Text></Text>
+			</View>
 		</SafeAreaView>
 	);
 }
