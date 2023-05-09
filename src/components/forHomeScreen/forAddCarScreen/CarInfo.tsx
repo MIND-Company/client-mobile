@@ -69,7 +69,7 @@ export const CarInfo = () => {
 								<Text style={[styles.propertyText, {color: theme.buttonProfileAndAddCar}]}>Модель:</Text>
 							</View>
 							<View style={styles.propertyTextView}>
-								<Text style={[styles.propertyText, {color: theme.buttonProfileAndAddCar}]}>{(typeof number !== 'undefined') ? number.brand + ' ' + number.model : 'Ошибка'}</Text>
+								<Text style={[styles.propertyText, {color: theme.buttonProfileAndAddCar}]}>{(typeof number !== 'undefined') ? number.number : 'Ошибка'}</Text>
 							</View>
 						</View>
 						<View style={styles.propertyView}>
@@ -85,7 +85,7 @@ export const CarInfo = () => {
 								<Text style={[styles.propertyText, {color: theme.buttonProfileAndAddCar}]}>Цвет:</Text>
 							</View>
 							<View style={styles.propertyTextView}>
-								<Text style={[styles.propertyText, {color: theme.buttonProfileAndAddCar}]}>{(typeof number !== 'undefined') ? number.color : 'Ошибка'}</Text>
+								<Text style={[styles.propertyText, {color: theme.buttonProfileAndAddCar}]}>{(typeof number !== 'undefined') ? number.number : 'Ошибка'}</Text>
 							</View>
 						</View>
 					</View>
