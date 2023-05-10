@@ -9,7 +9,7 @@ import {SuccessModal} from './SuccessModal';
 import DeleteIcon from 'react-native-vector-icons/MaterialIcons';
 import {responsiveFontSize, responsiveHeight} from 'react-native-responsive-dimensions';
 import {Picker} from '@react-native-picker/picker';
-import { bazeUrl } from "../../../utils/bazeURL";
+import {bazeUrl} from '../../../utils/bazeURL';
 
 const DeleteCarNumberButtonText = (props: {deleteCar: (value) => void}) => {
 	const [load, setLoad] = useState(false);
@@ -31,7 +31,6 @@ const DeleteCarNumberButtonText = (props: {deleteCar: (value) => void}) => {
 			if (number === null) {
 				setShowErrorModal(!showErrorModal);
 			} else {
-				console.log('http://188.68.221.169/api/cars/' + number + '/');
 				const request = await fetch(bazeUrl + '/api/cars/' + number + '/', {
 					method: 'DELETE',
 					headers: {

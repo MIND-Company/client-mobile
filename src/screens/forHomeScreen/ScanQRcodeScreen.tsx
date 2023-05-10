@@ -6,7 +6,7 @@ import {
 	PermissionsAndroid,
 	ActivityIndicator,
 	StyleSheet, Dimensions,
-} from "react-native";
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import type {NavigationProp} from '@react-navigation/native';
 import {BackComponent} from '../../components/BackComponent';
@@ -56,7 +56,7 @@ export default function ScanQRcodeScreen({navigation}: {navigation: NavigationPr
 	const checkQr = code => {
 		setLoad(true);
 		try {
-			if (code.length >= 20 && (/^[АВЕКМНОРСТУХ]\d{3}(?<!000)[АВЕКМНОРСТУХ]{2}\d{2,3}$/ui.exec(code.split(':')[1]))) {
+			if (code.length >= 30) {
 				setQrNumber('');
 				navigation.navigate('AddCar', code);
 			} else {
@@ -82,7 +82,7 @@ export default function ScanQRcodeScreen({navigation}: {navigation: NavigationPr
 							onChangeText={value => {
 								setQrNumber(value);
 							}}
-							maxLength={22}
+							maxLength={50}
 							placeholderTextColor = {'gray'}
 							placeholder = {'Введите номер с QR-кода'}
 							outlineColor = {'#b2a9d6'}
@@ -91,11 +91,11 @@ export default function ScanQRcodeScreen({navigation}: {navigation: NavigationPr
 							style = {{width: '90%', backgroundColor: '#fafbff', marginTop: '10%'}}
 							label ={'Код'}
 						/>
-						{oldStatusOk && <TouchableOpacity style={[{marginTop: '5%',alignSelf: 'center'}]} onPress={() => {
+						{oldStatusOk && <TouchableOpacity style={[{marginTop: '5%', alignSelf: 'center'}]} onPress={() => {
 							void requestCameraPermission();
 							setStatusOk(true);
 						}}>
-							<Text style={[{fontFamily: 'Montserrat-SemiBold',textDecorationLine: 'underline', fontSize: responsiveFontSize(1.8), color: '#886DEC'}]}>Считать QR-код камерой</Text>
+							<Text style={[{fontFamily: 'Montserrat-SemiBold', textDecorationLine: 'underline', fontSize: responsiveFontSize(1.8), color: '#886DEC'}]}>Считать QR-код камерой</Text>
 						</TouchableOpacity>
 						}
 						<TouchableOpacity onPress={(() => {

@@ -1,4 +1,4 @@
-import {Keyboard, Text, TouchableOpacity, View} from 'react-native';
+import {Keyboard, View} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useCallback, useContext, useState} from 'react';
 import type {NavigationProp} from '@react-navigation/native';
