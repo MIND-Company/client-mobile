@@ -9,7 +9,7 @@ import PreviousParkingComponent from './PreviousParkingComponent';
 import CurrentParkingComponent from './CurrentParkingComponent';
 import ThemeContext from '../../../config/ThemeContext';
 import {responsiveHeight} from 'react-native-responsive-dimensions';
-import { bazeUrl } from "../../utils/bazeURL";
+import {bazeUrl} from '../../utils/bazeURL';
 
 type PreviousParkingAndCardNumberProps = {
 	navigationFunc: () => void;
@@ -66,7 +66,7 @@ const PreviousParkingAndCardNumber: FC<PreviousParkingAndCardNumberProps> = ({na
 	}, []);
 	return (
 		<>
-			{error && <Text>{errorText}</Text>}
+			{error && <Text style={{alignSelf: 'center'}}>{errorText}</Text>}
 			<View style={[styles.view, {backgroundColor: theme.backgroundComponent}]}>
 				{load ? <ActivityIndicator size={20} color={'#886DEC'} />
 					: (<>{!parkingArray[0]

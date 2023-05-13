@@ -6,7 +6,7 @@ import {useCallback, useState} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
 import {responsiveFontSize, responsiveHeight} from 'react-native-responsive-dimensions';
 import ThemeContext from '../../../../config/ThemeContext';
-import { bazeUrl } from '../../../utils/bazeURL';
+import {bazeUrl} from '../../../utils/bazeURL';
 
 export const CarInfo = () => {
 	const [loading, setLoading] = useState <boolean>(true);
@@ -64,30 +64,30 @@ export const CarInfo = () => {
 						<Text style={[styles.headingText, {color: theme.buttonProfileAndAddCar}]}>Добавленное т/с</Text>
 					</View>
 					<View>
+						{/* <View style={styles.propertyView}> */}
+						{/*	<View style={styles.propertyTextView}> */}
+						{/*		<Text style={[styles.propertyText, {color: theme.buttonProfileAndAddCar}]}>Модель:</Text> */}
+						{/*	</View> */}
+						{/*	<View style={styles.propertyTextView}> */}
+						{/*		<Text style={[styles.propertyText, {color: theme.buttonProfileAndAddCar}]}>{(typeof number !== 'undefined') ? number.number : 'Ошибка'}</Text> */}
+						{/*	</View> */}
+						{/* </View> */}
 						<View style={styles.propertyView}>
-							<View style={styles.propertyTextView}>
-								<Text style={[styles.propertyText, {color: theme.buttonProfileAndAddCar}]}>Модель:</Text>
-							</View>
+							{/* <View style={styles.propertyTextView}> */}
+							{/*	<Text style={[styles.propertyText, {color: theme.buttonProfileAndAddCar}]}>Номер:</Text> */}
+							{/* </View> */}
 							<View style={styles.propertyTextView}>
 								<Text style={[styles.propertyText, {color: theme.buttonProfileAndAddCar}]}>{(typeof number !== 'undefined') ? number.number : 'Ошибка'}</Text>
 							</View>
 						</View>
-						<View style={styles.propertyView}>
-							<View style={styles.propertyTextView}>
-								<Text style={[styles.propertyText, {color: theme.buttonProfileAndAddCar}]}>Номер:</Text>
-							</View>
-							<View style={styles.propertyTextView}>
-								<Text style={[styles.propertyText, {color: theme.buttonProfileAndAddCar}]}>{(typeof number !== 'undefined') ? number.number : 'Ошибка'}</Text>
-							</View>
-						</View>
-						<View style={styles.propertyView}>
-							<View style={styles.propertyTextView}>
-								<Text style={[styles.propertyText, {color: theme.buttonProfileAndAddCar}]}>Цвет:</Text>
-							</View>
-							<View style={styles.propertyTextView}>
-								<Text style={[styles.propertyText, {color: theme.buttonProfileAndAddCar}]}>{(typeof number !== 'undefined') ? number.number : 'Ошибка'}</Text>
-							</View>
-						</View>
+						{/* <View style={styles.propertyView}> */}
+						{/*	<View style={styles.propertyTextView}> */}
+						{/*		<Text style={[styles.propertyText, {color: theme.buttonProfileAndAddCar}]}>Цвет:</Text> */}
+						{/*	</View> */}
+						{/*	<View style={styles.propertyTextView}> */}
+						{/*		<Text style={[styles.propertyText, {color: theme.buttonProfileAndAddCar}]}>{(typeof number !== 'undefined') ? number.number : 'Ошибка'}</Text> */}
+						{/*	</View> */}
+						{/* </View> */}
 					</View>
 				</>
 			)}
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
 		borderStyle: 'solid',
 		borderColor: '#886DEC',
 		borderWidth: 3,
-		height: responsiveHeight(27),
+		height: responsiveHeight(12),
 		borderRadius: 18,
 		alignSelf: 'center',
 		width: '95%',
@@ -131,10 +131,10 @@ const styles = StyleSheet.create({
 		shadowOffset: {width: 7, height: 7},
 	},
 	propertyText: {
-		fontFamily: 'Montserrat-Medium',
+		fontFamily: 'Montserrat-SemiBold',
 		marginBottom: '4%',
 		fontWeight: '500',
 		color: '#544d4d',
-		fontSize: responsiveFontSize(2.5),
+		fontSize: responsiveFontSize(2.8),
 	},
 });

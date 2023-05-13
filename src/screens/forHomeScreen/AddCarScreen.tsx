@@ -51,8 +51,6 @@ export default function AddCarScreen({navigation, route}: {route: any; navigatio
 				}),
 			});
 			const data = await request.json();
-			console.log(data);
-			console.log(request.status);
 			if (request.ok) {
 				await AsyncStorage.setItem('number', data.number);
 				setShowSuccessModal(true);
@@ -66,7 +64,7 @@ export default function AddCarScreen({navigation, route}: {route: any; navigatio
 				setShowWarningModal(true);
 				setTimeout(() => {
 					setShowSuccessModal(false);
-					navigation.goBack();
+					navigation.navigate('RefactorCar');
 					setError(false);
 				}, 3000);
 			}
@@ -102,6 +100,7 @@ export default function AddCarScreen({navigation, route}: {route: any; navigatio
 				<View style={styles.modalNumberView}>
 					<TouchableOpacity style={[{alignSelf: 'flex-end', marginRight: '4%', marginTop: '2%'}]}
 						onPress={() => {
+							setError(false);
 							setModalNumber('');
 							setShowNumberModal(!showNumberModal);
 						}}>
@@ -169,7 +168,7 @@ export default function AddCarScreen({navigation, route}: {route: any; navigatio
 				</View>
 			</View>
 			<TouchableOpacity style={styles.buttonStyle} onPress={() => {
-				void addCar();
+				modalNumber.length >= 8 ? void addCar() : setError(true); setErrorText('Введите номер');
 			}}>
 				<Text style={styles.buttonTextStyle}>Добавить</Text>
 			</TouchableOpacity>
@@ -181,7 +180,7 @@ export default function AddCarScreen({navigation, route}: {route: any; navigatio
 				<Text style={[styles.modalHeadingText, {color: 'rgb(123,144,135)'}]}>Номер успешно добавлен</Text>
 			</SuccessModal>}
 			{showWarningModal && <WarningModal showFunc={showWarningModal} setShowFunc={setShowWarningModal}>
-				<Text style={styles.modalHeadingText}>Данного кода не существует</Text>
+				<Text style={styles.modalHeadingText}>Неверный код или номер</Text>
 			</WarningModal>}
 			{load && <View style={styles.loading}>
 				<ActivityIndicator size={50} color={'black'}/>

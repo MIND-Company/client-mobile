@@ -54,17 +54,17 @@ export default function ScanQRcodeScreen({navigation}: {navigation: NavigationPr
 	}, []);
 
 	const checkQr = code => {
-		setLoad(true);
 		try {
 			if (code.length >= 30) {
 				setQrNumber('');
 				navigation.navigate('AddCar', code);
+				setShowErrorModal(false);
 			} else {
 				setQrNumber('');
-				setShowErrorModal(true);
+				setShowErrorModal(!showErrorModal);
 			}
-		} finally {
-			setLoad(false);
+		} catch (e) {
+			console.log(e);
 		}
 	};
 
