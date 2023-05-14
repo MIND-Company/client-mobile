@@ -64,30 +64,11 @@ export const CarInfo = () => {
 						<Text style={[styles.headingText, {color: theme.buttonProfileAndAddCar}]}>Добавленное т/с</Text>
 					</View>
 					<View>
-						{/* <View style={styles.propertyView}> */}
-						{/*	<View style={styles.propertyTextView}> */}
-						{/*		<Text style={[styles.propertyText, {color: theme.buttonProfileAndAddCar}]}>Модель:</Text> */}
-						{/*	</View> */}
-						{/*	<View style={styles.propertyTextView}> */}
-						{/*		<Text style={[styles.propertyText, {color: theme.buttonProfileAndAddCar}]}>{(typeof number !== 'undefined') ? number.number : 'Ошибка'}</Text> */}
-						{/*	</View> */}
-						{/* </View> */}
 						<View style={styles.propertyView}>
-							{/* <View style={styles.propertyTextView}> */}
-							{/*	<Text style={[styles.propertyText, {color: theme.buttonProfileAndAddCar}]}>Номер:</Text> */}
-							{/* </View> */}
 							<View style={styles.propertyTextView}>
 								<Text style={[styles.propertyText, {color: theme.buttonProfileAndAddCar}]}>{(typeof number !== 'undefined') ? number.number : 'Ошибка'}</Text>
 							</View>
 						</View>
-						{/* <View style={styles.propertyView}> */}
-						{/*	<View style={styles.propertyTextView}> */}
-						{/*		<Text style={[styles.propertyText, {color: theme.buttonProfileAndAddCar}]}>Цвет:</Text> */}
-						{/*	</View> */}
-						{/*	<View style={styles.propertyTextView}> */}
-						{/*		<Text style={[styles.propertyText, {color: theme.buttonProfileAndAddCar}]}>{(typeof number !== 'undefined') ? number.number : 'Ошибка'}</Text> */}
-						{/*	</View> */}
-						{/* </View> */}
 					</View>
 				</>
 			)}

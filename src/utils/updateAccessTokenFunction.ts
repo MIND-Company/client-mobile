@@ -4,7 +4,7 @@ import {bazeUrl} from './bazeURL';
 export const updateAccessToken = async (setE: any, func: any, setEText: any) => {
 	try {
 		const token = await AsyncStorage.getItem('refresh_token');
-		const request = await fetch(bazeUrl + '/token/refresh', {
+		const request = await fetch(bazeUrl + '/token/refresh/', {
 			method: 'POST',
 			headers: {
 				Accept: 'application/json',

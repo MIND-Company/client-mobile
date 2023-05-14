@@ -55,7 +55,7 @@ export default function RefactorCarScreen({navigation}: {navigation: NavigationP
 				<AddCarNumberComponent addCar = {setNumberArray} goQrScan={goQrScreen}/>
 				<ChangeCarComponent />
 				<DeleteCarNumberComponent deleteCar = {setNumberArray} />
-				<View style={{width: '100%', height: '0.3%', backgroundColor: '#B00000', marginTop: numberArray !== '' ? '55%' : '82%'}}/>
+				<View style={{width: '100%', height: '0.3%', backgroundColor: '#B00000', marginTop: numberArray !== '' ? '59%' : '82%'}}/>
 				<View style={{flexDirection: 'row', alignSelf: 'center', width: '90%', marginTop: '3%'}}>
 					<Text style={{fontFamily: 'Montserrat-SemiBold', fontSize: responsiveFontSize(2)}}><Text style={{fontFamily: 'Montserrat-Bold', color: '#B00000'}}>Важно:</Text> Чтобы добавить номер своего т/с вам надо <Text style={{color: '#886DEC'}}>заехать</Text> на любую парковку с нашей системой и <Text style={{color: '#886DEC'}}>получить</Text> напечатанный чек с Qr-кодом </Text>
 				</View>

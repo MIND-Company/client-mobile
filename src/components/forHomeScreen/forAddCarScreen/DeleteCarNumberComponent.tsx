@@ -8,26 +8,23 @@ import {WarningModal} from './WarningModal';
 import {SuccessModal} from './SuccessModal';
 import DeleteIcon from 'react-native-vector-icons/MaterialIcons';
 import {responsiveFontSize, responsiveHeight} from 'react-native-responsive-dimensions';
-import {Picker} from '@react-native-picker/picker';
 import {bazeUrl} from '../../../utils/bazeURL';
 
 const DeleteCarNumberButtonText = (props: {deleteCar: (value) => void}) => {
 	const [load, setLoad] = useState(false);
 	const [error, setError] = useState(false);
-	const [dropdownError, setDropdownError] = useState(false);
 	const [textError, setTextError] = useState('');
 	const [showErrorModal, setShowErrorModal] = useState(false);
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
 	const [showSuccessModal, setShowSuccessModal] = useState(false);
-	const [data, setData] = useState([]);
-	const [value, setValue] = useState('');
+	const [data, setData] = useState('');
 
 	const deleteCarNumber = async () => {
 		try {
 			setError(false);
 			setLoad(true);
 			const token = await AsyncStorage.getItem('access_token');
-			const number = value;
+			const number = data;
 			if (number === null) {
 				setShowErrorModal(!showErrorModal);
 			} else {
@@ -65,7 +62,7 @@ const DeleteCarNumberButtonText = (props: {deleteCar: (value) => void}) => {
 		if (number === null) {
 			setShowErrorModal(!showErrorModal);
 		} else {
-			setData(new Array(new Object({label: number, value: number})));
+			setData(number);
 			setShowDeleteModal(!showDeleteModal);
 		}
 	};
@@ -85,28 +82,33 @@ const DeleteCarNumberButtonText = (props: {deleteCar: (value) => void}) => {
 						}}>
 						<CloseModelIcon name='close' size={28} color= '#886DEC' />
 					</TouchableOpacity>
-					<Text style={styles.deleteModalHeadingText}>Выберите, какой номер удалить:</Text>
-					<Picker
-						mode = {'dropdown'}
-						onFocus = {() => {
-							setDropdownError(false);
-						}}
-						selectedValue={value}
-						onValueChange={(itemValue, itemIndex) => {
-							setValue(itemValue);
-						}
-						}
-						style={styles.dropdown}>
-						<Picker.Item label={'Выберите номер'} value={''} />
-						{data.map((element, index) =>
-							<Picker.Item key={index} label={element.label} value={element.value} />,
-						)}
-					</Picker>
-					{dropdownError && <Text style={{fontSize: 15, textAlign: 'center', color: '#de4b4b', fontWeight: '500', marginTop: '4%', fontFamily: 'Montserrat-SemiBold'}}>{textError}</Text>}
+					<Text style={styles.deleteModalHeadingText}>Удаление номера</Text>
+					<View style={styles.numberView}>
+						<View style={styles.numberCarView}>
+							<Text style={[styles.numberText, {color: 'black'}]}> {data.slice(0, 1).toUpperCase()}<Text style={{fontSize: responsiveFontSize(3.3)}}>{data.slice(1, 4).toUpperCase()}</Text>{data.slice(4, 6).toUpperCase()} </Text>
+						</View>
+						<View style={ {height: '100%', width: '30%'}}>
+							<Text style={[styles.numberRegionText, {color: 'black'}]}> {data.slice(6, 9).toUpperCase()} </Text>
+							<View style={ {width: '100%', flexDirection: 'row', justifyContent: 'center', height: '30%'}}>
+								<Text style={[styles.numberRegionText, {fontSize: 12}]}> RUS </Text>
+								<View style={styles.regionView}>
+									<View style={{width: '100%', height: '33%', backgroundColor: 'white'}}>
+									</View>
+									<View style={{width: '100%', height: '33%', backgroundColor: 'blue'}}>
+									</View>
+									<View style={{width: '100%', height: '33%', backgroundColor: '#ed1b24'}}>
+									</View>
+								</View>
+							</View>
+						</View>
+					</View>
+					<View style={{width: '95%', alignSelf: 'center', marginTop: '3%'}}>
+						<Text style={{fontFamily: 'Montserrat-SemiBold'}}>
+							<Text style={{color: '#886DEC'}}>Примечание:</Text> после удаления вам придётся снова получить напечатанный чек с Qr-кодом на парковке с нашей системой
+						</Text>
+					</View>
 					<View style={styles.deleteModalButtonView}>
-						<TouchableOpacity onPress={value ? async () => deleteCarNumber() : () => {
-							setDropdownError(true); setTextError('Выберите значение');
-						} } style={[styles.deleteModalButton, {backgroundColor: '#de4b4b'}]}>
+						<TouchableOpacity onPress={async () => deleteCarNumber()} style={[styles.deleteModalButton, {backgroundColor: '#de4b4b'}]}>
 							<Text style={{textAlign: 'center', fontSize: 17, color: 'white', fontFamily: 'Montserrat-SemiBold'}}>Удалить</Text>
 						</TouchableOpacity>
 					</View>
@@ -129,6 +131,48 @@ const DeleteCarNumberButtonText = (props: {deleteCar: (value) => void}) => {
 };
 
 const styles = StyleSheet.create({
+	regionView: {
+		backgroundColor: 'red',
+		width: '40%',
+		marginRight: '7%',
+		height: '100%',
+		borderColor: 'black',
+		borderWidth: 1,
+	},
+	numberCarView: {
+		height: '100%',
+		width: '70%',
+		borderRightColor: 'black',
+		borderRightWidth: 2,
+		justifyContent: 'center',
+	},
+	numberRegionText: {
+		fontFamily: 'Montserrat-Bold',
+		textAlign: 'center',
+		fontSize: responsiveFontSize(2.6),
+		fontWeight: '400',
+		color: 'black',
+	},
+	numberText: {
+		letterSpacing: 1,
+		fontFamily: 'Montserrat-ExtraBold',
+		textAlign: 'center',
+		fontSize: responsiveFontSize(2.9),
+		color: 'black',
+		marginRight: '1%',
+	},
+	numberView: {
+		marginTop: '5%',
+		alignSelf: 'center',
+		borderRadius: 5,
+		height: 50,
+		flexDirection: 'row',
+		width: 190,
+		alignItems: 'center',
+		backgroundColor: 'white',
+		borderWidth: 2,
+		borderColor: 'black',
+	},
 	loading: {
 		zIndex: 2,
 		position: 'absolute',
@@ -143,7 +187,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	deleteModalButtonView: {
-		marginTop: '5%',
+		marginTop: '3%',
 		alignSelf: 'center',
 	},
 	deleteModalButton: {
@@ -170,15 +214,14 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 	},
 	deleteModalHeadingText: {
-		fontFamily: 'Montserrat-SemiBold',
-		fontWeight: 'bold',
-		fontSize: 16,
-		color: 'gray',
+		fontFamily: 'Montserrat-ExtraBold',
+		fontSize: responsiveFontSize(2.1),
+		color: '#544d4d',
 		textAlign: 'center',
 	},
 	deleteModalView: {
 		width: '100%',
-		height: '28%',
+		height: '34%',
 		backgroundColor: 'white',
 		alignSelf: 'center',
 		borderRadius: 20,
